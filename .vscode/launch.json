@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AdamDateApp}",
+            "name": "Debug AdamDateApp",
+            "program": "${workspaceFolder:AdamDateApp}/.build/debug/AdamDateApp",
+            "preLaunchTask": "swift: Build Debug AdamDateApp"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AdamDateApp}",
+            "name": "Release AdamDateApp",
+            "program": "${workspaceFolder:AdamDateApp}/.build/release/AdamDateApp",
+            "preLaunchTask": "swift: Build Release AdamDateApp"
+        }
+    ]
+}
