@@ -19,7 +19,7 @@ struct UserModelMapper {
     ) throws -> UserModel {
         try UserModel(
             firstName: input.firstName,
-            lastName: input.lastName,
+            familyName: input.familyName,
             email: input.email,
             password: passwordHasher.hash(input.password),
             isVerified: input.isVerified

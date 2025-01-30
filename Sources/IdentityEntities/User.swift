@@ -11,7 +11,7 @@ package struct User: Identifiable, Equatable, Sendable {
 
     package let id: UUID
     package let firstName: String
-    package let lastName: String
+    package let familyName: String
     package let email: String
     package let isVerified: Bool
     package let isActive: Bool
@@ -19,7 +19,7 @@ package struct User: Identifiable, Equatable, Sendable {
     package var fullName: String {
         var components = PersonNameComponents()
         components.givenName = firstName
-        components.familyName = lastName
+        components.familyName = familyName
 
         let formatter = PersonNameComponentsFormatter()
         return formatter.string(from: components)
@@ -28,14 +28,14 @@ package struct User: Identifiable, Equatable, Sendable {
     package init(
         id: UUID,
         firstName: String,
-        lastName: String,
+        familyName: String,
         email: String,
         isVerified: Bool,
         isActive: Bool
     ) {
         self.id = id
         self.firstName = firstName
-        self.lastName = lastName
+        self.familyName = familyName
         self.email = email
         self.isVerified = isVerified
         self.isActive = isActive

@@ -16,7 +16,7 @@ struct UserMapper {
         try User(
             id: model.requireID(),
             firstName: model.firstName,
-            lastName: model.lastName,
+            familyName: model.familyName,
             email: model.email,
             isVerified: model.isVerified,
             isActive: model.deletedAt == nil

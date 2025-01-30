@@ -33,14 +33,14 @@ struct AuthControllerTests {
     func registerWhenRequestBodyIsValidReturnsRegisteredUser() async throws {
         let registerUserDTO = RegisterUserDTO(
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             password: "pass123"
         )
         let user = try User(
             id: #require(UUID(uuidString: "ABB41E11-03AB-4998-A349-9DE3FA859802")),
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true
@@ -87,7 +87,7 @@ struct AuthControllerTests {
         let user = try User(
             id: #require(UUID(uuidString: "ABB41E11-03AB-4998-A349-9DE3FA859802")),
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true
@@ -167,7 +167,7 @@ struct AuthControllerTests {
         let user = User(
             id: userID,
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true

@@ -34,14 +34,14 @@ struct UserDTOMapperTests {
         #expect(dto.firstName == firstName)
     }
 
-    @Test("map from user with last name")
+    @Test("map from user with family name")
     func mapFromUserWithLastName() throws {
-        let lastName = "Smith"
-        let user = try Self.buildUser(lastName: lastName)
+        let familyName = "Smith"
+        let user = try Self.buildUser(familyName: familyName)
 
         let dto = UserDTOMapper.map(from: user)
 
-        #expect(dto.lastName == lastName)
+        #expect(dto.familyName == familyName)
     }
 
     @Test("map from user with email")
@@ -71,7 +71,7 @@ extension UserDTOMapperTests {
     private static func buildUser(
         id: UUID? = UUID(uuidString: "0CC3CF79-E472-4D8A-BBEF-A0E8D3BDD88A"),
         firstName: String = "",
-        lastName: String = "",
+        familyName: String = "",
         email: String = "",
         isVerified: Bool = true,
         isActive: Bool = true
@@ -79,7 +79,7 @@ extension UserDTOMapperTests {
         User(
             id: try #require(id),
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: email,
             isVerified: isVerified,
             isActive: isActive

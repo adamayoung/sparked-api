@@ -35,7 +35,7 @@ struct UserFluentRepositoryTests {
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
         let input = RegisterUserInput(
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             password: "password",
             isVerified: false,
@@ -54,7 +54,7 @@ struct UserFluentRepositoryTests {
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
         let input = RegisterUserInput(
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             password: "password",
             isVerified: false,
@@ -64,7 +64,7 @@ struct UserFluentRepositoryTests {
             UserModel(
                 id: UUID(uuidString: "CEBBCF99-BAEF-4629-8E5C-5079AC5029A4"),
                 firstName: "Bob",
-                lastName: "Robert",
+                familyName: "Robert",
                 email: "email@example.com",
                 password: "pass123",
                 isVerified: true
@@ -83,7 +83,7 @@ struct UserFluentRepositoryTests {
         let alreadyExistsUser = UserModel(
             id: id,
             firstName: "Bob",
-            lastName: "Robert",
+            familyName: "Robert",
             email: "email@example.com",
             password: "pass123",
             isVerified: true
@@ -110,7 +110,7 @@ struct UserFluentRepositoryTests {
         let alreadyExistsUser = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
-            lastName: "Robert",
+            familyName: "Robert",
             email: email,
             password: "pass123",
             isVerified: true
@@ -143,7 +143,7 @@ struct UserFluentRepositoryTests {
         let alreadyExistsUser = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
-            lastName: "Robert",
+            familyName: "Robert",
             email: email,
             password: storedPassword,
             isVerified: true
@@ -186,7 +186,7 @@ struct UserFluentRepositoryTests {
         let alreadyExistsUser = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
-            lastName: "Robert",
+            familyName: "Robert",
             email: email,
             password: "321",
             isVerified: true

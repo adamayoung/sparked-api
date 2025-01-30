@@ -17,8 +17,8 @@ final class UserModel: Model, @unchecked Sendable {
     @Field(key: "first_name")
     var firstName: String
 
-    @Field(key: "last_name")
-    var lastName: String
+    @Field(key: "family_name")
+    var familyName: String
 
     @Field(key: "email")
     var email: String
@@ -43,14 +43,14 @@ final class UserModel: Model, @unchecked Sendable {
     init(
         id: UUID? = nil,
         firstName: String,
-        lastName: String,
+        familyName: String,
         email: String,
         password: String,
         isVerified: Bool
     ) {
         self.id = id
         self.firstName = firstName
-        self.lastName = lastName
+        self.familyName = familyName
         self.email = email
         self.password = password
         self.isVerified = isVerified

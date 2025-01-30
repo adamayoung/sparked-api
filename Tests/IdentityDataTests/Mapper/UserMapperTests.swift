@@ -42,14 +42,14 @@ struct UserMapperTests {
         #expect(user.firstName == firstName)
     }
 
-    @Test("map from user model with last name")
+    @Test("map from user model with family name")
     func mapFromUserModelWithLastName() throws {
-        let lastName = "Smith"
-        let userModel = Self.buildUserModel(lastName: lastName)
+        let familyName = "Smith"
+        let userModel = Self.buildUserModel(familyName: familyName)
 
         let user = try UserMapper.map(from: userModel)
 
-        #expect(user.lastName == lastName)
+        #expect(user.familyName == familyName)
     }
 
     @Test("map from user model with email")
@@ -108,7 +108,7 @@ extension UserMapperTests {
     private static func buildUserModel(
         id: UUID? = UUID(uuidString: "12250C60-4AB7-4040-9BED-7F253981D58D"),
         firstName: String = "",
-        lastName: String = "",
+        familyName: String = "",
         email: String = "",
         password: String = "",
         isVerified: Bool = true,
@@ -117,7 +117,7 @@ extension UserMapperTests {
         let model = UserModel(
             id: id,
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: email,
             password: password,
             isVerified: isVerified

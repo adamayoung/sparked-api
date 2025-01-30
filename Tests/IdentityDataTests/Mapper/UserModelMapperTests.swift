@@ -30,14 +30,14 @@ struct UserModelMapperTests {
         #expect(user.firstName == firstName)
     }
 
-    @Test("map from register user input with last name")
+    @Test("map from register user input with family name")
     func mapFromRegisterUserInputWithLastName() throws {
-        let lastName = "Smith"
-        let input = Self.buildRegisterUserInput(lastName: lastName)
+        let familyName = "Smith"
+        let input = Self.buildRegisterUserInput(familyName: familyName)
 
         let user = try UserModelMapper.map(from: input, using: passwordHasher)
 
-        #expect(user.lastName == lastName)
+        #expect(user.familyName == familyName)
     }
 
     @Test("map from register user input with email")
@@ -69,7 +69,7 @@ extension UserModelMapperTests {
 
     private static func buildRegisterUserInput(
         firstName: String = "",
-        lastName: String = "",
+        familyName: String = "",
         email: String = "",
         password: String = "",
         isVerified: Bool = false,
@@ -77,7 +77,7 @@ extension UserModelMapperTests {
     ) -> RegisterUserInput {
         RegisterUserInput(
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: email,
             password: password,
             isVerified: isVerified,

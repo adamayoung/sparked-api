@@ -28,7 +28,7 @@ struct FetchUserTests {
         let expectedUser = User(
             id: id,
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true

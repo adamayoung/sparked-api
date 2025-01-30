@@ -26,7 +26,7 @@ struct RegisterUserTests {
     func executeWhenUserCreatedSuccessfullyReturnsUser() async throws {
         let input = RegisterUserInput(
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             password: "password",
             isVerified: true
@@ -34,7 +34,7 @@ struct RegisterUserTests {
         let expectedUser = try User(
             id: #require(UUID(uuidString: "BDE07538-4204-4F5E-9DB6-CF90A322C18D")),
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true
@@ -51,7 +51,7 @@ struct RegisterUserTests {
     func executeWhenUserCreationFailedThrowsError() async throws {
         let input = RegisterUserInput(
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             password: "password",
             isVerified: true

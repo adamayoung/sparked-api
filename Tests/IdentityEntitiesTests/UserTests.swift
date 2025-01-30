@@ -16,11 +16,11 @@ struct UserTests {
     @Test("fullName")
     func fullNameReturnsFirstNameAndLastName() throws {
         let firstName = "Dave"
-        let lastName = "Smith"
+        let familyName = "Smith"
         let user = try User(
             id: #require(UUID(uuidString: "EFFE208D-7164-4CED-907E-278CB16A4C73")),
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: "email@example.com",
             isVerified: true,
             isActive: true
@@ -28,7 +28,7 @@ struct UserTests {
 
         var components = PersonNameComponents()
         components.givenName = firstName
-        components.familyName = lastName
+        components.familyName = familyName
         let formatter = PersonNameComponentsFormatter()
         let expectedFullName = formatter.string(from: components)
 

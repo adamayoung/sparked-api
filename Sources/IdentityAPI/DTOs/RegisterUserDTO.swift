@@ -10,7 +10,7 @@ import Vapor
 struct RegisterUserDTO: Content {
 
     let firstName: String
-    let lastName: String
+    let familyName: String
     let email: String
     let password: String
 

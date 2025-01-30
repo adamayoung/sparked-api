@@ -16,7 +16,7 @@ struct RegisterUserInputMapper {
     static func map(from dto: RegisterUserDTO) -> RegisterUserInput {
         RegisterUserInput(
             firstName: dto.firstName,
-            lastName: dto.lastName,
+            familyName: dto.familyName,
             email: dto.email,
             password: dto.password
         )

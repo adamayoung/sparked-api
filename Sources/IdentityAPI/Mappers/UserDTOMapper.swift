@@ -17,7 +17,7 @@ struct UserDTOMapper {
         UserDTO(
             id: user.id,
             firstName: user.firstName,
-            lastName: user.lastName,
+            familyName: user.familyName,
             email: user.email,
             isVerified: user.isVerified
         )

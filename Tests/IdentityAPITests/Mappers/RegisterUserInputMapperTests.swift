@@ -24,14 +24,14 @@ struct RegisterUserInputMapperTests {
         #expect(input.firstName == firstName)
     }
 
-    @Test("map from dto with last name")
+    @Test("map from dto with family name")
     func mapFromDTOWithLastName() {
-        let lastName = "Smith"
-        let dto = Self.buildDTO(lastName: lastName)
+        let familyName = "Smith"
+        let dto = Self.buildDTO(familyName: familyName)
 
         let input = RegisterUserInputMapper.map(from: dto)
 
-        #expect(input.lastName == lastName)
+        #expect(input.familyName == familyName)
     }
 
     @Test("map from dto with email")
@@ -60,13 +60,13 @@ extension RegisterUserInputMapperTests {
 
     private static func buildDTO(
         firstName: String = "",
-        lastName: String = "",
+        familyName: String = "",
         email: String = "",
         password: String = ""
     ) -> RegisterUserDTO {
         RegisterUserDTO(
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: email,
             password: password
         )

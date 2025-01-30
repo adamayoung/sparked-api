@@ -15,8 +15,8 @@ package struct CreateUserCommand: AsyncCommand {
         @Option(name: "firstName", short: "f")
         package var firstName: String?
 
-        @Option(name: "lastName", short: "l")
-        package var lastName: String?
+        @Option(name: "familyName", short: "s")
+        package var familyName: String?
 
         @Option(name: "email", short: "e")
         package var email: String?
@@ -47,8 +47,8 @@ package struct CreateUserCommand: AsyncCommand {
             return
         }
 
-        guard let lastName = signature.lastName else {
-            context.console.error("Missing last name argument")
+        guard let familyName = signature.familyName else {
+            context.console.error("Missing family name argument")
             return
         }
 
@@ -64,7 +64,7 @@ package struct CreateUserCommand: AsyncCommand {
 
         let registerUserInput = RegisterUserInput(
             firstName: firstName,
-            lastName: lastName,
+            familyName: familyName,
             email: email,
             password: password,
             isVerified: true

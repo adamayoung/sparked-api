@@ -10,7 +10,7 @@ import Foundation
 package struct RegisterUserInput: Equatable, Sendable {
 
     package let firstName: String
-    package let lastName: String
+    package let familyName: String
     package let email: String
     package let password: String
     package let isVerified: Bool
@@ -18,14 +18,14 @@ package struct RegisterUserInput: Equatable, Sendable {
 
     package init(
         firstName: String,
-        lastName: String,
+        familyName: String,
         email: String,
         password: String,
         isVerified: Bool = false,
         isAdmin: Bool = false
     ) {
         self.firstName = firstName
-        self.lastName = lastName
+        self.familyName = familyName
         self.email = email
         self.password = password
         self.isVerified = isVerified

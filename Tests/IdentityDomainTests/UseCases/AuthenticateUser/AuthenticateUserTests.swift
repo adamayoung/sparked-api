@@ -30,7 +30,7 @@ struct AuthenticateUserTests {
         let expectedUser = try User(
             id: #require(UUID(uuidString: "0941E3F4-A620-40CD-A2BD-4E8D0655D8B0")),
             firstName: "Dave",
-            lastName: "Smith",
+            familyName: "Smith",
             email: "email@example.com",
             isVerified: true,
             isActive: true

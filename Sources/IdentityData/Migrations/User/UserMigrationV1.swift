@@ -14,7 +14,7 @@ struct UserMigrationV1: AsyncMigration {
         try await database.schema("user")
             .id()
             .field("first_name", .string, .required)
-            .field("last_name", .string, .required)
+            .field("family_name", .string, .required)
             .field("email", .string, .required)
             .field("password", .string, .required)
             .field("is_verified", .bool, .required)
