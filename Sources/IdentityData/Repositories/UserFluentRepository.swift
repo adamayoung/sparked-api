@@ -24,8 +24,7 @@ package final class UserFluentRepository: UserRepository {
     }
 
     package func create(
-        input: RegisterUserInput,
-        isVerified: Bool
+        input: RegisterUserInput
     ) async throws(RegisterUserError) -> User {
         guard (try? await self.fetch(byEmail: input.email)) == nil else {
             throw .emailAlreadyExists

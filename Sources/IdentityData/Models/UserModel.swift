@@ -46,7 +46,7 @@ final class UserModel: Model, @unchecked Sendable {
         lastName: String,
         email: String,
         password: String,
-        isVerified: Bool = true
+        isVerified: Bool
     ) {
         self.id = id
         self.firstName = firstName

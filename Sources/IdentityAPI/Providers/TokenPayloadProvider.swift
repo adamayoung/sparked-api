@@ -9,7 +9,7 @@ import AdamDateAuth
 import Foundation
 import IdentityEntities
 
-package protocol TokenPayloadProvider {
+package protocol TokenPayloadProvider: Sendable {
 
     func tokenPayload(for user: User) -> TokenPayload
 

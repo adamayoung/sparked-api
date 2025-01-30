@@ -11,6 +11,6 @@ package enum FetchBasicProfileError: Error {
 
     case notFound
     case userNotFound(UUID)
-    case unknown(Error)
+    case unknown(Error? = nil)
 
 }

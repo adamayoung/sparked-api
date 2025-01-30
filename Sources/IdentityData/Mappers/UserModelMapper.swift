@@ -21,7 +21,8 @@ struct UserModelMapper {
             firstName: input.firstName,
             lastName: input.lastName,
             email: input.email,
-            password: passwordHasher.hash(input.password)
+            password: passwordHasher.hash(input.password),
+            isVerified: input.isVerified
         )
     }
 

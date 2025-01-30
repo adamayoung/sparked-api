@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct User: Identifiable, Sendable {
+package struct User: Identifiable, Equatable, Sendable {
 
     package let id: UUID
     package let firstName: String

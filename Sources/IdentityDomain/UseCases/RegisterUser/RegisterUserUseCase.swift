@@ -13,7 +13,4 @@ package protocol RegisterUserUseCase {
     @discardableResult
     func execute(input: RegisterUserInput) async throws(RegisterUserError) -> User
 
-    @discardableResult
-    func execute(input: RegisterUserInput, isVerified: Bool) async throws(RegisterUserError) -> User
-
 }

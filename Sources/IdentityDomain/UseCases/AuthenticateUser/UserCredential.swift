@@ -5,7 +5,7 @@
 //  Created by Adam Young on 24/01/2025.
 //
 
-package struct UserCredential: Sendable {
+package struct UserCredential: Equatable, Sendable {
 
     package let email: String
     package let password: String

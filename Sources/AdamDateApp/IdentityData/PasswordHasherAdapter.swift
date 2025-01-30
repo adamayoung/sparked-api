@@ -17,14 +17,11 @@ final class PasswordHasherAdapter: PasswordHasherProvider {
         self.hasher = hasher
     }
 
-    func hash<Password: DataProtocol>(_ password: Password) throws -> [UInt8] {
+    func hash(_ password: String) throws -> String {
         try hasher.hash(password)
     }
 
-    func verify<Password: DataProtocol, Digest: DataProtocol>(
-        _ password: Password,
-        created digest: Digest
-    ) throws -> Bool {
+    func verify(_ password: String, created digest: String) throws -> Bool {
         try hasher.verify(password, created: digest)
     }
 

@@ -18,16 +18,7 @@ package final class RegisterUser: RegisterUserUseCase {
 
     @discardableResult
     package func execute(input: RegisterUserInput) async throws(RegisterUserError) -> User {
-        let user = try await repository.create(input: input, isVerified: false)
-        return user
-    }
-
-    @discardableResult
-    package func execute(
-        input: RegisterUserInput,
-        isVerified: Bool
-    ) async throws(RegisterUserError) -> User {
-        let user = try await repository.create(input: input, isVerified: isVerified)
+        let user = try await repository.create(input: input)
         return user
     }
 

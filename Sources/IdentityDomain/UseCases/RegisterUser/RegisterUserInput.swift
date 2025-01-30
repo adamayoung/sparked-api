@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct RegisterUserInput {
+package struct RegisterUserInput: Equatable, Sendable {
 
     package let firstName: String
     package let lastName: String

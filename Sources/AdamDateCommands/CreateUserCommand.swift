@@ -66,7 +66,8 @@ package struct CreateUserCommand: AsyncCommand {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            password: password
+            password: password,
+            isVerified: true
         )
 
         let useCase = registerUserUseCase()

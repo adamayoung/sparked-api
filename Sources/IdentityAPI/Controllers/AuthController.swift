@@ -12,15 +12,19 @@ import Vapor
 
 package struct AuthController: RouteCollection, Sendable {
 
-    private let registerUserUseCase: @Sendable () -> any RegisterUserUseCase
-    private let authenticateUserUseCase: @Sendable () -> any AuthenticateUserUseCase
-    private let fetchUserUseCase: @Sendable () -> any FetchUserUseCase
+    package typealias RegisterUserUseCaseProvider = @Sendable () -> any RegisterUserUseCase
+    package typealias AuthenticateUserUseCaseProvider = @Sendable () -> any AuthenticateUserUseCase
+    package typealias FetchUserUseCaseProvider = @Sendable () -> any FetchUserUseCase
+
+    private let registerUserUseCase: RegisterUserUseCaseProvider
+    private let authenticateUserUseCase: AuthenticateUserUseCaseProvider
+    private let fetchUserUseCase: FetchUserUseCaseProvider
     private let tokenPayloadProvider: @Sendable () -> any TokenPayloadProvider
 
     package init(
-        registerUserUseCase: @escaping @Sendable () -> any RegisterUserUseCase,
-        authenticateUserUseCase: @escaping @Sendable () -> any AuthenticateUserUseCase,
-        fetchUserUseCase: @escaping @Sendable () -> any FetchUserUseCase,
+        registerUserUseCase: @escaping RegisterUserUseCaseProvider,
+        authenticateUserUseCase: @escaping AuthenticateUserUseCaseProvider,
+        fetchUserUseCase: @escaping FetchUserUseCaseProvider,
         tokenPayloadProvider: @escaping @Sendable () -> any TokenPayloadProvider
     ) {
         self.registerUserUseCase = registerUserUseCase
@@ -45,13 +49,7 @@ package struct AuthController: RouteCollection, Sendable {
             throw Abort(.badRequest, reason: "Request body is invalid")
         }
 
-        let input = RegisterUserInput(
-            firstName: registerUserDTO.firstName,
-            lastName: registerUserDTO.lastName,
-            email: registerUserDTO.email,
-            password: registerUserDTO.password
-        )
-
+        let input = RegisterUserInputMapper.map(from: registerUserDTO)
         let useCase = registerUserUseCase()
         try await useCase.execute(input: input)
 
@@ -88,14 +86,7 @@ package struct AuthController: RouteCollection, Sendable {
         let useCase = fetchUserUseCase()
         let user = try await useCase.execute(id: userID)
 
-        let dto = UserDTO(
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            isVerified: user.isVerified
-        )
-
+        let dto = UserDTOMapper.map(from: user)
         return dto
     }
 

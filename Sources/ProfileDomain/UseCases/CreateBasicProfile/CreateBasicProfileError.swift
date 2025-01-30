@@ -9,6 +9,6 @@ package enum CreateBasicProfileError: Error {
 
     case userNotFound
     case profileAlreadyExistsForUser
-    case unknown(Error)
+    case unknown(Error? = nil)
 
 }

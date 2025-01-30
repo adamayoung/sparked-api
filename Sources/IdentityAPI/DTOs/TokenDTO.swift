@@ -7,7 +7,7 @@
 
 import Vapor
 
-struct TokenDTO: Content {
+struct TokenDTO: Equatable, Content {
 
     let token: String
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-package enum AuthenticateUserError: LocalizedError, Sendable {
+package enum AuthenticateUserError: LocalizedError, Equatable, Sendable {
 
     case invalidEmailOrPassword
     case notVerified
@@ -17,16 +17,31 @@ package enum AuthenticateUserError: LocalizedError, Sendable {
     package var errorDescription: String? {
         switch self {
         case .invalidEmailOrPassword:
-            "invalid email or password"
+            "Invalid email or password"
 
         case .notVerified:
-            "not verified"
+            "Not verified"
 
         case .userDisabled:
-            "user disabled"
+            "User disabled"
 
         case .unknown(let error):
-            error?.localizedDescription ?? "Unknown error"
+            "Unknown error: \(error?.localizedDescription ?? "No description available")"
+        }
+    }
+
+    package static func == (lhs: AuthenticateUserError, rhs: AuthenticateUserError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidEmailOrPassword, .invalidEmailOrPassword):
+            return true
+        case (.notVerified, .notVerified):
+            return true
+        case (.userDisabled, .userDisabled):
+            return true
+        case (.unknown(let lhsError), .unknown(let rhsError)):
+            return lhsError?.localizedDescription == rhsError?.localizedDescription
+        default:
+            return false
         }
     }
 

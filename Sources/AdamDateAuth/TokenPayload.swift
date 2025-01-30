@@ -8,7 +8,7 @@
 import Foundation
 import JWT
 
-package struct TokenPayload: JWT.JWTPayload {
+package struct TokenPayload: JWT.JWTPayload, Equatable {
 
     package let issuer: IssuerClaim
     package let audience: AudienceClaim
@@ -37,15 +37,18 @@ extension TokenPayload {
         subject: String,
         email: String,
         fullName: String,
-        configuration: JWTConfiguration
+        configuration: JWTConfiguration,
+        dateProvider: () -> Date = { Date.now }
     ) {
+        let expirationDate = dateProvider().addingTimeInterval(configuration.expiration)
+
         self.init(
             issuer: IssuerClaim(value: configuration.issuer),
             audience: AudienceClaim(value: [configuration.audience]),
             subject: SubjectClaim(value: subject),
             email: email,
             name: fullName,
-            expiration: ExpirationClaim(value: Date().addingTimeInterval(configuration.expiration))
+            expiration: ExpirationClaim(value: expirationDate)
         )
     }
 

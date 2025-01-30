@@ -8,7 +8,7 @@
 import Foundation
 import ProfileEntities
 
-package struct CreateBasicProfileInput {
+package struct CreateBasicProfileInput: Equatable, Sendable {
 
     package let userID: UUID
     package let displayName: String

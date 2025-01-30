@@ -10,6 +10,6 @@ import IdentityEntities
 
 package protocol RegisterUserRepository {
 
-    func create(input: RegisterUserInput, isVerified: Bool) async throws(RegisterUserError) -> User
+    func create(input: RegisterUserInput) async throws(RegisterUserError) -> User
 
 }

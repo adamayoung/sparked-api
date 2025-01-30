@@ -1,0 +1,93 @@
+{
+  "configurations" : [
+    {
+      "id" : "3C457DAD-E4B9-4963-9B73-4FE192263D9F",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "language" : "en-GB",
+        "region" : "GB",
+        "testExecutionOrdering" : "random"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:",
+      "identifier" : "AdamDateApp",
+      "name" : "AdamDateApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AdamDateAppTests",
+        "name" : "AdamDateAppTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityAPITests",
+        "name" : "IdentityAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityDataTests",
+        "name" : "IdentityDataTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityDomainTests",
+        "name" : "IdentityDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityEntitiesTests",
+        "name" : "IdentityEntitiesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileAPITests",
+        "name" : "ProfileAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDataTests",
+        "name" : "ProfileDataTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileEntitiesTests",
+        "name" : "ProfileEntitiesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AdamDateAuthTests",
+        "name" : "AdamDateAuthTests"
+      }
+    }
+  ],
+  "version" : 1
+}
