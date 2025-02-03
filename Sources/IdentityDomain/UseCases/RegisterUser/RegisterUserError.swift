@@ -7,15 +7,15 @@
 
 import Foundation
 
-package enum RegisterUserError: LocalizedError, Equatable {
+package enum RegisterUserError: LocalizedError, Equatable, Sendable {
 
-    case emailAlreadyExists
+    case emailAlreadyExists(email: String)
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
         switch self {
-        case .emailAlreadyExists:
-            "Email already exists"
+        case .emailAlreadyExists(let email):
+            "Email \(email) already exists"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -24,14 +24,14 @@ package enum RegisterUserError: LocalizedError, Equatable {
 
     package static func == (lhs: RegisterUserError, rhs: RegisterUserError) -> Bool {
         switch (lhs, rhs) {
-        case (.emailAlreadyExists, .emailAlreadyExists):
-            return true
+        case (.emailAlreadyExists(let lhsEmail), .emailAlreadyExists(let rhsEmail)):
+            lhsEmail == rhsEmail
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?.localizedDescription
+            lhsError?.localizedDescription == rhsError?.localizedDescription
 
         default:
-            return false
+            false
         }
     }
 

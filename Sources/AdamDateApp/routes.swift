@@ -12,6 +12,6 @@ import Vapor
 func routes(_ routes: RoutesBuilder, container: Container) throws {
     let apiRouter = routes.grouped("api")
 
-    try apiRouter.register(collection: container.resolve(ProfileController.self))
+    try apiRouter.register(collection: container.resolve(BasicProfileController.self))
     try apiRouter.register(collection: container.resolve(AuthController.self))
 }

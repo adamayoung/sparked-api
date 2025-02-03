@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import ProfileEntities
 
-package protocol FetchBasicProfileUseCase: Sendable {
+package protocol FetchBasicProfileUseCase {
 
     func execute(id: BasicProfile.ID) async throws(FetchBasicProfileError) -> BasicProfile
 

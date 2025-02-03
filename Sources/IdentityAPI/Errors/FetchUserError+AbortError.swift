@@ -12,8 +12,9 @@ extension FetchUserError: AbortError {
 
     package var status: HTTPResponseStatus {
         switch self {
-        case .notFound: return .notFound
-        case .unknown: return .internalServerError
+        case .notFoundByID: .notFound
+        case .notFoundByEmail: .notFound
+        case .unknown: .internalServerError
         }
     }
 

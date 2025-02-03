@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import IdentityEntities
 
 package final class RegisterUser: RegisterUserUseCase {
 

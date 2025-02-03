@@ -18,12 +18,16 @@ struct RegisterUserErrorAbortErrorTests {
 
         @Test("status emailAlreadyExists returns not badRequest")
         func statusEmailAlreadyExistsReturnsBadRequest() {
-            #expect(RegisterUserError.emailAlreadyExists.status == .badRequest)
+            let status = RegisterUserError.emailAlreadyExists(email: "email@example.com").status
+
+            #expect(status == .badRequest)
         }
 
         @Test("status unknown returns internal server error")
         func statusUnknownReturnsInternalServerError() {
-            #expect(RegisterUserError.unknown().status == .internalServerError)
+            let status = RegisterUserError.unknown().status
+
+            #expect(status == .internalServerError)
         }
 
     }
@@ -32,7 +36,8 @@ struct RegisterUserErrorAbortErrorTests {
 
         @Test("reason returns localized description of error")
         func reasonReturnsLocalizedDescriptionOfError() {
-            let error = RegisterUserError.emailAlreadyExists
+            let error = RegisterUserError.emailAlreadyExists(email: "email@example.com")
+
             #expect(error.localizedDescription == error.reason)
         }
 

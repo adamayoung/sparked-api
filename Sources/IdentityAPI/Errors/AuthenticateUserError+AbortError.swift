@@ -12,10 +12,10 @@ extension AuthenticateUserError: AbortError {
 
     package var status: HTTPResponseStatus {
         switch self {
-        case .invalidEmailOrPassword: return .unauthorized
-        case .notVerified: return .forbidden
-        case .userDisabled: return .notFound
-        case .unknown: return .internalServerError
+        case .invalidEmailOrPassword: .unauthorized
+        case .notVerified: .forbidden
+        case .userDisabled: .notFound
+        case .unknown: .internalServerError
         }
     }
 

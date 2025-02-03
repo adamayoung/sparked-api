@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import IdentityEntities
+import IdentityDomain
 import Testing
 
 @testable import IdentityAPI

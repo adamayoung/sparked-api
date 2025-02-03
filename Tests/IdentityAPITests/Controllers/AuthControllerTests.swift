@@ -5,14 +5,15 @@
 //  Created by Adam Young on 29/01/2025.
 //
 
+import APITesting
 import AdamDateAuth
 import Foundation
+import IdentityDomain
 import JWT
 import Testing
 import VaporTesting
 
 @testable import IdentityAPI
-@testable import IdentityEntities
 
 @Suite("AuthController", .serialized)
 struct AuthControllerTests {
@@ -48,7 +49,14 @@ struct AuthControllerTests {
 
         registerUserUseCase.executeResult = .success(user)
 
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .POST, "auth/register",
                 beforeRequest: { req in
@@ -65,7 +73,14 @@ struct AuthControllerTests {
     func registerWhenRequestBodyIsInvalidReturnsBadRequest() async throws {
         registerUserUseCase.executeResult = .failure(.unknown())
 
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .POST, "auth/register",
                 beforeRequest: { req in
@@ -106,7 +121,14 @@ struct AuthControllerTests {
         authenticateUserUseCase.executeResult = .success(user)
         tokenPayloadProvider.tokenPayloadResult = tokenPayload
 
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .POST, "auth/token",
                 beforeRequest: { req in
@@ -127,7 +149,14 @@ struct AuthControllerTests {
     func tokenWhenRequestBodyIsInvalidReturnsBadRequest() async throws {
         authenticateUserUseCase.executeResult = .failure(.unknown())
 
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .POST, "auth/token",
                 beforeRequest: { req in
@@ -148,7 +177,14 @@ struct AuthControllerTests {
         )
         authenticateUserUseCase.executeResult = .failure(.invalidEmailOrPassword)
 
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .POST, "auth/token",
                 beforeRequest: { req in
@@ -185,12 +221,20 @@ struct AuthControllerTests {
         )
         fetchUserUseCase.executeResult = .success(user)
 
-        try await withApp { app in
-            let jwt = (try? await app.jwt.keys.sign(tokenPayload)) ?? ""
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
             try await app.testing().test(
                 .GET, "auth/me",
                 beforeRequest: { req in
-                    req.headers.bearerAuthorization = .init(token: jwt)
+                    if let jwt {
+                        req.headers.bearerAuthorization = .init(token: jwt)
+                    }
                 },
                 afterResponse: { res async in
                     #expect(res.status == .ok)
@@ -201,7 +245,14 @@ struct AuthControllerTests {
 
     @Test("me when no authorization header throws unauthorized error")
     func meWhenNoAuthorizationHeaderThrowsUnauthorizedError() async throws {
-        try await withApp { app in
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller) { app in
             try await app.testing().test(
                 .GET, "auth/me",
                 afterResponse: { res async in
@@ -225,50 +276,26 @@ struct AuthControllerTests {
             dateProvider: { Date.now }
         )
 
-        try await withApp { app in
-            let jwt = (try? await app.jwt.keys.sign(tokenPayload)) ?? ""
+        let controller = AuthController(
+            registerUserUseCase: { registerUserUseCase },
+            authenticateUserUseCase: { authenticateUserUseCase },
+            fetchUserUseCase: { fetchUserUseCase },
+            tokenPayloadProvider: { tokenPayloadProvider }
+        )
+
+        try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
             try await app.testing().test(
                 .GET, "auth/me",
                 beforeRequest: { req in
-                    req.headers.bearerAuthorization = .init(token: jwt)
+                    if let jwt {
+                        req.headers.bearerAuthorization = .init(token: jwt)
+                    }
                 },
                 afterResponse: { res async in
                     #expect(res.status == .forbidden)
                 }
             )
         }
-    }
-
-}
-
-extension AuthControllerTests {
-
-    private func withApp(_ test: (Application) async throws -> Void) async throws {
-        let app = try await Application.make(.testing)
-
-        do {
-            try await configure(app)
-            try await test(app)
-        } catch {
-            try await app.asyncShutdown()
-            throw error
-        }
-
-        try await app.asyncShutdown()
-    }
-
-    private func configure(_ app: Application) async throws {
-        let hmac = HMACKey(from: "secret123")
-        await app.jwt.keys.add(hmac: hmac, digestAlgorithm: .sha256)
-
-        try app.register(
-            collection: AuthController(
-                registerUserUseCase: { registerUserUseCase },
-                authenticateUserUseCase: { authenticateUserUseCase },
-                fetchUserUseCase: { fetchUserUseCase },
-                tokenPayloadProvider: { tokenPayloadProvider }
-            )
-        )
     }
 
 }

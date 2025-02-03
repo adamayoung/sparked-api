@@ -7,15 +7,19 @@
 
 import Foundation
 
-package enum FetchUserError: LocalizedError, Equatable {
+package enum FetchUserError: LocalizedError, Equatable, Sendable {
 
-    case notFound
+    case notFoundByID(userID: UUID)
+    case notFoundByEmail(email: String)
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
         switch self {
-        case .notFound:
-            "User not found"
+        case .notFoundByID(let userID):
+            "User \(userID) not found"
+
+        case .notFoundByEmail(let email):
+            "User \(email) not found"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -24,14 +28,17 @@ package enum FetchUserError: LocalizedError, Equatable {
 
     package static func == (lhs: FetchUserError, rhs: FetchUserError) -> Bool {
         switch (lhs, rhs) {
-        case (.notFound, .notFound):
-            return true
+        case (.notFoundByID(let lhsUserID), .notFoundByID(let rhsUserID)):
+            lhsUserID == rhsUserID
+
+        case (.notFoundByEmail(let lhsEmail), .notFoundByEmail(let rhsEmailID)):
+            lhsEmail == rhsEmailID
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?.localizedDescription
+            lhsError?.localizedDescription == rhsError?.localizedDescription
 
         default:
-            return false
+            false
         }
     }
 

@@ -7,7 +7,7 @@
 
 import AdamDateAuth
 import Foundation
-import IdentityEntities
+import IdentityDomain
 
 package protocol TokenPayloadProvider: Sendable {
 

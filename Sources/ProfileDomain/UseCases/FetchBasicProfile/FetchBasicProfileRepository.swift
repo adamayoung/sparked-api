@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import ProfileEntities
 
-package protocol FetchBasicProfileRepository: Sendable {
+package protocol FetchBasicProfileRepository {
 
     func fetch(byID id: BasicProfile.ID) async throws(FetchBasicProfileError) -> BasicProfile
 

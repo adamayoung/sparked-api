@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import ProfileEntities
 
 package protocol CreateBasicProfileRepository {
 
-    func create(input: CreateBasicProfileInput) async throws(CreateBasicProfileError)
-        -> BasicProfile
+    func create(
+        input: CreateBasicProfileInput
+    ) async throws(CreateBasicProfileError) -> BasicProfile
 
 }

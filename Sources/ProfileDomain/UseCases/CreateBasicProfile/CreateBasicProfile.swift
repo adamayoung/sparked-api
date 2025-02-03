@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import ProfileEntities
 
 package final class CreateBasicProfile: CreateBasicProfileUseCase {
 
     private let repository: any CreateBasicProfileRepository
 
-    package init(repository: some CreateBasicProfileRepository & FetchBasicProfileRepository) {
+    package init(repository: some CreateBasicProfileRepository) {
         self.repository = repository
     }
 

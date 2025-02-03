@@ -6,7 +6,7 @@
 //
 
 import AdamDateAuth
-import IdentityEntities
+import IdentityDomain
 import JWT
 import Vapor
 

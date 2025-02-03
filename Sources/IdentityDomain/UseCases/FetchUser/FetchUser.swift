@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import IdentityEntities
 
 package final class FetchUser: FetchUserUseCase {
 
@@ -18,7 +17,6 @@ package final class FetchUser: FetchUserUseCase {
 
     package func execute(id: User.ID) async throws(FetchUserError) -> User {
         let user = try await repository.fetch(byID: id)
-
         return user
     }
 

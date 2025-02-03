@@ -7,7 +7,6 @@
 
 import Foundation
 import IdentityDomain
-import IdentityEntities
 
 struct RegisterUserInputMapper {
 

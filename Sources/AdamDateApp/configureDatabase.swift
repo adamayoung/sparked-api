@@ -7,8 +7,8 @@
 
 import Fluent
 import FluentPostgresDriver
-import IdentityData
-import ProfileData
+import IdentityInfrastructure
+import ProfileInfrastructure
 import Vapor
 
 func configureDatabase(on app: Application) throws -> [DatabaseID: Database] {
@@ -18,8 +18,8 @@ func configureDatabase(on app: Application) throws -> [DatabaseID: Database] {
     }
 
     var migrations: [DatabaseID: [Migration]] = [:]
-    migrations[.profile] = ProfileData.migrations()
-    migrations[.identity] = IdentityData.migrations()
+    migrations[.profile] = ProfileInfrastructure.migrations()
+    migrations[.identity] = IdentityInfrastructure.migrations()
 
     for (databaseID, migrations) in migrations {
         for migration in migrations {

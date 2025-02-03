@@ -7,7 +7,6 @@
 
 import Foundation
 import IdentityDomain
-import IdentityEntities
 
 final class AuthenticateUserStubRepository: AuthenticateUserRepository {
 

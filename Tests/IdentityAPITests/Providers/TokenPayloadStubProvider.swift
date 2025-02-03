@@ -8,7 +8,7 @@
 import AdamDateAuth
 import Foundation
 import IdentityAPI
-import IdentityEntities
+import IdentityDomain
 
 final class TokenPayloadStubProvider: TokenPayloadProvider, @unchecked Sendable {
 

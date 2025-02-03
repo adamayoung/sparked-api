@@ -7,12 +7,13 @@
 
 import Foundation
 import IdentityDomain
-import IdentityEntities
 
 final class RegisterUserStubUseCase: RegisterUserUseCase, @unchecked Sendable {
 
     var executeResult: Result<User, RegisterUserError> = .failure(.unknown())
     private(set) var lastExecuteInput: RegisterUserInput?
+
+    init() {}
 
     @discardableResult
     func execute(input: RegisterUserInput) async throws(RegisterUserError) -> User {

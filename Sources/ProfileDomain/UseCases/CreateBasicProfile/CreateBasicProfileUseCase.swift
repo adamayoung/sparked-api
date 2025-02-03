@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import ProfileEntities
 
 package protocol CreateBasicProfileUseCase {
 

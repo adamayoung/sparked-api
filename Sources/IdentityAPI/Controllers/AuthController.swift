@@ -7,24 +7,19 @@
 
 import AdamDateAuth
 import IdentityDomain
-import IdentityEntities
 import Vapor
 
 package struct AuthController: RouteCollection, Sendable {
 
-    package typealias RegisterUserUseCaseProvider = @Sendable () -> any RegisterUserUseCase
-    package typealias AuthenticateUserUseCaseProvider = @Sendable () -> any AuthenticateUserUseCase
-    package typealias FetchUserUseCaseProvider = @Sendable () -> any FetchUserUseCase
-
-    private let registerUserUseCase: RegisterUserUseCaseProvider
-    private let authenticateUserUseCase: AuthenticateUserUseCaseProvider
-    private let fetchUserUseCase: FetchUserUseCaseProvider
+    private let registerUserUseCase: @Sendable () -> any RegisterUserUseCase
+    private let authenticateUserUseCase: @Sendable () -> any AuthenticateUserUseCase
+    private let fetchUserUseCase: @Sendable () -> any FetchUserUseCase
     private let tokenPayloadProvider: @Sendable () -> any TokenPayloadProvider
 
     package init(
-        registerUserUseCase: @escaping RegisterUserUseCaseProvider,
-        authenticateUserUseCase: @escaping AuthenticateUserUseCaseProvider,
-        fetchUserUseCase: @escaping FetchUserUseCaseProvider,
+        registerUserUseCase: @escaping @Sendable () -> any RegisterUserUseCase,
+        authenticateUserUseCase: @escaping @Sendable () -> any AuthenticateUserUseCase,
+        fetchUserUseCase: @escaping @Sendable () -> any FetchUserUseCase,
         tokenPayloadProvider: @escaping @Sendable () -> any TokenPayloadProvider
     ) {
         self.registerUserUseCase = registerUserUseCase

@@ -9,12 +9,11 @@ import AdamDateAuth
 import Fluent
 import Foundation
 import IdentityAPI
-import IdentityData
 import IdentityDomain
-import IdentityEntities
+import IdentityInfrastructure
 import ProfileAPI
-import ProfileData
 import ProfileDomain
+import ProfileInfrastructure
 import Vapor
 
 final class DefaultContainerConfigurator: ContainerConfigurator {
@@ -113,10 +112,10 @@ extension DefaultContainerConfigurator {
     }
 
     private func configureControllers() {
-        c.register(type: ProfileController.self) { c in
-            ProfileController(
-                createProfileUseCase: { c.resolve(CreateBasicProfileUseCase.self) },
-                fetchProfileUseCase: { c.resolve(FetchBasicProfileUseCase.self) }
+        c.register(type: BasicProfileController.self) { c in
+            BasicProfileController(
+                createBasicProfileUseCase: { c.resolve(CreateBasicProfileUseCase.self) },
+                fetchBasicProfileUseCase: { c.resolve(FetchBasicProfileUseCase.self) }
             )
         }
 

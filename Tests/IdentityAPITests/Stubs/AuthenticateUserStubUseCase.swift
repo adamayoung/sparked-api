@@ -7,12 +7,13 @@
 
 import Foundation
 import IdentityDomain
-import IdentityEntities
 
 final class AuthenticateUserStubUseCase: AuthenticateUserUseCase, @unchecked Sendable {
 
     var executeResult: Result<User, AuthenticateUserError> = .failure(.unknown())
     private(set) var lastExecuteCredential: UserCredential?
+
+    init() {}
 
     func execute(credential: UserCredential) async throws(AuthenticateUserError) -> User {
         lastExecuteCredential = credential

@@ -6,7 +6,6 @@
 //
 
 import IdentityDomain
-import IdentityEntities
 import Vapor
 
 package struct CreateUserCommand: AsyncCommand {

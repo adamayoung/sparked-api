@@ -13,7 +13,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-        .package(url: "https://github.com/vapor/leaf.git", from: "4.4.0"),
+        //        .package(url: "https://github.com/vapor/leaf.git", from: "4.4.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
@@ -26,13 +26,11 @@ let package = Package(
             dependencies: [
                 "AdamDateCommands",
                 "ProfileAPI",
-                "ProfileEntities",
                 "ProfileDomain",
-                "ProfileData",
+                "ProfileInfrastructure",
                 "IdentityAPI",
-                "IdentityEntities",
                 "IdentityDomain",
-                "IdentityData",
+                "IdentityInfrastructure",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -49,9 +47,7 @@ let package = Package(
         .target(
             name: "AdamDateCommands",
             dependencies: [
-                "ProfileEntities",
                 "ProfileDomain",
-                "IdentityEntities",
                 "IdentityDomain",
                 .product(name: "Vapor", package: "vapor")
             ]
@@ -64,8 +60,6 @@ let package = Package(
             name: "ProfileAPI",
             dependencies: [
                 "ProfileDomain",
-                "ProfileEntities",
-                "IdentityEntities",
                 "AdamDateAuth",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -76,39 +70,29 @@ let package = Package(
             name: "ProfileAPITests",
             dependencies: [
                 "ProfileAPI",
-                "ProfileEntities",
-                .product(name: "JWT", package: "jwt"),
+                "ProfileDomain",
+                "APITesting",
                 .product(name: "VaporTesting", package: "vapor")
             ]
         ),
 
-        .target(
-            name: "ProfileEntities"
-        ),
-        .testTarget(
-            name: "ProfileEntitiesTests",
-            dependencies: ["ProfileEntities"]
-        ),
-
-        .target(
-            name: "ProfileDomain",
-            dependencies: ["ProfileEntities"]
-        ),
+        .target(name: "ProfileDomain"),
         .testTarget(
             name: "ProfileDomainTests",
             dependencies: ["ProfileDomain"]
         ),
 
         .target(
-            name: "ProfileData",
+            name: "ProfileInfrastructure",
             dependencies: [
                 "ProfileDomain",
-                .product(name: "Fluent", package: "fluent")
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "XCTFluent", package: "fluent-kit")
             ]
         ),
         .testTarget(
-            name: "ProfileDataTests",
-            dependencies: ["ProfileData"]
+            name: "ProfileInfrastructureTests",
+            dependencies: ["ProfileInfrastructure"]
         ),
 
         // --------------------------------------
@@ -118,7 +102,6 @@ let package = Package(
             name: "IdentityAPI",
             dependencies: [
                 "IdentityDomain",
-                "IdentityEntities",
                 "AdamDateAuth",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -129,31 +112,21 @@ let package = Package(
             name: "IdentityAPITests",
             dependencies: [
                 "IdentityAPI",
-                "IdentityEntities",
+                "IdentityDomain",
+                "APITesting",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
             ]
         ),
 
-        .target(name: "IdentityEntities"),
-        .testTarget(
-            name: "IdentityEntitiesTests",
-            dependencies: [
-                "IdentityEntities"
-            ]
-        ),
-
-        .target(
-            name: "IdentityDomain",
-            dependencies: ["IdentityEntities"]
-        ),
+        .target(name: "IdentityDomain"),
         .testTarget(
             name: "IdentityDomainTests",
             dependencies: ["IdentityDomain"]
         ),
 
         .target(
-            name: "IdentityData",
+            name: "IdentityInfrastructure",
             dependencies: [
                 "IdentityDomain",
                 .product(name: "Fluent", package: "fluent"),
@@ -161,8 +134,8 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "IdentityDataTests",
-            dependencies: ["IdentityData"]
+            name: "IdentityInfrastructureTests",
+            dependencies: ["IdentityInfrastructure"]
         ),
 
         // --------------------------------------
@@ -175,6 +148,18 @@ let package = Package(
         .testTarget(
             name: "AdamDateAuthTests",
             dependencies: ["AdamDateAuth"]
+        ),
+
+        // --------------------------------------
+        // Testing Support
+
+        .target(
+            name: "APITesting",
+            dependencies: [
+                "AdamDateAuth",
+                .product(name: "VaporTesting", package: "vapor"),
+                .product(name: "JWT", package: "jwt")
+            ]
         )
 
     ]
