@@ -28,6 +28,8 @@ let package = Package(
                 "ProfileAPI",
                 "ProfileDomain",
                 "ProfileInfrastructure",
+                "ReferenceDataDomain",
+                "ReferenceDataInfrastructure",
                 "IdentityAPI",
                 "IdentityDomain",
                 "IdentityInfrastructure",
@@ -136,6 +138,24 @@ let package = Package(
         .testTarget(
             name: "IdentityInfrastructureTests",
             dependencies: ["IdentityInfrastructure"]
+        ),
+
+        // --------------------------------------
+        // Reference Data
+
+        .target(name: "ReferenceDataDomain"),
+        .testTarget(
+            name: "ReferenceDataDomainTests",
+            dependencies: ["ReferenceDataDomain"]
+        ),
+
+        .target(
+            name: "ReferenceDataInfrastructure",
+            dependencies: ["ReferenceDataDomain"]
+        ),
+        .testTarget(
+            name: "ReferenceDataInfrastructureTests",
+            dependencies: ["ReferenceDataInfrastructure"]
         ),
 
         // --------------------------------------

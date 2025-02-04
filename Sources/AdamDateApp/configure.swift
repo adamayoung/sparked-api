@@ -12,6 +12,7 @@ func configure(_ app: Application) async throws {
     let jwtConfiguration = await configureAuth(app)
 
     let container = Container()
+
     let containerConfigurator = DefaultContainerConfigurator(
         container: container,
         databases: databases,

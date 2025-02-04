@@ -23,6 +23,10 @@ class Container: @unchecked Sendable {
         service: @escaping (Container) -> Service
     ) {
         let serviceName = Self.serviceName(for: type, name: name)
+        guard services[serviceName] == nil else {
+            fatalError("\(serviceName) already register in container.")
+        }
+
         services[serviceName] = service
     }
 
@@ -30,11 +34,11 @@ class Container: @unchecked Sendable {
         let serviceName = Self.serviceName(for: type, name: name)
 
         guard let serviceBuilder = services[serviceName] else {
-            fatalError("Container not registered for \(serviceName).")
+            fatalError("\(serviceName) not registered in container.")
         }
 
         guard let service = serviceBuilder(self) as? Service else {
-            fatalError("Container registered for \(serviceName) but returned an invalid type.")
+            fatalError("\(serviceName) registered in container but returned an invalid type.")
         }
 
         return service
