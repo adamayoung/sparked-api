@@ -1,5 +1,5 @@
 //
-//  UserMigrations.swift
+//  IdentityMigrations.swift
 //  AdamDateApp
 //
 //  Created by Adam Young on 23/01/2025.

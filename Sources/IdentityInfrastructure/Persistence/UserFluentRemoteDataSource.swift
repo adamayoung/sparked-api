@@ -1,8 +1,8 @@
 //
-//  UserFluentRepository.swift
+//  UserFluentRemoteDataSource.swift
 //  AdamDateApp
 //
-//  Created by Adam Young on 23/01/2025.
+//  Created by Adam Young on 05/02/2025.
 //
 
 import Fluent
@@ -10,7 +10,7 @@ import Foundation
 import IdentityApplication
 import IdentityDomain
 
-package final class UserFluentRepository: UserRepository {
+package final class UserFluentRemoteDataSource: UserRemoteDataSource {
 
     private let database: any Database
     private let passwordHasher: any PasswordHasherProvider

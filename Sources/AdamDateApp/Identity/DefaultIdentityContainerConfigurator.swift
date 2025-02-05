@@ -45,10 +45,16 @@ extension DefaultIdentityContainerConfigurator {
             database
         }
 
-        c.register(type: UserRepository.self) { c in
-            UserFluentRepository(
+        c.register(type: UserRemoteDataSource.self) { c in
+            UserFluentRemoteDataSource(
                 database: c.resolve(Database.self, name: DatabaseID.identity.string),
                 passwordHasher: c.resolve(PasswordHasherProvider.self)
+            )
+        }
+
+        c.register(type: UserRepository.self) { c in
+            UserDefaultRepository(
+                remoteDataSource: c.resolve(UserRemoteDataSource.self)
             )
         }
     }
