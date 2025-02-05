@@ -15,6 +15,7 @@ struct CountryDTOMapper {
     static func map(from country: Country) -> CountryDTO {
         CountryDTO(
             id: country.id,
+            code: country.code,
             name: country.name
         )
     }

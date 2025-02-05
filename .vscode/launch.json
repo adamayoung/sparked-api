@@ -4,18 +4,18 @@
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:AdamDateApp}",
+            "cwd": "${workspaceFolder:adam-date-app}",
             "name": "Debug AdamDateApp",
-            "program": "${workspaceFolder:AdamDateApp}/.build/debug/AdamDateApp",
+            "program": "${workspaceFolder:adam-date-app}/.build/debug/AdamDateApp",
             "preLaunchTask": "swift: Build Debug AdamDateApp"
         },
         {
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:AdamDateApp}",
+            "cwd": "${workspaceFolder:adam-date-app}",
             "name": "Release AdamDateApp",
-            "program": "${workspaceFolder:AdamDateApp}/.build/release/AdamDateApp",
+            "program": "${workspaceFolder:adam-date-app}/.build/release/AdamDateApp",
             "preLaunchTask": "swift: Build Release AdamDateApp"
         }
     ]

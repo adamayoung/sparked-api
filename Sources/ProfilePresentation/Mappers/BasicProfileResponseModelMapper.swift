@@ -15,7 +15,8 @@ struct BasicProfileResponseModelMapper {
     static func map(from dto: BasicProfileDTO) -> BasicProfileResponseModel {
         BasicProfileResponseModel(
             id: dto.id,
-            displayName: dto.displayName
+            displayName: dto.displayName,
+            age: dto.age
         )
     }
 

@@ -1,6 +1,6 @@
 //
 //  BasicProfileController.swift
-//  AdamDateAPI
+//  AdamDateApp
 //
 //  Created by Adam Young on 09/01/2025.
 //
@@ -24,10 +24,9 @@ package struct BasicProfileController: RouteCollection, Sendable {
     }
 
     package func boot(routes: any RoutesBuilder) throws {
-        let profiles = routes.grouped("profiles")
-        profiles.get("me", "basic", use: showMe)
-        profiles.get(":profileID", "basic", use: show)
-        profiles.post("me", "basic", use: create)
+        routes.get("me", "basic", use: showMe)
+        routes.get(":profileID", "basic", use: show)
+        routes.post("me", "basic", use: create)
     }
 
     @Sendable

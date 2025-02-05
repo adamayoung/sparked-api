@@ -1,12 +1,12 @@
 //
 //  ContainerConfigurator.swift
-//  AdamDateAPI
+//  AdamDateApp
 //
 //  Created by Adam Young on 09/01/2025.
 //
 
 protocol ContainerConfigurator {
 
-    func configure()
+    func configure(in container: Container)
 
 }

@@ -9,11 +9,17 @@ import Foundation
 
 package struct Country: Identifiable, Equatable {
 
-    package let id: String
+    package let id: UUID
+    package let code: String
     package let name: String
 
-    package init(id: String, name: String) {
+    package init(
+        id: UUID,
+        code: String,
+        name: String
+    ) {
         self.id = id
+        self.code = code
         self.name = name
     }
 

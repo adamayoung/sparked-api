@@ -10,18 +10,13 @@ import Foundation
 
 final class AdamDateAuthContainerConfigurator: ContainerConfigurator {
 
-    private let c: Container
     private let jwtConfiguration: JWTConfiguration
 
-    init(
-        container: Container,
-        jwtConfiguration: JWTConfiguration
-    ) {
-        self.c = container
+    init(jwtConfiguration: JWTConfiguration) {
         self.jwtConfiguration = jwtConfiguration
     }
 
-    func configure() {
+    func configure(in c: Container) {
         c.register(type: JWTConfiguration.self) { [jwtConfiguration] _ in
             jwtConfiguration
         }

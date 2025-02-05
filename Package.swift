@@ -29,8 +29,10 @@ let package = Package(
                 "ProfileApplication",
                 "ProfileInfrastructure",
                 "ProfileDomain",
-                "ReferenceDataDomain",
+                "ReferenceDataPresentation",
+                "ReferenceDataApplication",
                 "ReferenceDataInfrastructure",
+                "ReferenceDataDomain",
                 "IdentityPresentation",
                 "IdentityApplication",
                 "IdentityInfrastructure",
@@ -97,8 +99,7 @@ let package = Package(
             dependencies: [
                 "ProfileApplication",
                 "ProfileDomain",
-                .product(name: "Fluent", package: "fluent"),
-                .product(name: "XCTFluent", package: "fluent-kit")
+                .product(name: "Fluent", package: "fluent")
             ]
         ),
         .testTarget(
@@ -106,7 +107,9 @@ let package = Package(
             dependencies: [
                 "ProfileInfrastructure",
                 "ProfileApplication",
-                "ProfileDomain"
+                "ProfileDomain",
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "XCTFluent", package: "fluent-kit")
             ]
         ),
 
@@ -157,8 +160,7 @@ let package = Package(
             dependencies: [
                 "IdentityApplication",
                 "IdentityDomain",
-                .product(name: "Fluent", package: "fluent"),
-                .product(name: "XCTFluent", package: "fluent-kit")
+                .product(name: "Fluent", package: "fluent")
             ]
         ),
         .testTarget(
@@ -166,7 +168,9 @@ let package = Package(
             dependencies: [
                 "IdentityInfrastructure",
                 "IdentityApplication",
-                "IdentityDomain"
+                "IdentityDomain",
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "XCTFluent", package: "fluent-kit")
             ]
         ),
 
@@ -179,19 +183,58 @@ let package = Package(
         // --------------------------------------
         // Reference Data
 
-        .target(name: "ReferenceDataDomain"),
+        .target(
+            name: "ReferenceDataPresentation",
+            dependencies: [
+                "ReferenceDataApplication",
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOPosix", package: "swift-nio")
+            ]
+        ),
         .testTarget(
-            name: "ReferenceDataDomainTests",
+            name: "ReferenceDataPresentationTests",
+            dependencies: [
+                "ReferenceDataPresentation",
+                "ReferenceDataApplication",
+                "APITesting",
+                .product(name: "JWT", package: "jwt"),
+                .product(name: "VaporTesting", package: "vapor")
+            ]
+        ),
+
+        .target(
+            name: "ReferenceDataApplication",
             dependencies: ["ReferenceDataDomain"]
+        ),
+        .testTarget(
+            name: "ReferenceDataApplicationTests",
+            dependencies: ["ReferenceDataApplication"]
         ),
 
         .target(
             name: "ReferenceDataInfrastructure",
-            dependencies: ["ReferenceDataDomain"]
+            dependencies: [
+                "ReferenceDataApplication",
+                "ReferenceDataDomain",
+                .product(name: "Fluent", package: "fluent")
+            ]
         ),
         .testTarget(
             name: "ReferenceDataInfrastructureTests",
-            dependencies: ["ReferenceDataInfrastructure"]
+            dependencies: [
+                "ReferenceDataInfrastructure",
+                "ReferenceDataApplication",
+                "ReferenceDataDomain",
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "XCTFluent", package: "fluent-kit")
+            ]
+        ),
+
+        .target(name: "ReferenceDataDomain"),
+        .testTarget(
+            name: "ReferenceDataDomainTests",
+            dependencies: ["ReferenceDataDomain"]
         ),
 
         // --------------------------------------

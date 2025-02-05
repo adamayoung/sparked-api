@@ -1,6 +1,6 @@
 //
 //  configure.swift
-//  AdamDateAPI
+//  AdamDateApp
 //
 //  Created by Adam Young on 09/01/2025.
 //
@@ -13,13 +13,12 @@ func configure(_ app: Application) async throws {
 
     let container = Container()
 
-    let containerConfigurator = DefaultContainerConfigurator(
-        container: container,
+    let containerConfigurator = AdamDateContainerConfigurator(
         databases: databases,
         jwtConfiguration: jwtConfiguration,
         passwordHasher: app.password
     )
-    containerConfigurator.configure()
+    container.configure(with: containerConfigurator)
 
     configureCommands(app, container: container)
 

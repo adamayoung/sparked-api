@@ -29,10 +29,9 @@ package struct AuthController: RouteCollection, Sendable {
     }
 
     package func boot(routes: any RoutesBuilder) throws {
-        let auth = routes.grouped("auth")
-        auth.post("register", use: register)
-        auth.post("token", use: token)
-        auth.get("me", use: me)
+        routes.post("register", use: register)
+        routes.post("token", use: token)
+        routes.get("me", use: me)
     }
 
     @Sendable

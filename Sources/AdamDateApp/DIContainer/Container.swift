@@ -1,6 +1,6 @@
 //
 //  Container.swift
-//  AdamDateAPI
+//  AdamDateApp
 //
 //  Created by Adam Young on 09/01/2025.
 //
@@ -42,6 +42,10 @@ class Container: @unchecked Sendable {
         }
 
         return service
+    }
+
+    func configure(with configurator: some ContainerConfigurator) {
+        configurator.configure(in: self)
     }
 
 }

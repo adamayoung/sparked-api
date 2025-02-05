@@ -7,13 +7,19 @@
 
 import Foundation
 
-package struct CountryDTO: Identifiable, Equatable {
+package struct CountryDTO: Identifiable, Equatable, Sendable {
 
-    package let id: String
+    package let id: UUID
+    package let code: String
     package let name: String
 
-    package init(id: String, name: String) {
+    package init(
+        id: UUID,
+        code: String,
+        name: String
+    ) {
         self.id = id
+        self.code = code
         self.name = name
     }
 
