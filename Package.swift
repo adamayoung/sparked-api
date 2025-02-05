@@ -25,15 +25,16 @@ let package = Package(
             name: "AdamDateApp",
             dependencies: [
                 "AdamDateCommands",
-                "ProfileAPI",
-                "ProfileDomain",
+                "ProfilePresentation",
+                "ProfileApplication",
                 "ProfileInfrastructure",
+                "ProfileDomain",
                 "ReferenceDataDomain",
                 "ReferenceDataInfrastructure",
                 "IdentityPresentation",
                 "IdentityApplication",
-                "IdentityDomain",
                 "IdentityInfrastructure",
+                "IdentityDomain",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -60,9 +61,9 @@ let package = Package(
         // Profile
 
         .target(
-            name: "ProfileAPI",
+            name: "ProfilePresentation",
             dependencies: [
-                "ProfileDomain",
+                "ProfileApplication",
                 "AdamDateAuth",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -70,24 +71,31 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "ProfileAPITests",
+            name: "ProfilePresentationTests",
             dependencies: [
-                "ProfileAPI",
-                "ProfileDomain",
+                "ProfilePresentation",
+                "ProfileApplication",
                 "APITesting",
                 .product(name: "VaporTesting", package: "vapor")
             ]
         ),
 
-        .target(name: "ProfileDomain"),
-        .testTarget(
-            name: "ProfileDomainTests",
+        .target(
+            name: "ProfileApplication",
             dependencies: ["ProfileDomain"]
+        ),
+        .testTarget(
+            name: "ProfileApplicationTests",
+            dependencies: [
+                "ProfileApplication",
+                "ProfileDomain"
+            ]
         ),
 
         .target(
             name: "ProfileInfrastructure",
             dependencies: [
+                "ProfileApplication",
                 "ProfileDomain",
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "XCTFluent", package: "fluent-kit")
@@ -95,7 +103,17 @@ let package = Package(
         ),
         .testTarget(
             name: "ProfileInfrastructureTests",
-            dependencies: ["ProfileInfrastructure"]
+            dependencies: [
+                "ProfileInfrastructure",
+                "ProfileApplication",
+                "ProfileDomain"
+            ]
+        ),
+
+        .target(name: "ProfileDomain"),
+        .testTarget(
+            name: "ProfileDomainTests",
+            dependencies: ["ProfileDomain"]
         ),
 
         // --------------------------------------

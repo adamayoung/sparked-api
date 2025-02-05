@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ProfileDomain
+import ProfileApplication
 import Testing
 
 @testable import ProfileInfrastructure
@@ -19,9 +19,9 @@ struct BasicProfileModelMapperTests {
         let userID = try #require(UUID(uuidString: "CBCEC7E9-5038-422D-A3A1-779228BB31F2"))
         let input = try Self.buildCreateBasicProfileInput(userID: userID)
 
-        let basicProfile = BasicProfileModelMapper.map(from: input)
+        let basicProfileModel = BasicProfileModelMapper.map(from: input)
 
-        #expect(basicProfile.userID == userID)
+        #expect(basicProfileModel.userID == userID)
     }
 
     @Test("map from create basic profile input with display name")
@@ -29,9 +29,9 @@ struct BasicProfileModelMapperTests {
         let displayName = "Dave Smith"
         let input = try Self.buildCreateBasicProfileInput(displayName: displayName)
 
-        let basicProfile = BasicProfileModelMapper.map(from: input)
+        let basicProfileModel = BasicProfileModelMapper.map(from: input)
 
-        #expect(basicProfile.displayName == displayName)
+        #expect(basicProfileModel.displayName == displayName)
     }
 
     @Test("map from create basic profile input with birth date")
@@ -39,9 +39,9 @@ struct BasicProfileModelMapperTests {
         let birthDate = Date(timeIntervalSince1970: 20000)
         let input = try Self.buildCreateBasicProfileInput(birthDate: birthDate)
 
-        let basicProfile = BasicProfileModelMapper.map(from: input)
+        let basicProfileModel = BasicProfileModelMapper.map(from: input)
 
-        #expect(basicProfile.birthDate == birthDate)
+        #expect(basicProfileModel.birthDate == birthDate)
     }
 
 }

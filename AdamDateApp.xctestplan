@@ -21,6 +21,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "ProfilePresentationTests",
+        "name" : "ProfilePresentationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "AdamDateAppTests",
         "name" : "AdamDateAppTests"
       }
@@ -28,15 +35,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityApplicationTests",
-        "name" : "IdentityApplicationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataInfrastructureTests",
-        "name" : "ReferenceDataInfrastructureTests"
+        "identifier" : "ProfileApplicationTests",
+        "name" : "ProfileApplicationTests"
       }
     },
     {
@@ -49,29 +49,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfileDomainTests",
-        "name" : "ProfileDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ProfileAPITests",
-        "name" : "ProfileAPITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityPresentationTests",
-        "name" : "IdentityPresentationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataDomainTests",
-        "name" : "ReferenceDataDomainTests"
+        "identifier" : "IdentityApplicationTests",
+        "name" : "IdentityApplicationTests"
       }
     },
     {
@@ -79,6 +58,13 @@
         "containerPath" : "container:",
         "identifier" : "AdamDateAuthTests",
         "name" : "AdamDateAuthTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
       }
     },
     {
@@ -93,6 +79,27 @@
         "containerPath" : "container:",
         "identifier" : "IdentityInfrastructureTests",
         "name" : "IdentityInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataDomainTests",
+        "name" : "ReferenceDataDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataInfrastructureTests",
+        "name" : "ReferenceDataInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityPresentationTests",
+        "name" : "IdentityPresentationTests"
       }
     }
   ],

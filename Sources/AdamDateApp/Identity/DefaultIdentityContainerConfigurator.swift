@@ -31,34 +31,20 @@ final class DefaultIdentityContainerConfigurator: ContainerConfigurator {
     }
 
     func configure() {
-        configureDatabase()
-        configureProviders()
-        configureRepositories()
-        configureUseCases()
-        configureControllers()
+        configureInfrastructure()
+        configureApplication()
+        configurePresentation()
     }
 
 }
 
 extension DefaultIdentityContainerConfigurator {
 
-    private func configureDatabase() {
+    private func configureInfrastructure() {
         c.register(type: Database.self, name: DatabaseID.identity.string) { [database] _ in
             database
         }
-    }
 
-    private func configureProviders() {
-        c.register(type: TokenPayloadProvider.self) { c in
-            TokenPayloadAdapter(jwtConfiguration: c.resolve(JWTConfiguration.self))
-        }
-
-        c.register(type: PasswordHasherProvider.self) { [passwordHasher] _ in
-            PasswordHasherAdapter(hasher: passwordHasher)
-        }
-    }
-
-    private func configureRepositories() {
         c.register(type: UserRepository.self) { c in
             UserFluentRepository(
                 database: c.resolve(Database.self, name: DatabaseID.identity.string),
@@ -67,7 +53,15 @@ extension DefaultIdentityContainerConfigurator {
         }
     }
 
-    private func configureUseCases() {
+    private func configureApplication() {
+        c.register(type: TokenPayloadProvider.self) { c in
+            TokenPayloadAdapter(jwtConfiguration: c.resolve(JWTConfiguration.self))
+        }
+
+        c.register(type: PasswordHasherProvider.self) { [passwordHasher] _ in
+            PasswordHasherAdapter(hasher: passwordHasher)
+        }
+
         c.register(type: RegisterUserUseCase.self) { c in
             RegisterUser(repository: c.resolve(UserRepository.self))
         }
@@ -81,7 +75,7 @@ extension DefaultIdentityContainerConfigurator {
         }
     }
 
-    private func configureControllers() {
+    private func configurePresentation() {
         c.register(type: AuthController.self) { c in
             AuthController(
                 registerUserUseCase: { [c] in c.resolve(RegisterUserUseCase.self) },

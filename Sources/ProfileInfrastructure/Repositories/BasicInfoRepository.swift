@@ -6,6 +6,6 @@
 //
 
 import Foundation
-import ProfileDomain
+import ProfileApplication
 
 package protocol BasicInfoRepository: FetchBasicInfoRepository {}

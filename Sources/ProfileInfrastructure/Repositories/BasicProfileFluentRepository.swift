@@ -7,6 +7,7 @@
 
 import Fluent
 import Foundation
+import ProfileApplication
 import ProfileDomain
 
 package final class BasicProfileFluentRepository: BasicProfileRepository {

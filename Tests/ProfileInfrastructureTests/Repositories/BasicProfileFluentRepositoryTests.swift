@@ -7,6 +7,7 @@
 
 import Fluent
 import Foundation
+import ProfileApplication
 import ProfileDomain
 import Testing
 import XCTFluent

@@ -7,9 +7,10 @@
 
 import Fluent
 import Foundation
-import ProfileAPI
+import ProfileApplication
 import ProfileDomain
 import ProfileInfrastructure
+import ProfilePresentation
 import ReferenceDataDomain
 import Vapor
 
@@ -27,34 +28,20 @@ final class DefaultProfileContainerConfigurator: ContainerConfigurator {
     }
 
     func configure() {
-        configureDatabases()
-        configureProviders()
-        configureRepositories()
-        configureUseCases()
-        configureControllers()
+        configureInfrastructure()
+        configureApplication()
+        configurePresentation()
     }
 
 }
 
 extension DefaultProfileContainerConfigurator {
 
-    private func configureDatabases() {
+    private func configureInfrastructure() {
         c.register(type: Database.self, name: DatabaseID.profile.string) { [database] _ in
             database
         }
-    }
 
-    private func configureProviders() {
-        c.register(type: GenderProvider.self) { c in
-            ProfileGenderAdapter(fetchGendersUseCase: c.resolve(FetchGendersUseCase.self))
-        }
-
-        c.register(type: CountryProvider.self) { c in
-            ProfileCountryAdapter(fetchCountriesUseCase: c.resolve(FetchCountriesUseCase.self))
-        }
-    }
-
-    private func configureRepositories() {
         c.register(type: BasicProfileRepository.self) { c in
             BasicProfileFluentRepository(
                 database: c.resolve(Database.self, name: DatabaseID.profile.string)
@@ -62,7 +49,15 @@ extension DefaultProfileContainerConfigurator {
         }
     }
 
-    private func configureUseCases() {
+    private func configureApplication() {
+        c.register(type: GenderProvider.self) { c in
+            ProfileGenderAdapter(fetchGendersUseCase: c.resolve(FetchGendersUseCase.self))
+        }
+
+        c.register(type: CountryProvider.self) { c in
+            ProfileCountryAdapter(fetchCountriesUseCase: c.resolve(FetchCountriesUseCase.self))
+        }
+
         c.register(type: CreateBasicProfileUseCase.self) { c in
             CreateBasicProfile(
                 repository: c.resolve(BasicProfileRepository.self)
@@ -76,7 +71,7 @@ extension DefaultProfileContainerConfigurator {
         }
     }
 
-    private func configureControllers() {
+    private func configurePresentation() {
         c.register(type: BasicProfileController.self) { c in
             BasicProfileController(
                 createBasicProfileUseCase: { [c] in c.resolve(CreateBasicProfileUseCase.self) },

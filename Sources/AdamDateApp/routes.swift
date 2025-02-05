@@ -6,7 +6,7 @@
 //
 
 import IdentityPresentation
-import ProfileAPI
+import ProfilePresentation
 import Vapor
 
 func routes(_ routes: RoutesBuilder, container: Container) throws {
