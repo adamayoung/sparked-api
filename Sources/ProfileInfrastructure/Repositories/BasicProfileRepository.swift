@@ -8,6 +8,6 @@
 import Foundation
 import ProfileDomain
 
-package protocol BasicProfileRepository: CreateBasicProfileRepository, FetchBasicProfileRepository,
-    Sendable
+package protocol BasicProfileRepository: CreateBasicProfileRepository,
+    FetchBasicProfileRepository
 {}

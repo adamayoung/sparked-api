@@ -48,6 +48,10 @@ extension DefaultProfileContainerConfigurator {
         c.register(type: GenderProvider.self) { c in
             ProfileGenderAdapter(fetchGendersUseCase: c.resolve(FetchGendersUseCase.self))
         }
+
+        c.register(type: CountryProvider.self) { c in
+            ProfileCountryAdapter(fetchCountriesUseCase: c.resolve(FetchCountriesUseCase.self))
+        }
     }
 
     private func configureRepositories() {

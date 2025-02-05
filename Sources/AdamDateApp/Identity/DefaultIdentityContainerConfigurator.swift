@@ -8,9 +8,10 @@
 import AdamDateAuth
 import Fluent
 import Foundation
-import IdentityAPI
+import IdentityApplication
 import IdentityDomain
 import IdentityInfrastructure
+import IdentityPresentation
 import Vapor
 
 final class DefaultIdentityContainerConfigurator: ContainerConfigurator {

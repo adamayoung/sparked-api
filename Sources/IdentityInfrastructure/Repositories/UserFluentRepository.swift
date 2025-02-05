@@ -7,6 +7,7 @@
 
 import Fluent
 import Foundation
+import IdentityApplication
 import IdentityDomain
 
 package final class UserFluentRepository: UserRepository {

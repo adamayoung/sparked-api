@@ -1,0 +1,66 @@
+//
+//  RegisterUserTests.swift
+//  AdamDateApp
+//
+//  Created by Adam Young on 29/01/2025.
+//
+
+import Foundation
+import IdentityDomain
+import Testing
+
+@testable import IdentityApplication
+
+@Suite("RegisterUser")
+struct RegisterUserTests {
+
+    let useCase: RegisterUser
+    let repository: RegisterUserStubRepository
+
+    init() {
+        self.repository = RegisterUserStubRepository()
+        self.useCase = RegisterUser(repository: repository)
+    }
+
+    @Test("execute when user created successfully returns user")
+    func executeWhenUserCreatedSuccessfullyReturnsUser() async throws {
+        let input = RegisterUserInput(
+            firstName: "Dave",
+            familyName: "Smith",
+            email: "email@example.com",
+            password: "password",
+            isVerified: true
+        )
+        let user = try User(
+            id: #require(UUID(uuidString: "BDE07538-4204-4F5E-9DB6-CF90A322C18D")),
+            firstName: "Dave",
+            familyName: "Smith",
+            email: "email@example.com",
+            isVerified: true,
+            isActive: true
+        )
+        repository.createResult = .success(user)
+
+        let userDTO = try await useCase.execute(input: input)
+
+        #expect(userDTO.id == user.id)
+        #expect(repository.lastCreateInput == input)
+    }
+
+    @Test("execute when user creation failed throws error")
+    func executeWhenUserCreationFailedThrowsError() async throws {
+        let input = RegisterUserInput(
+            firstName: "Dave",
+            familyName: "Smith",
+            email: "email@example.com",
+            password: "password",
+            isVerified: true
+        )
+        repository.createResult = .failure(.unknown())
+
+        await #expect(throws: RegisterUserError.unknown()) {
+            _ = try await useCase.execute(input: input)
+        }
+    }
+
+}

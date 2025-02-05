@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import IdentityDomain
+import IdentityApplication
 import Testing
 
 @testable import IdentityInfrastructure
@@ -25,9 +25,9 @@ struct UserModelMapperTests {
         let firstName = "Dave"
         let input = Self.buildRegisterUserInput(firstName: firstName)
 
-        let user = try UserModelMapper.map(from: input, using: passwordHasher)
+        let userModel = try UserModelMapper.map(from: input, using: passwordHasher)
 
-        #expect(user.firstName == firstName)
+        #expect(userModel.firstName == firstName)
     }
 
     @Test("map from register user input with family name")
@@ -35,9 +35,9 @@ struct UserModelMapperTests {
         let familyName = "Smith"
         let input = Self.buildRegisterUserInput(familyName: familyName)
 
-        let user = try UserModelMapper.map(from: input, using: passwordHasher)
+        let userModel = try UserModelMapper.map(from: input, using: passwordHasher)
 
-        #expect(user.familyName == familyName)
+        #expect(userModel.familyName == familyName)
     }
 
     @Test("map from register user input with email")
@@ -45,9 +45,9 @@ struct UserModelMapperTests {
         let email = "email@example.com"
         let input = Self.buildRegisterUserInput(email: email)
 
-        let user = try UserModelMapper.map(from: input, using: passwordHasher)
+        let userModel = try UserModelMapper.map(from: input, using: passwordHasher)
 
-        #expect(user.email == email)
+        #expect(userModel.email == email)
     }
 
     @Test("map from register user input with password")
@@ -57,9 +57,9 @@ struct UserModelMapperTests {
         let input = Self.buildRegisterUserInput(password: password)
         passwordHasher.hashResult = .success(expectedPassword)
 
-        let user = try UserModelMapper.map(from: input, using: passwordHasher)
+        let userModel = try UserModelMapper.map(from: input, using: passwordHasher)
 
-        #expect(user.password == expectedPassword)
+        #expect(userModel.password == expectedPassword)
         #expect(passwordHasher.hashLastPassword == password)
     }
 

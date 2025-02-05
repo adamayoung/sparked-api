@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import IdentityApplication
 import IdentityDomain
 
 package protocol UserRepository: RegisterUserRepository, FetchUserRepository,
-    AuthenticateUserRepository, Sendable
+    AuthenticateUserRepository
 {}

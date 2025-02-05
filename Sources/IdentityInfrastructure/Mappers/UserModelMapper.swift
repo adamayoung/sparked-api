@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import IdentityApplication
 import IdentityDomain
 
 struct UserModelMapper {

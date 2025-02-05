@@ -7,6 +7,7 @@
 
 import Fluent
 import Foundation
+import IdentityApplication
 import IdentityDomain
 import Testing
 import XCTFluent
@@ -58,7 +59,7 @@ struct UserFluentRepositoryTests {
             isVerified: false,
             isAdmin: false
         )
-        let alreadyExistsUser = try #require(
+        let alreadyExistsUserModel = try #require(
             UserModel(
                 id: UUID(uuidString: "CEBBCF99-BAEF-4629-8E5C-5079AC5029A4"),
                 firstName: "Bob",
@@ -68,7 +69,7 @@ struct UserFluentRepositoryTests {
                 isVerified: true
             ))
         passwordHasher.hashResult = .success(String(input.password.reversed()))
-        database.append([TestOutput(alreadyExistsUser)])
+        database.append([TestOutput(alreadyExistsUserModel)])
 
         await #expect(throws: RegisterUserError.emailAlreadyExists(email: input.email)) {
             _ = try await repository.create(input: input)
@@ -78,7 +79,7 @@ struct UserFluentRepositoryTests {
     @Test("fetch by ID when user exists returns user")
     func fetchByIDWhenUserExistsReturnsUser() async throws {
         let id = try #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"))
-        let alreadyExistsUser = UserModel(
+        let alreadyExistsUserModel = UserModel(
             id: id,
             firstName: "Bob",
             familyName: "Robert",
@@ -86,7 +87,7 @@ struct UserFluentRepositoryTests {
             password: "pass123",
             isVerified: true
         )
-        database.append([TestOutput(alreadyExistsUser)])
+        database.append([TestOutput(alreadyExistsUserModel)])
 
         let user = try await repository.fetch(byID: id)
         #expect(user.id == id)
@@ -105,7 +106,7 @@ struct UserFluentRepositoryTests {
     @Test("fetch by email when user exists returns user")
     func fetchByEmailWhenUserExistsReturnsUser() async throws {
         let email = "email@example.com"
-        let alreadyExistsUser = try UserModel(
+        let alreadyExistsUserModel = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
             familyName: "Robert",
@@ -113,7 +114,7 @@ struct UserFluentRepositoryTests {
             password: "pass123",
             isVerified: true
         )
-        database.append([TestOutput(alreadyExistsUser)])
+        database.append([TestOutput(alreadyExistsUserModel)])
 
         let user = try await repository.fetch(byEmail: email)
         #expect(user.email == email)
@@ -138,7 +139,7 @@ struct UserFluentRepositoryTests {
         let email = "email@example.com"
         let password = "123"
         let storedPassword = "321"
-        let alreadyExistsUser = try UserModel(
+        let alreadyExistsUserModel = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
             familyName: "Robert",
@@ -146,7 +147,7 @@ struct UserFluentRepositoryTests {
             password: storedPassword,
             isVerified: true
         )
-        database.append([TestOutput(alreadyExistsUser)])
+        database.append([TestOutput(alreadyExistsUserModel)])
         passwordHasher.verifyResult = .success(true)
 
         let user = try await repository.authenticate(email: email, password: password)
@@ -181,7 +182,7 @@ struct UserFluentRepositoryTests {
         async throws
     {
         let email = "email@example.com"
-        let alreadyExistsUser = try UserModel(
+        let alreadyExistsUserModel = try UserModel(
             id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
             firstName: "Bob",
             familyName: "Robert",
@@ -189,7 +190,7 @@ struct UserFluentRepositoryTests {
             password: "321",
             isVerified: true
         )
-        database.append([TestOutput(alreadyExistsUser)])
+        database.append([TestOutput(alreadyExistsUserModel)])
         passwordHasher.verifyResult = .success(false)
 
         await #expect(throws: AuthenticateUserError.invalidEmailOrPassword) {

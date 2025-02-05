@@ -30,7 +30,8 @@ let package = Package(
                 "ProfileInfrastructure",
                 "ReferenceDataDomain",
                 "ReferenceDataInfrastructure",
-                "IdentityAPI",
+                "IdentityPresentation",
+                "IdentityApplication",
                 "IdentityDomain",
                 "IdentityInfrastructure",
                 .product(name: "Vapor", package: "vapor"),
@@ -98,12 +99,12 @@ let package = Package(
         ),
 
         // --------------------------------------
-        // User
+        // Identity
 
         .target(
-            name: "IdentityAPI",
+            name: "IdentityPresentation",
             dependencies: [
-                "IdentityDomain",
+                "IdentityApplication",
                 "AdamDateAuth",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -111,25 +112,32 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "IdentityAPITests",
+            name: "IdentityPresentationTests",
             dependencies: [
-                "IdentityAPI",
-                "IdentityDomain",
+                "IdentityPresentation",
+                "IdentityApplication",
                 "APITesting",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
             ]
         ),
 
-        .target(name: "IdentityDomain"),
-        .testTarget(
-            name: "IdentityDomainTests",
+        .target(
+            name: "IdentityApplication",
             dependencies: ["IdentityDomain"]
+        ),
+        .testTarget(
+            name: "IdentityApplicationTests",
+            dependencies: [
+                "IdentityApplication",
+                "IdentityDomain"
+            ]
         ),
 
         .target(
             name: "IdentityInfrastructure",
             dependencies: [
+                "IdentityApplication",
                 "IdentityDomain",
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "XCTFluent", package: "fluent-kit")
@@ -137,7 +145,17 @@ let package = Package(
         ),
         .testTarget(
             name: "IdentityInfrastructureTests",
-            dependencies: ["IdentityInfrastructure"]
+            dependencies: [
+                "IdentityInfrastructure",
+                "IdentityApplication",
+                "IdentityDomain"
+            ]
+        ),
+
+        .target(name: "IdentityDomain"),
+        .testTarget(
+            name: "IdentityDomainTests",
+            dependencies: ["IdentityDomain"]
         ),
 
         // --------------------------------------

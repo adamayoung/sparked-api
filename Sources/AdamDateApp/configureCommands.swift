@@ -6,6 +6,7 @@
 //
 
 import AdamDateCommands
+import IdentityApplication
 import IdentityDomain
 import Vapor
 
