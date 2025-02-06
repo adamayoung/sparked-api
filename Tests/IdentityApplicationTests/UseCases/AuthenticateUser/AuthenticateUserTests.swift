@@ -16,10 +16,12 @@ struct AuthenticateUserTests {
 
     let useCase: AuthenticateUser
     let repository: AuthenticateUserStubRepository
+    let hasher: PasswordHasherStubService
 
     init() {
         self.repository = AuthenticateUserStubRepository()
-        self.useCase = AuthenticateUser(repository: repository)
+        self.hasher = PasswordHasherStubService()
+        self.useCase = AuthenticateUser(repository: repository, hasher: hasher)
     }
 
     @Test("execute when authentication is successful returns user")
@@ -31,17 +33,17 @@ struct AuthenticateUserTests {
             id: #require(UUID(uuidString: "0941E3F4-A620-40CD-A2BD-4E8D0655D8B0")),
             firstName: "Dave",
             familyName: "Smith",
-            email: "email@example.com",
+            email: email,
+            passwordHash: password,
             isVerified: true,
             isActive: true
         )
-        repository.authenticateResult = .success(user)
+        repository.fetchForAuthenticationResult = .success(user)
 
         let userDTO = try await useCase.execute(credential: credential)
 
         #expect(userDTO.id == user.id)
         #expect(repository.lastAuthenticateEmail == email)
-        #expect(repository.lastAuthenticatePassword == password)
     }
 
     @Test("execute when authentication is unsuccessful throws error")
@@ -49,7 +51,7 @@ struct AuthenticateUserTests {
         let email = "email@example.com"
         let password = "testPassword"
         let credential = UserCredential(email: email, password: password)
-        repository.authenticateResult = .failure(.unknown())
+        repository.fetchForAuthenticationResult = .failure(.unknown())
 
         await #expect(throws: AuthenticateUserError.unknown()) {
             _ = try await useCase.execute(credential: credential)

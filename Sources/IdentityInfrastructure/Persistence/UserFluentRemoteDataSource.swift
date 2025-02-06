@@ -13,29 +13,17 @@ import IdentityDomain
 package final class UserFluentRemoteDataSource: UserRemoteDataSource {
 
     private let database: any Database
-    private let passwordHasher: any PasswordHasherProvider
 
-    package init(
-        database: some Database,
-        passwordHasher: some PasswordHasherProvider
-    ) {
+    package init(database: some Database) {
         self.database = database
-        self.passwordHasher = passwordHasher
     }
 
-    package func create(
-        input: RegisterUserInput
-    ) async throws(RegisterUserError) -> User {
-        guard (try? await self.fetch(byEmail: input.email)) == nil else {
-            throw .emailAlreadyExists(email: input.email)
+    package func create(user: User) async throws(RegisterUserError) -> User {
+        guard (try? await self.fetch(byEmail: user.email)) == nil else {
+            throw .emailAlreadyExists(email: user.email)
         }
 
-        let userModel: UserModel
-        do {
-            userModel = try UserModelMapper.map(from: input, using: passwordHasher)
-        } catch let error {
-            throw .unknown(error)
-        }
+        let userModel = UserModelMapper.map(from: user)
 
         do {
             try await userModel.save(on: database)
@@ -86,44 +74,6 @@ package final class UserFluentRemoteDataSource: UserRemoteDataSource {
 
         guard let userModel else {
             throw .notFoundByEmail(email: email)
-        }
-
-        let user: User
-        do {
-            user = try UserMapper.map(from: userModel)
-        } catch let error {
-            throw .unknown(error)
-        }
-
-        return user
-    }
-
-    package func authenticate(
-        email: String,
-        password: String
-    ) async throws(AuthenticateUserError) -> User {
-        let userModel: UserModel?
-        do {
-            userModel = try await UserModel.query(on: database)
-                .filter(\.$email == email)
-                .first()
-        } catch let error {
-            throw .unknown(error)
-        }
-
-        guard let userModel else {
-            throw .invalidEmailOrPassword
-        }
-
-        let isPasswordMatch: Bool
-        do {
-            isPasswordMatch = try passwordHasher.verify(password, created: userModel.password)
-        } catch {
-            throw .invalidEmailOrPassword
-        }
-
-        guard isPasswordMatch else {
-            throw .invalidEmailOrPassword
         }
 
         let user: User

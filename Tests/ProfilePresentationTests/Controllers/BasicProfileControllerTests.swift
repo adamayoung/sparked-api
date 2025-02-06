@@ -18,12 +18,18 @@ import VaporTesting
 @Suite("BasicProfileController", .serialized)
 struct BasicProfileControllerTests {
 
+    let controller: BasicProfileController
     let createBasicProfileUseCase: CreateBasicProfileStubUseCase
     let fetchBasicProfileUseCase: FetchBasicProfileStubUseCase
 
-    init() throws {
+    init() {
         self.createBasicProfileUseCase = CreateBasicProfileStubUseCase()
         self.fetchBasicProfileUseCase = FetchBasicProfileStubUseCase()
+        let dependencies = BasicProfileController.Dependencies(
+            createBasicProfileUseCase: { [createBasicProfileUseCase] in createBasicProfileUseCase },
+            fetchBasicProfileUseCase: { [fetchBasicProfileUseCase] in fetchBasicProfileUseCase }
+        )
+        self.controller = BasicProfileController(dependencies: dependencies)
     }
 
     @Test("show me when valid JWT token returns basic profile")
@@ -34,14 +40,9 @@ struct BasicProfileControllerTests {
         fetchBasicProfileUseCase.executeUserIDResult = .success(basicProfileDTO)
         let expectedResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
-        let controller = BasicProfileController(
-            createBasicProfileUseCase: { createBasicProfileUseCase },
-            fetchBasicProfileUseCase: { fetchBasicProfileUseCase }
-        )
-
         try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
             try await app.testing().test(
-                .GET, "profiles/me/basic",
+                .GET, "me/basic",
                 beforeRequest: { req in
                     if let jwt {
                         req.headers.bearerAuthorization = .init(token: jwt)
@@ -59,14 +60,9 @@ struct BasicProfileControllerTests {
 
     @Test("show me when no JWT token throws unauthorized error")
     func showMeWhenNoJWTTokenThrowsUnauthorizedError() async throws {
-        let controller = BasicProfileController(
-            createBasicProfileUseCase: { createBasicProfileUseCase },
-            fetchBasicProfileUseCase: { fetchBasicProfileUseCase }
-        )
-
         try await testWithApp(controller) { app in
             try await app.testing().test(
-                .GET, "profiles/me/basic",
+                .GET, "me/basic",
                 afterResponse: { res async throws in
                     #expect(res.status == .unauthorized)
                 }

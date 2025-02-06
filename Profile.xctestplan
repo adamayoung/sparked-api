@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "C5EDA0A3-3421-4158-AB07-981912D0855B",
+      "name" : "Configuration 1",
+      "options" : {
+        "language" : "en-GB",
+        "region" : "GB",
+        "testExecutionOrdering" : "random"
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfilePresentationTests",
+        "name" : "ProfilePresentationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileApplicationTests",
+        "name" : "ProfileApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileInfrastructureTests",
+        "name" : "ProfileInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
+      }
+    }
+  ],
+  "version" : 1
+}

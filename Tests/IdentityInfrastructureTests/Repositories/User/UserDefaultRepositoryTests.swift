@@ -27,31 +27,30 @@ struct UserDefaultRepositoryTests {
 
     @Test("create when user with email does not exist creates user")
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
-        let input = Self.buildRegisterUserInput()
-        let expectedUser = try Self.buildUser()
-        remoteDataSource.createResult = .success(expectedUser)
+        let newUser = try Self.buildUser()
+        remoteDataSource.createResult = .success(newUser)
 
-        let user = try await repository.create(input: input)
+        let user = try await repository.create(user: newUser)
 
-        #expect(user.email == input.email)
+        #expect(user.id == newUser.id)
         #expect(remoteDataSource.createWasCalled)
-        #expect(remoteDataSource.lastCreateInput == input)
+        #expect(remoteDataSource.lastCreateUser == newUser)
         #expect(remoteDataSource.fetchByEmailWasCalled)
-        #expect(remoteDataSource.lastFetchByEmailEmail == input.email)
+        #expect(remoteDataSource.lastFetchByEmailEmail == newUser.email)
     }
 
     @Test("create when user with email does exist throws email already exists error")
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
         let email = "email@example.com"
-        let input = Self.buildRegisterUserInput(email: email)
+        let newUser = try Self.buildUser(email: email)
         let alreadyExistsUser = try Self.buildUser(email: email)
         remoteDataSource.fetchByEmailResult = .success(alreadyExistsUser)
 
-        await #expect(throws: RegisterUserError.emailAlreadyExists(email: input.email)) {
-            _ = try await repository.create(input: input)
+        await #expect(throws: RegisterUserError.emailAlreadyExists(email: newUser.email)) {
+            _ = try await repository.create(user: newUser)
         }
         #expect(!remoteDataSource.createWasCalled)
-        #expect(remoteDataSource.lastCreateInput == nil)
+        #expect(remoteDataSource.lastCreateUser == nil)
         #expect(remoteDataSource.fetchByEmailWasCalled)
         #expect(remoteDataSource.lastFetchByEmailEmail == email)
     }
@@ -109,66 +108,47 @@ struct UserDefaultRepositoryTests {
     @Test(
         "authenticate with email and password when user exists with matching email and password returns user"
     )
-    func authenticateWithEmailAndPasswordWhenUserExistsWithMatchingEmailAndPasswordReturnsUser()
+    func fetchForAuthenticationWithEmailWhenUserExistsWithMatchingEmailAndPasswordReturnsUser()
         async throws
     {
         let email = "email@example.com"
-        let password = "123"
         let alreadyExistsUserModel = try Self.buildUser(email: email)
-        remoteDataSource.authenticateResult = .success(alreadyExistsUserModel)
+        remoteDataSource.fetchByEmailResult = .success(alreadyExistsUserModel)
 
-        let user = try await repository.authenticate(email: email, password: password)
+        let user = try await repository.fetchForAuthentication(byEmail: email)
 
         #expect(user.email == email)
-        #expect(remoteDataSource.authenticateWasCalled)
-        #expect(remoteDataSource.lastAuthenticateEmail == email)
-        #expect(remoteDataSource.lastAuthenticatePassword == password)
+        #expect(remoteDataSource.fetchByEmailWasCalled)
+        #expect(remoteDataSource.lastFetchByEmailEmail == email)
     }
 
     @Test(
         "authenticate with email and password when user with email does not exist throws invalid email or password error"
     )
     func
-        authenticateWithEmailAndPasswordWhenUserWithEmailDoesNotExistThrowsInvalidEmailOrPasswordError()
+        fetchForAuthenticationWithEmailWhenUserWithEmailDoesNotExistThrowsInvalidEmailOrPasswordError()
         async throws
     {
         let email = "email@example.com"
-        let password = "123"
-        remoteDataSource.authenticateResult = .failure(.invalidEmailOrPassword)
+        remoteDataSource.fetchByEmailResult = .failure(.notFoundByEmail(email: email))
 
         await #expect(throws: AuthenticateUserError.invalidEmailOrPassword) {
-            _ = try await repository.authenticate(email: email, password: password)
+            _ = try await repository.fetchForAuthentication(byEmail: email)
         }
-        #expect(remoteDataSource.authenticateWasCalled)
-        #expect(remoteDataSource.lastAuthenticateEmail == email)
-        #expect(remoteDataSource.lastAuthenticatePassword == password)
+        #expect(remoteDataSource.fetchByEmailWasCalled)
+        #expect(remoteDataSource.lastFetchByEmailEmail == email)
     }
 
 }
 
 extension UserDefaultRepositoryTests {
 
-    private static func buildRegisterUserInput(
-        firstName: String = "Bob",
-        familyName: String = "Robert",
-        email: String = "email@example.com",
-        password: String = "pass123",
-        isVerified: Bool = true
-    ) -> RegisterUserInput {
-        RegisterUserInput(
-            firstName: firstName,
-            familyName: familyName,
-            email: email,
-            password: password,
-            isVerified: isVerified
-        )
-    }
-
     private static func buildUser(
         id: UUID? = UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"),
         firstName: String = "Bob",
         familyName: String = "Robert",
         email: String = "email@example.com",
+        passwordHash: String = "pass123",
         isVerified: Bool = true,
         isActive: Bool = true
     ) throws -> User {
@@ -177,6 +157,7 @@ extension UserDefaultRepositoryTests {
             firstName: firstName,
             familyName: familyName,
             email: email,
+            passwordHash: passwordHash,
             isVerified: isVerified,
             isActive: isActive
         )

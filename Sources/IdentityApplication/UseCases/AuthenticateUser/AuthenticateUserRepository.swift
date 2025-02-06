@@ -10,9 +10,6 @@ import IdentityDomain
 
 package protocol AuthenticateUserRepository {
 
-    func authenticate(
-        email: String,
-        password: String
-    ) async throws(AuthenticateUserError) -> User
+    func fetchForAuthentication(byEmail email: String) async throws(AuthenticateUserError) -> User
 
 }

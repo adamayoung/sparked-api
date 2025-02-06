@@ -19,60 +19,33 @@ struct UserFluentRemoteDataSourceTests {
 
     let dataSource: UserFluentRemoteDataSource
     let database: ArrayTestDatabase
-    let passwordHasher: PasswordHasherStubProvider
 
     init() {
         self.database = ArrayTestDatabase()
-        self.passwordHasher = PasswordHasherStubProvider()
-        self.dataSource = UserFluentRemoteDataSource(
-            database: database.db,
-            passwordHasher: passwordHasher
-        )
+        self.dataSource = UserFluentRemoteDataSource(database: database.db)
     }
 
     @Test("create when user with email does not exist creates user")
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
-        let input = RegisterUserInput(
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            password: "password",
-            isVerified: false,
-            isAdmin: false
-        )
-        passwordHasher.hashResult = .success(input.password)
+        let newUser = try Self.buildUser()
         database.append([TestOutput()])
         database.append([TestOutput()])
 
-        let user = try await dataSource.create(input: input)
+        let user = try await dataSource.create(user: newUser)
 
-        #expect(user.email == input.email)
+        #expect(user.id == newUser.id)
     }
 
     @Test("create when user with email does exist throws email already exists error")
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
-        let input = RegisterUserInput(
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            password: "password",
-            isVerified: false,
-            isAdmin: false
-        )
-        let alreadyExistsUserModel = try #require(
-            UserModel(
-                id: UUID(uuidString: "CEBBCF99-BAEF-4629-8E5C-5079AC5029A4"),
-                firstName: "Bob",
-                familyName: "Robert",
-                email: "email@example.com",
-                password: "pass123",
-                isVerified: true
-            ))
-        passwordHasher.hashResult = .success(String(input.password.reversed()))
+        let id = try #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"))
+        let email = "dave@example.com"
+        let newUser = try Self.buildUser(id: id, email: email)
+        let alreadyExistsUserModel = Self.buildUserModel(id: id, email: email)
         database.append([TestOutput(alreadyExistsUserModel)])
 
-        await #expect(throws: RegisterUserError.emailAlreadyExists(email: input.email)) {
-            _ = try await dataSource.create(input: input)
+        await #expect(throws: RegisterUserError.emailAlreadyExists(email: email)) {
+            _ = try await dataSource.create(user: newUser)
         }
     }
 
@@ -130,72 +103,46 @@ struct UserFluentRemoteDataSourceTests {
         }
     }
 
-    @Test(
-        "authenticate with email and password when user exists with matching email and password returns user"
-    )
-    func authenticateWithEmailAndPasswordWhenUserExistsWithMatchingEmailAndPasswordReturnsUser()
-        async throws
-    {
-        let email = "email@example.com"
-        let password = "123"
-        let storedPassword = "321"
-        let alreadyExistsUserModel = try UserModel(
-            id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
-            firstName: "Bob",
-            familyName: "Robert",
+}
+
+extension UserFluentRemoteDataSourceTests {
+
+    private static func buildUser(
+        id: UUID? = UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"),
+        firstName: String = "Bob",
+        familyName: String = "Robert",
+        email: String = "email@example.com",
+        passwordHash: String = "pass123",
+        isVerified: Bool = true,
+        isActive: Bool = true
+    ) throws -> User {
+        try User(
+            id: #require(id),
+            firstName: firstName,
+            familyName: familyName,
             email: email,
-            password: storedPassword,
-            isVerified: true
+            passwordHash: passwordHash,
+            isVerified: isVerified,
+            isActive: isActive
         )
-        database.append([TestOutput(alreadyExistsUserModel)])
-        passwordHasher.verifyResult = .success(true)
-
-        let user = try await dataSource.authenticate(email: email, password: password)
-
-        #expect(user.email == email)
-        #expect(passwordHasher.verifyLastPassword == password)
-        #expect(passwordHasher.verifyLastCreated == storedPassword)
     }
 
-    @Test(
-        "authenticate with email and password when user with email does not exist throws invalid email or password error"
-    )
-    func
-        authenticateWithEmailAndPasswordWhenUserWithEmailDoesNotExistThrowsInvalidEmailOrPasswordError()
-        async throws
-    {
-        let email = "email@example.com"
-        let password = "123"
-        database.append([])
-        passwordHasher.verifyResult = .success(true)
-
-        await #expect(throws: AuthenticateUserError.invalidEmailOrPassword) {
-            _ = try await dataSource.authenticate(email: email, password: password)
-        }
-    }
-
-    @Test(
-        "authenticate with email and password when user with email exists but password mismatch throws invalid email or password error"
-    )
-    func
-        authenticateWithEmailAndPasswordWhenUserWithEmailExistsButPasswordMismatchThrowsInvalidEmailOrPasswordError()
-        async throws
-    {
-        let email = "email@example.com"
-        let alreadyExistsUserModel = try UserModel(
-            id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
-            firstName: "Bob",
-            familyName: "Robert",
+    private static func buildUserModel(
+        id: UUID? = nil,
+        firstName: String = "Bob",
+        familyName: String = "Robert",
+        email: String = "email@example.com",
+        password: String = "pass123",
+        isVerified: Bool = true
+    ) -> UserModel {
+        UserModel(
+            id: id,
+            firstName: firstName,
+            familyName: familyName,
             email: email,
-            password: "321",
-            isVerified: true
+            password: password,
+            isVerified: isVerified
         )
-        database.append([TestOutput(alreadyExistsUserModel)])
-        passwordHasher.verifyResult = .success(false)
-
-        await #expect(throws: AuthenticateUserError.invalidEmailOrPassword) {
-            _ = try await dataSource.authenticate(email: email, password: "incorrect-password")
-        }
     }
 
 }

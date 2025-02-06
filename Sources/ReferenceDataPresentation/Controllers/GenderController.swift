@@ -10,12 +10,20 @@ import Vapor
 
 package struct GenderController: RouteCollection, Sendable {
 
-    private let fetchGendersUseCase: @Sendable () -> any FetchGendersUseCase
+    package struct Dependencies {
+        package let fetchGendersUseCase: @Sendable () -> any FetchGendersUseCase
 
-    package init(
-        fetchGendersUseCase: @escaping @Sendable () -> any FetchGendersUseCase
-    ) {
-        self.fetchGendersUseCase = fetchGendersUseCase
+        package init(
+            fetchGendersUseCase: @escaping @Sendable () -> any FetchGendersUseCase
+        ) {
+            self.fetchGendersUseCase = fetchGendersUseCase
+        }
+    }
+
+    private let dependencies: Dependencies
+
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
     package func boot(routes: any RoutesBuilder) throws {
@@ -24,7 +32,7 @@ package struct GenderController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [GenderResponseModel] {
-        let useCase = fetchGendersUseCase()
+        let useCase = dependencies.fetchGendersUseCase()
         let genderDTOs = try await useCase.execute()
         let genderResponseModels = genderDTOs.map(GenderResponseModelMapper.map)
 

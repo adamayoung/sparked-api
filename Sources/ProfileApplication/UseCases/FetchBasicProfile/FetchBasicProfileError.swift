@@ -10,6 +10,7 @@ import Foundation
 package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
 
     case notFound(profileID: UUID)
+    case notFoundForUser(userID: UUID)
     case userNotFound(userID: UUID)
     case unknown(Error? = nil)
 
@@ -18,8 +19,11 @@ package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
         case .notFound(let profileID):
             "Basic profile \(profileID) not found"
 
-        case .userNotFound(let userID):
+        case .notFoundForUser(let userID):
             "Basic profile for user \(userID) not found"
+
+        case .userNotFound(let userID):
+            "User \(userID) not found"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -30,6 +34,9 @@ package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
         switch (lhs, rhs) {
         case (.notFound(let lhsProfileID), .notFound(let rhsProfileID)):
             lhsProfileID == rhsProfileID
+
+        case (.notFoundForUser(let lhsUserID), .notFoundForUser(let rhsUserID)):
+            lhsUserID == rhsUserID
 
         case (.userNotFound(let lhsUserID), .userNotFound(let rhsUserID)):
             lhsUserID == rhsUserID

@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "68CCA93A-E555-472E-9012-AAB1A26C8D5A",
+      "name" : "Configuration 1",
+      "options" : {
+        "language" : "en-GB",
+        "region" : "GB",
+        "testExecutionOrdering" : "random"
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataInfrastructureTests",
+        "name" : "ReferenceDataInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataPresentationTests",
+        "name" : "ReferenceDataPresentationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataApplicationTests",
+        "name" : "ReferenceDataApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataDomainTests",
+        "name" : "ReferenceDataDomainTests"
+      }
+    }
+  ],
+  "version" : 1
+}

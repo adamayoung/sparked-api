@@ -12,6 +12,7 @@ extension RegisterUserError: AbortError {
 
     package var status: HTTPResponseStatus {
         switch self {
+        case .validation: .badRequest
         case .emailAlreadyExists: .badRequest
         case .unknown: .internalServerError
         }

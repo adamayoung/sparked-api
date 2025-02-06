@@ -38,9 +38,15 @@ extension ProfileContainerConfigurator {
             database
         }
 
-        c.register(type: BasicProfileRepository.self) { c in
-            BasicProfileFluentRepository(
+        c.register(type: BasicProfileRemoteDataSource.self) { c in
+            BasicProfileRemoteFluentDataSource(
                 database: c.resolve(Database.self, name: DatabaseID.profile.string)
+            )
+        }
+
+        c.register(type: BasicProfileRepository.self) { c in
+            BasicProfileDefaultRepository(
+                remoteDataSource: c.resolve(BasicProfileRemoteDataSource.self)
             )
         }
 
@@ -61,23 +67,26 @@ extension ProfileContainerConfigurator {
         c.register(type: CreateBasicProfileUseCase.self) { c in
             CreateBasicProfile(
                 repository: c.resolve(BasicProfileRepository.self),
-                userService: c.resolve(ProfileUserAdapter.self)
+                userService: c.resolve(UserService.self)
             )
         }
 
         c.register(type: FetchBasicProfileUseCase.self) { c in
             FetchBasicProfile(
-                repository: c.resolve(BasicProfileRepository.self)
+                repository: c.resolve(BasicProfileRepository.self),
+                userService: c.resolve(UserService.self)
             )
         }
     }
 
     private func configurePresentation(in c: Container) {
         c.register(type: BasicProfileController.self) { c in
-            BasicProfileController(
+            let dependencies = BasicProfileController.Dependencies(
                 createBasicProfileUseCase: { [c] in c.resolve(CreateBasicProfileUseCase.self) },
                 fetchBasicProfileUseCase: { [c] in c.resolve(FetchBasicProfileUseCase.self) }
             )
+
+            return BasicProfileController(dependencies: dependencies)
         }
     }
 

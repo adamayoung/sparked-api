@@ -72,15 +72,19 @@ extension ReferenceDataContainerConfigurator {
 
     private func configurePresentation(in c: Container) {
         c.register(type: CountryController.self) { c in
-            CountryController(
+            let dependencies = CountryController.Dependencies(
                 fetchCountriesUseCase: { [c] in c.resolve(FetchCountriesUseCase.self) }
             )
+
+            return CountryController(dependencies: dependencies)
         }
 
         c.register(type: GenderController.self) { c in
-            GenderController(
+            let dependencies = GenderController.Dependencies(
                 fetchGendersUseCase: { [c] in c.resolve(FetchGendersUseCase.self) }
             )
+
+            return GenderController(dependencies: dependencies)
         }
     }
 

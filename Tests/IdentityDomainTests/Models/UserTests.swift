@@ -22,6 +22,7 @@ struct UserTests {
             firstName: firstName,
             familyName: familyName,
             email: "email@example.com",
+            passwordHash: "Password123",
             isVerified: true,
             isActive: true
         )

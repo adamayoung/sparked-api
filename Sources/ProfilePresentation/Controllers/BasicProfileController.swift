@@ -12,15 +12,23 @@ import Vapor
 
 package struct BasicProfileController: RouteCollection, Sendable {
 
-    private let createBasicProfileUseCase: @Sendable () -> any CreateBasicProfileUseCase
-    private let fetchBasicProfileUseCase: @Sendable () -> any FetchBasicProfileUseCase
+    package struct Dependencies {
+        package let createBasicProfileUseCase: @Sendable () -> any CreateBasicProfileUseCase
+        package let fetchBasicProfileUseCase: @Sendable () -> any FetchBasicProfileUseCase
 
-    package init(
-        createBasicProfileUseCase: @escaping @Sendable () -> any CreateBasicProfileUseCase,
-        fetchBasicProfileUseCase: @escaping @Sendable () -> any FetchBasicProfileUseCase
-    ) {
-        self.createBasicProfileUseCase = createBasicProfileUseCase
-        self.fetchBasicProfileUseCase = fetchBasicProfileUseCase
+        package init(
+            createBasicProfileUseCase: @escaping @Sendable () -> any CreateBasicProfileUseCase,
+            fetchBasicProfileUseCase: @escaping @Sendable () -> any FetchBasicProfileUseCase
+        ) {
+            self.createBasicProfileUseCase = createBasicProfileUseCase
+            self.fetchBasicProfileUseCase = fetchBasicProfileUseCase
+        }
+    }
+
+    private let dependencies: Dependencies
+
+    package init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
     package func boot(routes: any RoutesBuilder) throws {
@@ -36,7 +44,7 @@ package struct BasicProfileController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let useCase = fetchBasicProfileUseCase()
+        let useCase = dependencies.fetchBasicProfileUseCase()
         let basicProfileDTO = try await useCase.execute(userID: userID)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
@@ -53,7 +61,7 @@ package struct BasicProfileController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let useCase = fetchBasicProfileUseCase()
+        let useCase = dependencies.fetchBasicProfileUseCase()
         let basicProfileDTO = try await useCase.execute(id: profileID)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
@@ -79,7 +87,7 @@ package struct BasicProfileController: RouteCollection, Sendable {
             from: createBasicProfileRequestModel,
             userID: userID
         )
-        let useCase = createBasicProfileUseCase()
+        let useCase = dependencies.createBasicProfileUseCase()
         let basicProfile = try await useCase.execute(input: input)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfile)
 

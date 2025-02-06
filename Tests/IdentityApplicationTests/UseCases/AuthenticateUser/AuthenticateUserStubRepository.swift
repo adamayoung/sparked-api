@@ -11,17 +11,15 @@ import IdentityDomain
 
 final class AuthenticateUserStubRepository: AuthenticateUserRepository {
 
-    var authenticateResult: Result<User, AuthenticateUserError> = .failure(.unknown(nil))
+    var fetchForAuthenticationResult: Result<User, AuthenticateUserError> = .failure(.unknown(nil))
     private(set) var lastAuthenticateEmail: String?
-    private(set) var lastAuthenticatePassword: String?
 
     init() {}
 
-    func authenticate(email: String, password: String) async throws(AuthenticateUserError) -> User {
+    func fetchForAuthentication(byEmail email: String) async throws(AuthenticateUserError) -> User {
         lastAuthenticateEmail = email
-        lastAuthenticatePassword = password
 
-        return try authenticateResult.get()
+        return try fetchForAuthenticationResult.get()
     }
 
 }

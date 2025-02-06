@@ -14,7 +14,7 @@ final class UserRemoteStubDataSource: UserRemoteDataSource {
 
     var createResult: Result<User, RegisterUserError> = .failure(.unknown())
     private(set) var createWasCalled = false
-    private(set) var lastCreateInput: RegisterUserInput?
+    private(set) var lastCreateUser: User?
 
     var fetchByIDResult: Result<User, FetchUserError> = .failure(.unknown())
     private(set) var fetchByIDWasCalled = false
@@ -24,16 +24,11 @@ final class UserRemoteStubDataSource: UserRemoteDataSource {
     private(set) var fetchByEmailWasCalled = false
     private(set) var lastFetchByEmailEmail: String?
 
-    var authenticateResult: Result<User, AuthenticateUserError> = .failure(.unknown())
-    private(set) var authenticateWasCalled = false
-    private(set) var lastAuthenticateEmail: String?
-    private(set) var lastAuthenticatePassword: String?
-
     init() {}
 
-    func create(input: RegisterUserInput) async throws(RegisterUserError) -> User {
+    func create(user: User) async throws(RegisterUserError) -> User {
         createWasCalled = true
-        lastCreateInput = input
+        lastCreateUser = user
 
         return try createResult.get()
     }
@@ -50,14 +45,6 @@ final class UserRemoteStubDataSource: UserRemoteDataSource {
         lastFetchByEmailEmail = email
 
         return try fetchByEmailResult.get()
-    }
-
-    func authenticate(email: String, password: String) async throws(AuthenticateUserError) -> User {
-        authenticateWasCalled = true
-        lastAuthenticateEmail = email
-        lastAuthenticatePassword = password
-
-        return try authenticateResult.get()
     }
 
 }

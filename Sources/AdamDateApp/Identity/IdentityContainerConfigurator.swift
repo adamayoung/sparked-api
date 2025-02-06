@@ -38,14 +38,17 @@ final class IdentityContainerConfigurator: ContainerConfigurator {
 extension IdentityContainerConfigurator {
 
     private func configureInfrastructure(in c: Container) {
+        c.register(type: PasswordHasherService.self) { [passwordHasher] _ in
+            PasswordHasherAdapter(hasher: passwordHasher)
+        }
+
         c.register(type: Database.self, name: DatabaseID.identity.string) { [database] _ in
             database
         }
 
         c.register(type: UserRemoteDataSource.self) { c in
             UserFluentRemoteDataSource(
-                database: c.resolve(Database.self, name: DatabaseID.identity.string),
-                passwordHasher: c.resolve(PasswordHasherProvider.self)
+                database: c.resolve(Database.self, name: DatabaseID.identity.string)
             )
         }
 
@@ -61,16 +64,18 @@ extension IdentityContainerConfigurator {
             TokenPayloadAdapter(jwtConfiguration: c.resolve(JWTConfiguration.self))
         }
 
-        c.register(type: PasswordHasherProvider.self) { [passwordHasher] _ in
-            PasswordHasherAdapter(hasher: passwordHasher)
-        }
-
         c.register(type: RegisterUserUseCase.self) { c in
-            RegisterUser(repository: c.resolve(UserRepository.self))
+            RegisterUser(
+                repository: c.resolve(UserRepository.self),
+                hasher: c.resolve(PasswordHasherService.self)
+            )
         }
 
         c.register(type: AuthenticateUserUseCase.self) { c in
-            AuthenticateUser(repository: c.resolve(UserRepository.self))
+            AuthenticateUser(
+                repository: c.resolve(UserRepository.self),
+                hasher: c.resolve(PasswordHasherService.self)
+            )
         }
 
         c.register(type: FetchUserUseCase.self) { c in
@@ -79,13 +84,29 @@ extension IdentityContainerConfigurator {
     }
 
     private func configurePresentation(in c: Container) {
-        c.register(type: AuthController.self) { c in
-            AuthController(
-                registerUserUseCase: { [c] in c.resolve(RegisterUserUseCase.self) },
+        c.register(type: MeController.self) { c in
+            let dependencies = MeController.Dependencies(
+                fetchUserUseCase: { [c] in c.resolve(FetchUserUseCase.self) }
+            )
+
+            return MeController(dependencies: dependencies)
+        }
+
+        c.register(type: RegisterController.self) { c in
+            let dependencies = RegisterController.Dependencies(
+                registerUserUseCase: { [c] in c.resolve(RegisterUserUseCase.self) }
+            )
+
+            return RegisterController(dependencies: dependencies)
+        }
+
+        c.register(type: TokenController.self) { c in
+            let dependencies = TokenController.Dependencies(
                 authenticateUserUseCase: { [c] in c.resolve(AuthenticateUserUseCase.self) },
-                fetchUserUseCase: { [c] in c.resolve(FetchUserUseCase.self) },
                 tokenPayloadProvider: { [c] in c.resolve(TokenPayloadProvider.self) }
             )
+
+            return TokenController(dependencies: dependencies)
         }
     }
 

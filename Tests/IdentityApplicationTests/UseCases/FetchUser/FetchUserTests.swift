@@ -30,6 +30,7 @@ struct FetchUserTests {
             firstName: "Dave",
             familyName: "Smith",
             email: "email@example.com",
+            passwordHash: "Password123",
             isVerified: true,
             isActive: true
         )

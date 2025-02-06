@@ -7,7 +7,7 @@
 
 import Vapor
 
-struct GenderResponseModel: Content {
+struct GenderResponseModel: Equatable, Content {
 
     let id: UUID
     let code: String

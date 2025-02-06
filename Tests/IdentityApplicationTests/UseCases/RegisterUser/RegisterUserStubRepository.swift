@@ -12,12 +12,14 @@ import IdentityDomain
 final class RegisterUserStubRepository: RegisterUserRepository {
 
     var createResult: Result<User, RegisterUserError> = .failure(.unknown())
-    var lastCreateInput: RegisterUserInput?
+    private(set) var createWasCalled = false
+    private(set) var lastCreateUser: User?
 
     init() {}
 
-    func create(input: RegisterUserInput) async throws(RegisterUserError) -> User {
-        lastCreateInput = input
+    func create(user: User) async throws(RegisterUserError) -> User {
+        createWasCalled = true
+        lastCreateUser = user
 
         return try createResult.get()
     }

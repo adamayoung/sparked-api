@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "F8F9788E-D3E3-4AD7-88B0-4159F53ADF9B",
+      "name" : "Configuration 1",
+      "options" : {
+        "language" : "en-GB",
+        "region" : "GB",
+        "testExecutionOrdering" : "random"
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityInfrastructureTests",
+        "name" : "IdentityInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityDomainTests",
+        "name" : "IdentityDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityApplicationTests",
+        "name" : "IdentityApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityPresentationTests",
+        "name" : "IdentityPresentationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -10,5 +10,8 @@ import Vapor
 
 func identityRoutes(_ routes: RoutesBuilder, container: Container) throws {
     let authRouter = routes.grouped("auth")
-    try authRouter.register(collection: container.resolve(AuthController.self))
+
+    try authRouter.register(collection: container.resolve(MeController.self))
+    try authRouter.register(collection: container.resolve(RegisterController.self))
+    try authRouter.register(collection: container.resolve(TokenController.self))
 }

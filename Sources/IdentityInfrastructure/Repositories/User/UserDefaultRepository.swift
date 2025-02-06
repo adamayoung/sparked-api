@@ -18,14 +18,12 @@ package final class UserDefaultRepository: UserRepository {
         self.remoteDataSource = remoteDataSource
     }
 
-    package func create(
-        input: RegisterUserInput
-    ) async throws(RegisterUserError) -> User {
-        guard (try? await self.fetch(byEmail: input.email)) == nil else {
-            throw .emailAlreadyExists(email: input.email)
+    package func create(user: User) async throws(RegisterUserError) -> User {
+        guard (try? await self.fetch(byEmail: user.email)) == nil else {
+            throw .emailAlreadyExists(email: user.email)
         }
 
-        let newUser = try await remoteDataSource.create(input: input)
+        let newUser = try await remoteDataSource.create(user: user)
 
         return newUser
     }
@@ -42,11 +40,17 @@ package final class UserDefaultRepository: UserRepository {
         return user
     }
 
-    package func authenticate(
-        email: String,
-        password: String
+    package func fetchForAuthentication(
+        byEmail email: String
     ) async throws(AuthenticateUserError) -> User {
-        let user = try await remoteDataSource.authenticate(email: email, password: password)
+        let user: User
+        do {
+            user = try await remoteDataSource.fetch(byEmail: email)
+        } catch FetchUserError.notFoundByEmail {
+            throw .invalidEmailOrPassword
+        } catch let error {
+            throw .unknown(error)
+        }
 
         return user
     }

@@ -10,12 +10,20 @@ import Vapor
 
 package struct CountryController: RouteCollection, Sendable {
 
-    private let fetchCountriesUseCase: @Sendable () -> any FetchCountriesUseCase
+    package struct Dependencies {
+        let fetchCountriesUseCase: @Sendable () -> any FetchCountriesUseCase
 
-    package init(
-        fetchCountriesUseCase: @escaping @Sendable () -> any FetchCountriesUseCase
-    ) {
-        self.fetchCountriesUseCase = fetchCountriesUseCase
+        package init(
+            fetchCountriesUseCase: @escaping @Sendable () -> any FetchCountriesUseCase
+        ) {
+            self.fetchCountriesUseCase = fetchCountriesUseCase
+        }
+    }
+
+    private let dependencies: Dependencies
+
+    package init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
     package func boot(routes: any RoutesBuilder) throws {
@@ -25,7 +33,7 @@ package struct CountryController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [CountryResponseModel] {
-        let useCase = fetchCountriesUseCase()
+        let useCase = dependencies.fetchCountriesUseCase()
         let countryDTOs = try await useCase.execute()
         let countryResponseModels = countryDTOs.map(CountryResponseModelMapper.map)
 

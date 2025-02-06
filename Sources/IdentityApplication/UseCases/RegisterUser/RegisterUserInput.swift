@@ -32,4 +32,8 @@ package struct RegisterUserInput: Equatable, Sendable {
         self.isAdmin = isAdmin
     }
 
+    func passwordHash(using hasher: some PasswordHasherService) throws -> String {
+        try hasher.hash(password)
+    }
+
 }

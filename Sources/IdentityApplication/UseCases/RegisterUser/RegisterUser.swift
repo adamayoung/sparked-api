@@ -11,15 +11,41 @@ import IdentityDomain
 package final class RegisterUser: RegisterUserUseCase {
 
     private let repository: any RegisterUserRepository
+    private let hasher: any PasswordHasherService
 
-    package init(repository: some RegisterUserRepository) {
+    package init(
+        repository: some RegisterUserRepository,
+        hasher: some PasswordHasherService
+    ) {
         self.repository = repository
+        self.hasher = hasher
     }
 
     @discardableResult
     package func execute(input: RegisterUserInput) async throws(RegisterUserError) -> UserDTO {
-        let user = try await repository.create(input: input)
-        let userDTO = UserDTOMapper.map(from: user)
+        let passwordValidator = PasswordValidator()
+        do {
+            try passwordValidator.validate(input.password)
+        } catch let error {
+            throw RegisterUserError(error: error)
+        }
+
+        let user: User
+        do {
+            user = try UserMapper.map(from: input, using: hasher)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        let userValidator = UserValidator()
+        do {
+            try userValidator.validate(user)
+        } catch let error {
+            throw RegisterUserError(error: error)
+        }
+
+        let createdUser = try await repository.create(user: user)
+        let userDTO = UserDTOMapper.map(from: createdUser)
 
         return userDTO
     }

@@ -7,7 +7,7 @@
 
 import Vapor
 
-struct CountryResponseModel: Content {
+struct CountryResponseModel: Equatable, Content {
 
     let id: UUID
     let code: String
