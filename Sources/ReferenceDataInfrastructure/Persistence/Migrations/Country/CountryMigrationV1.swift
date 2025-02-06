@@ -34,7 +34,7 @@ struct CountryMigrationV1: AsyncMigration {
                 return
             }
 
-            let country = CountryModel(code: countryCode, name: name)
+            let country = CountryModel(code: isoCountryCode, name: name)
             try await country.save(on: database)
         }
     }
