@@ -27,27 +27,26 @@ struct UserDefaultRepositoryTests {
 
     @Test("create when user with email does not exist creates user")
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
-        let newUser = try Self.buildUser()
-        remoteDataSource.createResult = .success(newUser)
+        let user = try Self.buildUser()
+        remoteDataSource.createResult = .success(Void())
 
-        let user = try await repository.create(user: newUser)
+        try await repository.create(user)
 
-        #expect(user.id == newUser.id)
         #expect(remoteDataSource.createWasCalled)
-        #expect(remoteDataSource.lastCreateUser == newUser)
+        #expect(remoteDataSource.lastCreateUser == user)
         #expect(remoteDataSource.fetchByEmailWasCalled)
-        #expect(remoteDataSource.lastFetchByEmailEmail == newUser.email)
+        #expect(remoteDataSource.lastFetchByEmailEmail == user.email)
     }
 
     @Test("create when user with email does exist throws email already exists error")
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
         let email = "email@example.com"
-        let newUser = try Self.buildUser(email: email)
+        let user = try Self.buildUser(email: email)
         let alreadyExistsUser = try Self.buildUser(email: email)
         remoteDataSource.fetchByEmailResult = .success(alreadyExistsUser)
 
-        await #expect(throws: RegisterUserError.emailAlreadyExists(email: newUser.email)) {
-            _ = try await repository.create(user: newUser)
+        await #expect(throws: RegisterUserError.emailAlreadyExists(email: user.email)) {
+            try await repository.create(user)
         }
         #expect(!remoteDataSource.createWasCalled)
         #expect(remoteDataSource.lastCreateUser == nil)

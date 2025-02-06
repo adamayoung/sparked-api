@@ -11,7 +11,7 @@ import IdentityDomain
 
 package protocol UserRemoteDataSource {
 
-    func create(user: User) async throws(RegisterUserError) -> User
+    func create(_ user: User) async throws(RegisterUserError)
 
     func fetch(byID id: User.ID) async throws(FetchUserError) -> User
 

@@ -44,8 +44,8 @@ package final class RegisterUser: RegisterUserUseCase {
             throw RegisterUserError(error: error)
         }
 
-        let createdUser = try await repository.create(user: user)
-        let userDTO = UserDTOMapper.map(from: createdUser)
+        try await repository.create(user)
+        let userDTO = UserDTOMapper.map(from: user)
 
         return userDTO
     }

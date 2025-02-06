@@ -45,11 +45,11 @@ struct RegisterUserTests {
             isActive: true
         )
         hasher.hashResult = .success(passwordHash)
-        repository.createResult = .success(user)
+        repository.createResult = .success(Void())
 
         let userDTO = try await useCase.execute(input: input)
 
-        #expect(userDTO.id == user.id)
+        #expect(userDTO.email == user.email)
         #expect(repository.createWasCalled)
         #expect(repository.lastCreateUser?.email == input.email)
         #expect(hasher.hashWasCalled)

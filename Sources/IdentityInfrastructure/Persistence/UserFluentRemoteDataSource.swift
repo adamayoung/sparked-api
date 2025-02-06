@@ -18,7 +18,7 @@ package final class UserFluentRemoteDataSource: UserRemoteDataSource {
         self.database = database
     }
 
-    package func create(user: User) async throws(RegisterUserError) -> User {
+    package func create(_ user: User) async throws(RegisterUserError) {
         guard (try? await self.fetch(byEmail: user.email)) == nil else {
             throw .emailAlreadyExists(email: user.email)
         }
@@ -30,15 +30,6 @@ package final class UserFluentRemoteDataSource: UserRemoteDataSource {
         } catch let error {
             throw .unknown(error)
         }
-
-        let newUser: User
-        do {
-            newUser = try UserMapper.map(from: userModel)
-        } catch let error {
-            throw .unknown(error)
-        }
-
-        return newUser
     }
 
     package func fetch(byID id: User.ID) async throws(FetchUserError) -> User {

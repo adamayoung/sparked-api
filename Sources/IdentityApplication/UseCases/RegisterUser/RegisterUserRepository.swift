@@ -10,6 +10,6 @@ import IdentityDomain
 
 package protocol RegisterUserRepository {
 
-    func create(user: User) async throws(RegisterUserError) -> User
+    func create(_ user: User) async throws(RegisterUserError)
 
 }

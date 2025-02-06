@@ -18,14 +18,12 @@ package final class UserDefaultRepository: UserRepository {
         self.remoteDataSource = remoteDataSource
     }
 
-    package func create(user: User) async throws(RegisterUserError) -> User {
+    package func create(_ user: User) async throws(RegisterUserError) {
         guard (try? await self.fetch(byEmail: user.email)) == nil else {
             throw .emailAlreadyExists(email: user.email)
         }
 
-        let newUser = try await remoteDataSource.create(user: user)
-
-        return newUser
+        try await remoteDataSource.create(user)
     }
 
     package func fetch(byID id: User.ID) async throws(FetchUserError) -> User {

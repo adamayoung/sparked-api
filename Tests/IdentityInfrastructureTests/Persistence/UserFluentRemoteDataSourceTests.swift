@@ -27,25 +27,25 @@ struct UserFluentRemoteDataSourceTests {
 
     @Test("create when user with email does not exist creates user")
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
-        let newUser = try Self.buildUser()
+        let user = try Self.buildUser()
         database.append([TestOutput()])
         database.append([TestOutput()])
 
-        let user = try await dataSource.create(user: newUser)
-
-        #expect(user.id == newUser.id)
+        await #expect(throws: Never.self) {
+            try await dataSource.create(user)
+        }
     }
 
     @Test("create when user with email does exist throws email already exists error")
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
         let id = try #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"))
         let email = "dave@example.com"
-        let newUser = try Self.buildUser(id: id, email: email)
+        let user = try Self.buildUser(id: id, email: email)
         let alreadyExistsUserModel = Self.buildUserModel(id: id, email: email)
         database.append([TestOutput(alreadyExistsUserModel)])
 
         await #expect(throws: RegisterUserError.emailAlreadyExists(email: email)) {
-            _ = try await dataSource.create(user: newUser)
+            try await dataSource.create(user)
         }
     }
 
