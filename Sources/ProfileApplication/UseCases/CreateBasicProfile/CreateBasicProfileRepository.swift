@@ -10,8 +10,6 @@ import ProfileDomain
 
 package protocol CreateBasicProfileRepository {
 
-    func create(
-        input: CreateBasicProfileInput
-    ) async throws(CreateBasicProfileError) -> BasicProfile
+    func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError)
 
 }

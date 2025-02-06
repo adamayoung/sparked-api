@@ -32,15 +32,15 @@ struct CreateBasicProfileTests {
         let basicProfile = try Self.createBasicProfile(userID: userID)
 
         userService.fetchByIDResult = .success(userDTO)
-        repository.createResult = .success(basicProfile)
+        repository.createResult = .success(Void())
 
         let basicProfileDTO = try await useCase.execute(input: input)
 
-        #expect(basicProfileDTO.id == basicProfile.id)
+        #expect(basicProfileDTO.userID == basicProfile.userID)
         #expect(userService.fetchByIDWasCalled)
         #expect(userService.lastFetchByIDID == userID)
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateInput == input)
+        #expect(repository.lastCreateBasicProfile?.userID == userID)
     }
 
     @Test("execute when user does not exist throws user not found error")
@@ -73,7 +73,7 @@ struct CreateBasicProfileTests {
         #expect(userService.fetchByIDWasCalled)
         #expect(userService.lastFetchByIDID == userID)
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateInput == input)
+        #expect(repository.lastCreateBasicProfile?.userID == input.userID)
     }
 
 }

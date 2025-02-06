@@ -18,10 +18,8 @@ package final class BasicProfileRemoteFluentDataSource: BasicProfileRemoteDataSo
         self.database = database
     }
 
-    package func create(
-        input: CreateBasicProfileInput
-    ) async throws(CreateBasicProfileError) -> BasicProfile {
-        let basicProfileModel = BasicProfileModelMapper.map(from: input)
+    package func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError) {
+        let basicProfileModel = BasicProfileModelMapper.map(from: basicProfile)
 
         var existingBasicProfile: BasicProfile?
         do {
@@ -41,15 +39,6 @@ package final class BasicProfileRemoteFluentDataSource: BasicProfileRemoteDataSo
         } catch let error {
             throw .unknown(error)
         }
-
-        let newBasicProfile: BasicProfile
-        do {
-            newBasicProfile = try BasicProfileMapper.map(from: basicProfileModel)
-        } catch let error {
-            throw .unknown(error)
-        }
-
-        return newBasicProfile
     }
 
     package func fetch(

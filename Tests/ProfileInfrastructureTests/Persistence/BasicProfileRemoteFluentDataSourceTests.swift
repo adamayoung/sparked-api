@@ -27,8 +27,10 @@ struct BasicProfileRemoteFluentDataSourceTests {
 
     @Test("create when profile does not exist for user creates profile")
     func createWhenProfileDoesNotExistForUserCreatesProfile() async throws {
+        let id = try #require(UUID(uuidString: "D74A08FC-0248-42AC-8DF9-759B6CEF8165"))
         let userID = try #require(UUID(uuidString: "9991A3C9-29AB-4C0F-90BD-51782083F344"))
-        let input = CreateBasicProfileInput(
+        let basicProfile = BasicProfile(
+            id: id,
             userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000)
@@ -36,9 +38,9 @@ struct BasicProfileRemoteFluentDataSourceTests {
         database.append([])
         database.append([TestOutput()])
 
-        let basicProfile = try await dataSource.create(input: input)
-
-        #expect(basicProfile.userID == userID)
+        await #expect(throws: Never.self) {
+            try await dataSource.create(basicProfile)
+        }
     }
 
     @Test("create when profile does exist for user throws profile already exists for user error")
@@ -50,7 +52,8 @@ struct BasicProfileRemoteFluentDataSourceTests {
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000)
         )
-        let input = CreateBasicProfileInput(
+        let basicProfile = BasicProfile(
+            id: try #require(UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA")),
             userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000)
@@ -59,7 +62,7 @@ struct BasicProfileRemoteFluentDataSourceTests {
         database.append([TestOutput()])
 
         await #expect(throws: CreateBasicProfileError.profileAlreadyExistsForUser(userID: userID)) {
-            _ = try await dataSource.create(input: input)
+            try await dataSource.create(basicProfile)
         }
     }
 

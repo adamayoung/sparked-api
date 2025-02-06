@@ -6,19 +6,18 @@
 //
 
 import Foundation
-import ProfileApplication
+import ProfileDomain
 
 struct BasicProfileModelMapper {
 
     private init() {}
 
-    static func map(
-        from input: CreateBasicProfileInput
-    ) -> BasicProfileModel {
+    static func map(from basicProfile: BasicProfile) -> BasicProfileModel {
         BasicProfileModel(
-            userID: input.userID,
-            displayName: input.displayName,
-            birthDate: input.birthDate
+            id: basicProfile.id,
+            userID: basicProfile.userID,
+            displayName: basicProfile.displayName,
+            birthDate: basicProfile.birthDate
         )
     }
 

@@ -18,12 +18,8 @@ package final class BasicProfileDefaultRepository: BasicProfileRepository {
         self.remoteDataSource = remoteDataSource
     }
 
-    package func create(
-        input: CreateBasicProfileInput
-    ) async throws(CreateBasicProfileError) -> BasicProfile {
-        let newBasicProfile = try await remoteDataSource.create(input: input)
-
-        return newBasicProfile
+    package func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError) {
+        try await remoteDataSource.create(basicProfile)
     }
 
     package func fetch(

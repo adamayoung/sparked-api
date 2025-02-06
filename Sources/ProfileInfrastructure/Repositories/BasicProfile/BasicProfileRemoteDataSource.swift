@@ -11,9 +11,7 @@ import ProfileDomain
 
 package protocol BasicProfileRemoteDataSource {
 
-    func create(
-        input: CreateBasicProfileInput
-    ) async throws(CreateBasicProfileError) -> BasicProfile
+    func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError)
 
     func fetch(byID id: BasicProfile.ID) async throws(FetchBasicProfileError) -> BasicProfile
 

@@ -11,19 +11,17 @@ import ProfileDomain
 
 final class CreateBasicProfileStubRepository: CreateBasicProfileRepository {
 
-    var createResult: Result<BasicProfile, CreateBasicProfileError> = .failure(.unknown())
+    var createResult: Result<Void, CreateBasicProfileError> = .failure(.unknown())
     private(set) var createWasCalled = false
-    private(set) var lastCreateInput: CreateBasicProfileInput?
+    private(set) var lastCreateBasicProfile: BasicProfile?
 
     init() {}
 
-    func create(
-        input: CreateBasicProfileInput
-    ) async throws(CreateBasicProfileError) -> BasicProfile {
+    func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError) {
         createWasCalled = true
-        lastCreateInput = input
+        lastCreateBasicProfile = basicProfile
 
-        return try createResult.get()
+        try createResult.get()
     }
 
 }

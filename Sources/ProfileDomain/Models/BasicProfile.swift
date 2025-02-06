@@ -24,7 +24,7 @@ package struct BasicProfile: Identifiable, Equatable, Sendable {
     }
 
     package init(
-        id: UUID,
+        id: UUID = UUID(),
         userID: UUID,
         displayName: String,
         birthDate: Date

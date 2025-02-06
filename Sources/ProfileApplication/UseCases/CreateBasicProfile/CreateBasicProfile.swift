@@ -32,7 +32,8 @@ package final class CreateBasicProfile: CreateBasicProfileUseCase {
             throw .unknown(error)
         }
 
-        let basicProfile = try await repository.create(input: input)
+        let basicProfile = BasicProfileMapper.map(from: input)
+        try await repository.create(basicProfile)
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
         return basicProfileDTO
