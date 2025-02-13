@@ -6,39 +6,41 @@
 //
 
 import Foundation
+import ProfileDomain
 
-package final class FetchBasicProfile: FetchBasicProfileUseCase {
+final class FetchBasicProfile: FetchBasicProfileUseCase {
 
-    private let repository: any FetchBasicProfileRepository
-    private let userService: any UserService
+    private let repository: any BasicProfileRepository
 
-    package init(
-        repository: some FetchBasicProfileRepository,
-        userService: some UserService
-    ) {
+    init(repository: some BasicProfileRepository) {
         self.repository = repository
-        self.userService = userService
     }
 
-    package func execute(
-        id: BasicProfileDTO.ID
-    ) async throws(FetchBasicProfileError) -> BasicProfileDTO {
-        let basicProfile = try await repository.fetch(byID: id)
+    func execute(id: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO {
+        let basicProfile: BasicProfile
+        do {
+            basicProfile = try await repository.fetch(byID: id)
+        } catch BasicProfileRepositoryError.notFound {
+            throw .notFound(profileID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
         return basicProfileDTO
     }
 
-    package func execute(userID: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO {
+    func execute(userID: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO {
+        let basicProfile: BasicProfile
         do {
-            _ = try await userService.fetch(byID: userID)
-        } catch UserServiceError.notFound {
-            throw .userNotFound(userID: userID)
+            basicProfile = try await repository.fetch(byUserID: userID)
+        } catch BasicProfileRepositoryError.notFound {
+            throw .notFoundForUser(userID: userID)
         } catch let error {
             throw .unknown(error)
         }
 
-        let basicProfile = try await repository.fetch(byUserID: userID)
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
         return basicProfileDTO

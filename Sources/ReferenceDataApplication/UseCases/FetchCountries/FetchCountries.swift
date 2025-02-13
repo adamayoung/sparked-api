@@ -7,16 +7,16 @@
 
 import Foundation
 
-package final class FetchCountries: FetchCountriesUseCase {
+final class FetchCountries: FetchCountriesUseCase {
 
-    private let repository: any FetchCountriesRepository
+    private let repository: any CountryRepository
 
-    package init(repository: some FetchCountriesRepository) {
+    init(repository: some CountryRepository) {
         self.repository = repository
     }
 
-    package func execute() async throws(FetchCountriesError) -> [CountryDTO] {
-        let countries = try await repository.countries()
+    func execute() async throws(FetchCountriesError) -> [CountryDTO] {
+        let countries = try await repository.fetchAll()
         let countryDTOs = countries.map(CountryDTOMapper.map)
             .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
 

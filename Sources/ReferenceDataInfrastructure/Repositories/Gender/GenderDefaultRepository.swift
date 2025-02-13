@@ -9,16 +9,20 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-package final class GenderDefaultRepository: GenderRepository {
+final class GenderDefaultRepository: GenderRepository {
 
     private let remoteDataSource: any GenderRemoteDataSource
 
-    package init(remoteDataSource: some GenderRemoteDataSource) {
+    init(remoteDataSource: some GenderRemoteDataSource) {
         self.remoteDataSource = remoteDataSource
     }
 
-    package func genders() async throws(FetchGendersError) -> [Gender] {
-        try await remoteDataSource.genders()
+    func fetchAll() async throws(FetchGendersError) -> [Gender] {
+        try await remoteDataSource.fetchAll()
+    }
+
+    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender {
+        try await remoteDataSource.fetch(byID: id)
     }
 
 }

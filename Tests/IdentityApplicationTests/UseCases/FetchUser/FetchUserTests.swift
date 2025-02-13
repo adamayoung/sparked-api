@@ -15,10 +15,10 @@ import Testing
 struct FetchUserTests {
 
     let useCase: FetchUser
-    let repository: FetchUserStubRepository
+    let repository: UserStubRepository
 
     init() {
-        self.repository = FetchUserStubRepository()
+        self.repository = UserStubRepository()
         self.useCase = FetchUser(repository: repository)
     }
 
@@ -34,22 +34,24 @@ struct FetchUserTests {
             isVerified: true,
             isActive: true
         )
-        repository.fetchResult = .success(user)
+        repository.fetchByIDResult = .success(user)
 
         let userDTO = try await useCase.execute(id: id)
 
         #expect(userDTO.id == user.id)
-        #expect(repository.lastFetchID == id)
+        #expect(repository.fetchByIDWasCalled)
+        #expect(repository.lastFetchByIDID == id)
     }
 
     @Test("execute when user fetch fails throws error")
     func executeWhenUserFetchFailsThrowsError() async throws {
         let id = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        repository.fetchResult = .failure(.unknown())
+        repository.fetchByIDResult = .failure(.unknown())
 
-        await #expect(throws: FetchUserError.unknown()) {
+        await #expect(throws: FetchUserError.unknown(UserRepositoryError.unknown())) {
             _ = try await useCase.execute(id: id)
         }
+        #expect(repository.fetchByIDWasCalled)
     }
 
 }

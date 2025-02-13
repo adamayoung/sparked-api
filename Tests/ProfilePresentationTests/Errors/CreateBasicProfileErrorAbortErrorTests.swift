@@ -16,15 +16,6 @@ struct CreateBasicProfileErrorAbortErrorTests {
 
     struct Status {
 
-        @Test("status user not found returns not found")
-        func statusUserNotFoundReturnsNotFound() throws {
-            let userID = try #require(UUID(uuidString: "E30DE47A-E931-41EA-BD96-AABBBB9FDA54"))
-
-            let status = CreateBasicProfileError.userNotFound(userID: userID).status
-
-            #expect(status == .notFound)
-        }
-
         @Test("status profile already exists for user returns bad request")
         func statusProfileAlreadyExistsForUserReturnsBadRequest() throws {
             let userID = try #require(UUID(uuidString: "E30DE47A-E931-41EA-BD96-AABBBB9FDA54"))
@@ -49,7 +40,7 @@ struct CreateBasicProfileErrorAbortErrorTests {
         func reasonReturnsLocalizedDescriptionOfError() throws {
             let userID = try #require(UUID(uuidString: "E30DE47A-E931-41EA-BD96-AABBBB9FDA54"))
 
-            let error = CreateBasicProfileError.userNotFound(userID: userID)
+            let error = CreateBasicProfileError.profileAlreadyExistsForUser(userID: userID)
 
             #expect(error.localizedDescription == error.reason)
         }

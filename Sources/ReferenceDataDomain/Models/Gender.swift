@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct Gender: Identifiable, Equatable, Sendable {
+package struct Gender: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
     package let code: String

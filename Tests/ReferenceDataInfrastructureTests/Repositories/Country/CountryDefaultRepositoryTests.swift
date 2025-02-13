@@ -39,21 +39,22 @@ struct CountryDefaultRepositoryTests {
                 name: "United Kingdom"
             )
         ]
-        remoteDataSource.countriesResult = .success(expectedCountries)
+        remoteDataSource.fetchAllResult = .success(expectedCountries)
 
-        let countries = try await repository.countries()
+        let countries = try await repository.fetchAll()
 
         #expect(countries == expectedCountries)
-        #expect(remoteDataSource.countriesWasCalled)
+        #expect(remoteDataSource.fetchAllWasCalled)
     }
 
     @Test("countries when fails throws error")
     func countriesWhenFailsThrowsError() async throws {
-        remoteDataSource.countriesResult = .failure(.unknown())
+        remoteDataSource.fetchAllResult = .failure(.unknown())
 
         await #expect(throws: FetchCountriesError.unknown()) {
-            try await repository.countries()
+            try await repository.fetchAll()
         }
+        #expect(remoteDataSource.fetchAllWasCalled)
     }
 
 }

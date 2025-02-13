@@ -10,6 +10,11 @@ import Vapor
 
 func referenceDataRoutes(_ routes: RoutesBuilder, container: Container) throws {
     let referenceDataRouter = routes.grouped("reference-data")
-    try referenceDataRouter.register(collection: container.resolve(CountryController.self))
-    try referenceDataRouter.register(collection: container.resolve(GenderController.self))
+
+    try referenceDataRouter.register(
+        collection: container.resolve(RouteCollection.self, name: "CountryController")
+    )
+    try referenceDataRouter.register(
+        collection: container.resolve(RouteCollection.self, name: "GenderController")
+    )
 }

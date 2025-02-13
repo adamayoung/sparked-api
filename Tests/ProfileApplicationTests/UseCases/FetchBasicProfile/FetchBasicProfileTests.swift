@@ -15,16 +15,14 @@ import Testing
 struct FetchBasicProfileTests {
 
     let useCase: FetchBasicProfile
-    let repository: FetchBasicProfileStubRepository
-    let userService: UserStubService
+    let repository: BasicProfileStubRepository
 
     init() {
-        self.repository = FetchBasicProfileStubRepository()
-        self.userService = UserStubService()
-        self.useCase = FetchBasicProfile(repository: repository, userService: userService)
+        self.repository = BasicProfileStubRepository()
+        self.useCase = FetchBasicProfile(repository: repository)
     }
 
-    @Test("execute by ID when basic profile exists returns basic profile")
+    @Test("execute by ID when basic profile exists returns basic profile DTO")
     func executeByIDWhenBasicProfileExistsReturnsBasicProfile() async throws {
         let id = try #require(UUID(uuidString: "3065DD78-CC13-4EFD-A1F8-0FF58C07DA24"))
         let basicProfile = try Self.createBasicProfile(id: id)
@@ -43,7 +41,8 @@ struct FetchBasicProfileTests {
         let id = try #require(UUID(uuidString: "3065DD78-CC13-4EFD-A1F8-0FF58C07DA24"))
         repository.fetchByIDResult = .failure(.unknown())
 
-        await #expect(throws: FetchBasicProfileError.unknown()) {
+        await #expect(throws: FetchBasicProfileError.unknown(BasicProfileRepositoryError.unknown()))
+        {
             _ = try await useCase.execute(id: id)
         }
         #expect(repository.fetchByIDWasCalled)
@@ -54,44 +53,25 @@ struct FetchBasicProfileTests {
     func executeByUserIDWhenUserAndBasicProfileExistsReturnsBasicProfile() async throws {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
         let basicProfile = try Self.createBasicProfile(userID: userID)
-        let userDTO = try Self.createUserDTO(id: userID)
-        userService.fetchByIDResult = .success(userDTO)
         repository.fetchByUserIDResult = .success(basicProfile)
 
         let basicProfileDTO = try await useCase.execute(userID: userID)
 
         #expect(basicProfileDTO.id == basicProfile.id)
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
         #expect(repository.fetchByUserIDWasCalled)
         #expect(repository.lastFetchByUserIDUserID == userID)
-    }
-
-    @Test("execute by user ID when user does not exist throws user not found error")
-    func executeByUserIDWhenUserDoesNotExistThrowsUserNotFoundError() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        userService.fetchByIDResult = .failure(.notFound)
-
-        await #expect(throws: FetchBasicProfileError.userNotFound(userID: userID)) {
-            _ = try await useCase.execute(userID: userID)
-        }
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
-        #expect(!repository.fetchByUserIDWasCalled)
     }
 
     @Test("execute by user ID when user exists and fetching basic profile fails throws error")
     func executeWhenFetchingBasicProfileByUserIDFailsThrowsError() async throws {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let userDTO = try Self.createUserDTO(id: userID)
-        userService.fetchByIDResult = .success(userDTO)
         repository.fetchByUserIDResult = .failure(.unknown())
 
-        await #expect(throws: FetchBasicProfileError.unknown()) {
+        await #expect(
+            throws: FetchBasicProfileError.unknown(BasicProfileRepositoryError.unknown())
+        ) {
             _ = try await useCase.execute(userID: userID)
         }
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
         #expect(repository.fetchByUserIDWasCalled)
         #expect(repository.lastFetchByUserIDUserID == userID)
     }
@@ -99,22 +79,6 @@ struct FetchBasicProfileTests {
 }
 
 extension FetchBasicProfileTests {
-
-    private static func createUserDTO(
-        id: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
-        firstName: String = "Dave",
-        familyName: String = "Smith",
-        fullName: String = "Dave Smith",
-        email: String = "email@example.com"
-    ) throws -> UserDTO {
-        try UserDTO(
-            id: #require(id),
-            firstName: firstName,
-            familyName: familyName,
-            fullName: fullName,
-            email: email
-        )
-    }
 
     private static func createBasicProfile(
         id: UUID? = UUID(uuidString: "51045953-FA7E-47FF-A336-D608742031DF"),

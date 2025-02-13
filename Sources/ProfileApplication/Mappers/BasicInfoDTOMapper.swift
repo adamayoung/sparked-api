@@ -15,9 +15,10 @@ struct BasicInfoDTOMapper {
     static func map(from basicInfo: BasicInfo) -> BasicInfoDTO {
         BasicInfoDTO(
             id: basicInfo.id,
+            userID: basicInfo.userID,
             profileID: basicInfo.profileID,
-            gender: GenderDTOMapper.map(from: basicInfo.gender),
-            country: CountryDTOMapper.map(from: basicInfo.country),
+            genderID: basicInfo.genderID,
+            countryID: basicInfo.countryID,
             location: basicInfo.location,
             homeTown: basicInfo.homeTown,
             workplace: basicInfo.workplace

@@ -14,7 +14,7 @@ func configureProfileDatabase(on app: Application) throws -> (id: DatabaseID, da
     let databaseID: DatabaseID = .profile
     try createDatabaseConfiguration(on: app, databaseID: databaseID)
 
-    let migrations = ProfileInfrastructure.migrations()
+    let migrations = ProfileInfrastructureFactory.makeMigrations()
     for migration in migrations {
         app.migrations.add(migration, to: databaseID)
     }

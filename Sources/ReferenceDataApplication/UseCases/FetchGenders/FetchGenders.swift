@@ -7,16 +7,16 @@
 
 import Foundation
 
-package final class FetchGenders: FetchGendersUseCase {
+final class FetchGenders: FetchGendersUseCase {
 
-    private let repository: any FetchGendersRepository
+    private let repository: any GenderRepository
 
-    package init(repository: some FetchGendersRepository) {
+    init(repository: some GenderRepository) {
         self.repository = repository
     }
 
-    package func execute() async throws(FetchGendersError) -> [GenderDTO] {
-        let genders = try await repository.genders()
+    func execute() async throws(FetchGendersError) -> [GenderDTO] {
+        let genders = try await repository.fetchAll()
         let genderDTOS = genders.map(GenderDTOMapper.map)
             .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
 

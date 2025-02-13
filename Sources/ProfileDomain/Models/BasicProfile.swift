@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct BasicProfile: Identifiable, Equatable, Sendable {
+package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
     package let userID: UUID

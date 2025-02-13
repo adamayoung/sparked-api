@@ -7,7 +7,7 @@
 
 import Foundation
 
-package struct Country: Identifiable, Equatable, Sendable {
+package struct Country: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
     package let code: String

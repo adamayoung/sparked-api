@@ -8,23 +8,29 @@
 import Foundation
 import IdentityDomain
 
-package final class AuthenticateUser: AuthenticateUserUseCase {
+final class AuthenticateUser: AuthenticateUserUseCase {
 
-    private let repository: any AuthenticateUserRepository
+    private let repository: any UserRepository
     private let hasher: any PasswordHasherService
 
-    package init(
-        repository: some AuthenticateUserRepository,
+    init(
+        repository: some UserRepository,
         hasher: some PasswordHasherService
     ) {
         self.repository = repository
         self.hasher = hasher
     }
 
-    package func execute(
-        credential: UserCredential
-    ) async throws(AuthenticateUserError) -> UserDTO {
-        let user = try await repository.fetchForAuthentication(byEmail: credential.email)
+    func execute(credential: UserCredential) async throws(AuthenticateUserError) -> UserDTO {
+        let user: User
+
+        do {
+            user = try await repository.fetch(byEmail: credential.email)
+        } catch UserRepositoryError.notFound {
+            throw .invalidEmailOrPassword
+        } catch let error {
+            throw .unknown(error)
+        }
 
         let isPasswordMatch: Bool
         do {

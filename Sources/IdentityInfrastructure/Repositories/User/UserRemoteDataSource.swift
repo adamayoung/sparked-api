@@ -9,12 +9,12 @@ import Foundation
 import IdentityApplication
 import IdentityDomain
 
-package protocol UserRemoteDataSource {
+protocol UserRemoteDataSource {
 
-    func create(_ user: User) async throws(RegisterUserError)
+    func create(_ user: User) async throws(UserRepositoryError)
 
-    func fetch(byID id: User.ID) async throws(FetchUserError) -> User
+    func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User
 
-    func fetch(byEmail email: String) async throws(FetchUserError) -> User
+    func fetch(byEmail email: String) async throws(UserRepositoryError) -> User
 
 }

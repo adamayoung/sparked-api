@@ -8,13 +8,13 @@
 import Foundation
 import IdentityDomain
 
-package final class RegisterUser: RegisterUserUseCase {
+final class RegisterUser: RegisterUserUseCase {
 
-    private let repository: any RegisterUserRepository
+    private let repository: any UserRepository
     private let hasher: any PasswordHasherService
 
-    package init(
-        repository: some RegisterUserRepository,
+    init(
+        repository: some UserRepository,
         hasher: some PasswordHasherService
     ) {
         self.repository = repository
@@ -22,7 +22,7 @@ package final class RegisterUser: RegisterUserUseCase {
     }
 
     @discardableResult
-    package func execute(input: RegisterUserInput) async throws(RegisterUserError) -> UserDTO {
+    func execute(input: RegisterUserInput) async throws(RegisterUserError) -> UserDTO {
         let passwordValidator = PasswordValidator()
         do {
             try passwordValidator.validate(input.password)
@@ -44,7 +44,14 @@ package final class RegisterUser: RegisterUserUseCase {
             throw RegisterUserError(error: error)
         }
 
-        try await repository.create(user)
+        do {
+            try await repository.create(user)
+        } catch UserRepositoryError.duplicateEmail {
+            throw .emailAlreadyExists(email: input.email)
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let userDTO = UserDTOMapper.map(from: user)
 
         return userDTO

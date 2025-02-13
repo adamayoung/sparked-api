@@ -17,11 +17,14 @@ struct GenderControllerTests {
 
     let controller: GenderController
     let fetchGendersUseCase: FetchGendersStubUseCase
+    let fetchGenderUseCase: FetchGenderStubUseCase
 
     init() throws {
         self.fetchGendersUseCase = FetchGendersStubUseCase()
+        self.fetchGenderUseCase = FetchGenderStubUseCase()
         let dependencies = GenderController.Dependencies(
-            fetchGendersUseCase: { [fetchGendersUseCase] in fetchGendersUseCase }
+            fetchGendersUseCase: { [fetchGendersUseCase] in fetchGendersUseCase },
+            fetchGenderUseCase: { [fetchGenderUseCase] in fetchGenderUseCase }
         )
         self.controller = GenderController(dependencies: dependencies)
     }

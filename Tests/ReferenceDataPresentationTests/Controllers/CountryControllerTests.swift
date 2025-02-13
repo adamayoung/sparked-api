@@ -17,11 +17,14 @@ struct CountryControllerTests {
 
     let controller: CountryController
     let fetchCountriesUseCase: FetchCountriesStubUseCase
+    let fetchCountryUseCase: FetchCountryStubUseCase
 
     init() throws {
         self.fetchCountriesUseCase = FetchCountriesStubUseCase()
+        self.fetchCountryUseCase = FetchCountryStubUseCase()
         let dependencies = CountryController.Dependencies(
-            fetchCountriesUseCase: { [fetchCountriesUseCase] in fetchCountriesUseCase }
+            fetchCountriesUseCase: { [fetchCountriesUseCase] in fetchCountriesUseCase },
+            fetchCountryUseCase: { [fetchCountryUseCase] in fetchCountryUseCase }
         )
         self.controller = CountryController(dependencies: dependencies)
     }

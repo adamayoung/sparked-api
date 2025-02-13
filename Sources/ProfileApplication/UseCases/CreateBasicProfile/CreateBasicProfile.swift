@@ -8,35 +8,57 @@
 import Foundation
 import ProfileDomain
 
-package final class CreateBasicProfile: CreateBasicProfileUseCase {
+final class CreateBasicProfile: CreateBasicProfileUseCase {
 
-    private let repository: any CreateBasicProfileRepository
+    private let repository: any BasicProfileRepository
     private let userService: any UserService
 
-    package init(
-        repository: some CreateBasicProfileRepository,
+    init(
+        repository: some BasicProfileRepository,
         userService: some UserService
     ) {
         self.repository = repository
         self.userService = userService
     }
 
-    package func execute(
+    func execute(
         input: CreateBasicProfileInput
     ) async throws(CreateBasicProfileError) -> BasicProfileDTO {
+        try await validate(input: input)
+
+        let basicProfile = BasicProfileMapper.map(from: input)
         do {
-            try await userService.fetch(byID: input.userID)
-        } catch UserServiceError.notFound {
-            throw .userNotFound(userID: input.userID)
+            try await repository.create(basicProfile)
+        } catch BasicProfileRepositoryError.duplicate {
+            throw .profileAlreadyExistsForUser(userID: input.userID)
         } catch let error {
             throw .unknown(error)
         }
 
-        let basicProfile = BasicProfileMapper.map(from: input)
-        try await repository.create(basicProfile)
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
         return basicProfileDTO
+    }
+
+}
+
+extension CreateBasicProfile {
+
+    private func validate(input: CreateBasicProfileInput) async throws(CreateBasicProfileError) {
+        try await validate(userID: input.userID)
+    }
+
+    private func validate(userID: UUID) async throws(CreateBasicProfileError) {
+        let userExists: Bool
+        do {
+            userExists = try await userService.doesUserExist(withID: userID)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        guard userExists else {
+            throw .userNotFound(userID: userID)
+        }
     }
 
 }

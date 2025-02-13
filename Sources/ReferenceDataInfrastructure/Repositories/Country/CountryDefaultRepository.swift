@@ -9,16 +9,20 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-package final class CountryDefaultRepository: CountryRepository {
+final class CountryDefaultRepository: CountryRepository {
 
     private let remoteDataSource: any CountryRemoteDataSource
 
-    package init(remoteDataSource: some CountryRemoteDataSource) {
+    init(remoteDataSource: some CountryRemoteDataSource) {
         self.remoteDataSource = remoteDataSource
     }
 
-    package func countries() async throws(FetchCountriesError) -> [Country] {
-        try await remoteDataSource.countries()
+    func fetchAll() async throws(FetchCountriesError) -> [Country] {
+        try await remoteDataSource.fetchAll()
+    }
+
+    func fetch(byID id: Country.ID) async throws(FetchCountryError) -> Country {
+        try await remoteDataSource.fetch(byID: id)
     }
 
 }

@@ -8,19 +8,29 @@
 import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
-import ReferenceDataInfrastructure
+
+@testable import ReferenceDataInfrastructure
 
 final class CountryRemoteStubDataSource: CountryRemoteDataSource {
 
-    var countriesResult: Result<[Country], FetchCountriesError> = .failure(.unknown())
-    private(set) var countriesWasCalled = false
+    var fetchAllResult: Result<[Country], FetchCountriesError> = .failure(.unknown())
+    private(set) var fetchAllWasCalled = false
+
+    var fetchByIDResult: Result<Country, FetchCountryError> = .failure(.unknown())
+    private(set) var fetchByIDWasCalled = false
+    private(set) var lastFetchByIDID: Country.ID?
 
     init() {}
 
-    func countries() async throws(FetchCountriesError) -> [Country] {
-        countriesWasCalled = true
+    func fetchAll() async throws(FetchCountriesError) -> [Country] {
+        fetchAllWasCalled = true
+        return try fetchAllResult.get()
+    }
 
-        return try countriesResult.get()
+    func fetch(byID id: Country.ID) async throws(FetchCountryError) -> Country {
+        fetchByIDWasCalled = true
+        lastFetchByIDID = id
+        return try fetchByIDResult.get()
     }
 
 }

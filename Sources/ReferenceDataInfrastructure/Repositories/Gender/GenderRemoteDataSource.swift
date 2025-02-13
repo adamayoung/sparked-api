@@ -9,8 +9,10 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-package protocol GenderRemoteDataSource {
+protocol GenderRemoteDataSource {
 
-    func genders() async throws(FetchGendersError) -> [Gender]
+    func fetchAll() async throws(FetchGendersError) -> [Gender]
+
+    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender
 
 }

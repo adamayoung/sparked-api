@@ -15,10 +15,10 @@ import Testing
 struct FetchGendersTests {
 
     let useCase: FetchGenders
-    let repository: FetchGendersStubRepository
+    let repository: GenderStubRepository
 
     init() {
-        self.repository = FetchGendersStubRepository()
+        self.repository = GenderStubRepository()
         self.useCase = FetchGenders(repository: repository)
     }
 
@@ -48,21 +48,22 @@ struct FetchGendersTests {
                 name: "Male"
             )
         ]
-        repository.gendersResult = .success(genders)
+        repository.fetchAllResult = .success(genders)
 
         let genderDTOs = try await useCase.execute()
 
         #expect(genderDTOs == expectedGenderDTOs)
-        #expect(repository.gendersHasBeenCalled)
+        #expect(repository.fetchAllWasCalled)
     }
 
     @Test("execute when fails throws error")
     func executeWhenFailsThrowsError() async {
-        repository.gendersResult = .failure(.unknown())
+        repository.fetchAllResult = .failure(.unknown())
 
         await #expect(throws: FetchGendersError.unknown()) {
             try await useCase.execute()
         }
+        #expect(repository.fetchAllWasCalled)
     }
 
 }

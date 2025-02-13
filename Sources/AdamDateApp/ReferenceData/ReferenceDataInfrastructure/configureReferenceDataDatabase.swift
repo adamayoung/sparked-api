@@ -16,7 +16,7 @@ func configureReferenceDataDatabase(
     let databaseID: DatabaseID = .referenceData
     try createDatabaseConfiguration(on: app, databaseID: databaseID)
 
-    let migrations = ReferenceDataInfrastructure.migrations()
+    let migrations = ReferenceDataInfrastructureFactory.makeMigrations()
     for migration in migrations {
         app.migrations.add(migration, to: databaseID)
     }

@@ -9,9 +9,9 @@ import AdamDateAuth
 import IdentityApplication
 import Vapor
 
-package struct TokenController: RouteCollection, Sendable {
+struct TokenController: RouteCollection, Sendable {
 
-    package struct Dependencies: Sendable {
+    struct Dependencies: Sendable {
         package let authenticateUserUseCase: @Sendable () -> any AuthenticateUserUseCase
         package let tokenPayloadProvider: @Sendable () -> any TokenPayloadProvider
 
@@ -26,11 +26,11 @@ package struct TokenController: RouteCollection, Sendable {
 
     private let dependencies: Dependencies
 
-    package init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         routes.post("token", use: token)
     }
 

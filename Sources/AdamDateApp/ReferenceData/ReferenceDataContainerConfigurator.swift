@@ -11,6 +11,7 @@ import ReferenceDataApplication
 import ReferenceDataDomain
 import ReferenceDataInfrastructure
 import ReferenceDataPresentation
+import Vapor
 
 final class ReferenceDataContainerConfigurator: ContainerConfigurator {
 
@@ -35,56 +36,58 @@ extension ReferenceDataContainerConfigurator {
             database
         }
 
-        c.register(type: GenderRemoteDataSource.self) { c in
-            GenderRemoteFluentDataSource(
-                database: c.resolve(Database.self, name: DatabaseID.referenceData.string)
-            )
-        }
-
-        c.register(type: CountryRemoteDataSource.self) { c in
-            CountryRemoteFluentDataSource(
+        c.register(type: CountryRepository.self) { c in
+            ReferenceDataInfrastructureFactory.makeCountryRepository(
                 database: c.resolve(Database.self, name: DatabaseID.referenceData.string)
             )
         }
 
         c.register(type: GenderRepository.self) { c in
-            GenderDefaultRepository(
-                remoteDataSource: c.resolve(GenderRemoteDataSource.self)
-            )
-        }
-
-        c.register(type: CountryRepository.self) { c in
-            CountryDefaultRepository(
-                remoteDataSource: c.resolve(CountryRemoteDataSource.self)
+            ReferenceDataInfrastructureFactory.makeGenderRepository(
+                database: c.resolve(Database.self, name: DatabaseID.referenceData.string)
             )
         }
     }
 
     private func configureApplication(in c: Container) {
-        c.register(type: FetchGendersUseCase.self) { c in
-            FetchGenders(repository: c.resolve(GenderRepository.self))
+        c.register(type: FetchCountriesUseCase.self) { c in
+            ReferenceDataApplicationFactory.makeFetchCountriesUseCase(
+                countryRepository: c.resolve(CountryRepository.self)
+            )
         }
 
-        c.register(type: FetchCountriesUseCase.self) { c in
-            FetchCountries(repository: c.resolve(CountryRepository.self))
+        c.register(type: FetchCountryUseCase.self) { c in
+            ReferenceDataApplicationFactory.makeFetchCountryUseCase(
+                countryRepository: c.resolve(CountryRepository.self)
+            )
+        }
+
+        c.register(type: FetchGendersUseCase.self) { c in
+            ReferenceDataApplicationFactory.makeFetchGendersUseCase(
+                genderRepository: c.resolve(GenderRepository.self)
+            )
+        }
+
+        c.register(type: FetchGenderUseCase.self) { c in
+            ReferenceDataApplicationFactory.makeFetchGenderUseCase(
+                genderRepository: c.resolve(GenderRepository.self)
+            )
         }
     }
 
     private func configurePresentation(in c: Container) {
-        c.register(type: CountryController.self) { c in
-            let dependencies = CountryController.Dependencies(
-                fetchCountriesUseCase: { [c] in c.resolve(FetchCountriesUseCase.self) }
+        c.register(type: RouteCollection.self, name: "CountryController") { c in
+            ReferenceDataPresentationFactory.makeCountryController(
+                fetchCountriesUseCase: { [c] in c.resolve(FetchCountriesUseCase.self) },
+                fetchCountryUseCase: { [c] in c.resolve(FetchCountryUseCase.self) }
             )
-
-            return CountryController(dependencies: dependencies)
         }
 
-        c.register(type: GenderController.self) { c in
-            let dependencies = GenderController.Dependencies(
-                fetchGendersUseCase: { [c] in c.resolve(FetchGendersUseCase.self) }
+        c.register(type: RouteCollection.self, name: "GenderController") { c in
+            ReferenceDataPresentationFactory.makeGenderController(
+                fetchGendersUseCase: { [c] in c.resolve(FetchGendersUseCase.self) },
+                fetchGenderUseCase: { [c] in c.resolve(FetchGenderUseCase.self) }
             )
-
-            return GenderController(dependencies: dependencies)
         }
     }
 

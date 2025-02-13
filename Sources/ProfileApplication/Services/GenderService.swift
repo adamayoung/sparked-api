@@ -2,18 +2,18 @@
 //  GenderService.swift
 //  AdamDateApp
 //
-//  Created by Adam Young on 04/02/2025.
+//  Created by Adam Young on 13/02/2025.
 //
 
 import Foundation
 
 package protocol GenderService {
 
-    func genders() async throws(GenderServiceError) -> [GenderDTO]
+    func doesGenderExist(withID id: UUID) async throws(GenderServiceError) -> Bool
 
 }
 
-package enum GenderServiceError: LocalizedError, Equatable {
+package enum GenderServiceError: LocalizedError, Equatable, Sendable {
 
     case unknown(Error? = nil)
 
@@ -27,7 +27,7 @@ package enum GenderServiceError: LocalizedError, Equatable {
     package static func == (lhs: GenderServiceError, rhs: GenderServiceError) -> Bool {
         switch (lhs, rhs) {
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?.localizedDescription
+            lhsError?.localizedDescription == rhsError?.localizedDescription
         }
     }
 

@@ -49,7 +49,7 @@ struct FetchBasicProfileErrorAbortErrorTests {
         func reasonReturnsLocalizedDescriptionOfError() throws {
             let userID = try #require(UUID(uuidString: "E30DE47A-E931-41EA-BD96-AABBBB9FDA54"))
 
-            let error = CreateBasicProfileError.userNotFound(userID: userID)
+            let error = CreateBasicProfileError.profileAlreadyExistsForUser(userID: userID)
 
             #expect(error.localizedDescription == error.reason)
         }

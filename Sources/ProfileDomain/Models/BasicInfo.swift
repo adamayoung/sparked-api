@@ -7,29 +7,32 @@
 
 import Foundation
 
-package struct BasicInfo: Identifiable, Equatable, Sendable {
+package struct BasicInfo: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
+    package let userID: UUID
     package let profileID: BasicProfile.ID
-    package let gender: Gender
-    package let country: Country
+    package let genderID: UUID
+    package let countryID: UUID
     package let location: String
     package let homeTown: String?
     package let workplace: String?
 
     package init(
-        id: UUID,
+        id: UUID = UUID(),
+        userID: UUID,
         profileID: BasicProfile.ID,
-        gender: Gender,
-        country: Country,
+        genderID: UUID,
+        countryID: UUID,
         location: String,
         homeTown: String? = nil,
         workplace: String? = nil
     ) {
         self.id = id
+        self.userID = userID
         self.profileID = profileID
-        self.gender = gender
-        self.country = country
+        self.genderID = genderID
+        self.countryID = countryID
         self.location = location
         self.homeTown = homeTown
         self.workplace = workplace

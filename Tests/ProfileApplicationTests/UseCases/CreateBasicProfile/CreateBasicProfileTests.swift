@@ -15,63 +15,45 @@ import Testing
 struct CreateBasicProfileTests {
 
     let useCase: CreateBasicProfile
-    let repository: CreateBasicProfileStubRepository
+    let repository: BasicProfileStubRepository
     let userService: UserStubService
 
     init() {
-        self.repository = CreateBasicProfileStubRepository()
+        self.repository = BasicProfileStubRepository()
         self.userService = UserStubService()
-        self.useCase = CreateBasicProfile(repository: repository, userService: userService)
+        self.useCase = CreateBasicProfile(
+            repository: repository,
+            userService: userService
+        )
     }
 
     @Test("execute when user exists and basic profile created returns basic profile")
     func executeWhenUserExistsAndBasicProfileCreatedReturnsBasicProfile() async throws {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
         let input = try Self.createCreateBasicProfileInput(userID: userID)
-        let userDTO = try Self.createUserDTO(id: userID)
         let basicProfile = try Self.createBasicProfile(userID: userID)
 
-        userService.fetchByIDResult = .success(userDTO)
         repository.createResult = .success(Void())
 
         let basicProfileDTO = try await useCase.execute(input: input)
 
         #expect(basicProfileDTO.userID == basicProfile.userID)
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
         #expect(repository.createWasCalled)
         #expect(repository.lastCreateBasicProfile?.userID == userID)
-    }
-
-    @Test("execute when user does not exist throws user not found error")
-    func executeWhenUserDoesNotExistThrowsUserNotFoundError() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let input = try Self.createCreateBasicProfileInput(userID: userID)
-
-        userService.fetchByIDResult = .failure(.notFound)
-
-        await #expect(throws: CreateBasicProfileError.userNotFound(userID: userID)) {
-            _ = try await useCase.execute(input: input)
-        }
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
-        #expect(!repository.createWasCalled)
     }
 
     @Test("execute when create basic profile fails throws error")
     func executeWhenCreatingBasicProfileFailsThrowsError() async throws {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
         let input = try Self.createCreateBasicProfileInput(userID: userID)
-        let userDTO = try Self.createUserDTO(id: userID)
 
-        userService.fetchByIDResult = .success(userDTO)
         repository.createResult = .failure(.unknown())
 
-        await #expect(throws: CreateBasicProfileError.unknown()) {
+        await #expect(
+            throws: CreateBasicProfileError.unknown(BasicProfileRepositoryError.unknown())
+        ) {
             _ = try await useCase.execute(input: input)
         }
-        #expect(userService.fetchByIDWasCalled)
-        #expect(userService.lastFetchByIDID == userID)
         #expect(repository.createWasCalled)
         #expect(repository.lastCreateBasicProfile?.userID == input.userID)
     }
@@ -89,22 +71,6 @@ extension CreateBasicProfileTests {
             userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate
-        )
-    }
-
-    private static func createUserDTO(
-        id: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
-        firstName: String = "Dave",
-        familyName: String = "Smith",
-        fullName: String = "Dave Smith",
-        email: String = "email@example.com"
-    ) throws -> UserDTO {
-        try UserDTO(
-            id: #require(id),
-            firstName: firstName,
-            familyName: familyName,
-            fullName: fullName,
-            email: email
         )
     }
 

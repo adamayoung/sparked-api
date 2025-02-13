@@ -8,26 +8,31 @@
 import ReferenceDataApplication
 import Vapor
 
-package struct GenderController: RouteCollection, Sendable {
+struct GenderController: RouteCollection, Sendable {
 
-    package struct Dependencies {
-        package let fetchGendersUseCase: @Sendable () -> any FetchGendersUseCase
+    struct Dependencies {
+        let fetchGendersUseCase: @Sendable () -> any FetchGendersUseCase
+        let fetchGenderUseCase: @Sendable () -> any FetchGenderUseCase
 
-        package init(
-            fetchGendersUseCase: @escaping @Sendable () -> any FetchGendersUseCase
+        init(
+            fetchGendersUseCase: @escaping @Sendable () -> any FetchGendersUseCase,
+            fetchGenderUseCase: @escaping @Sendable () -> any FetchGenderUseCase
         ) {
             self.fetchGendersUseCase = fetchGendersUseCase
+            self.fetchGenderUseCase = fetchGenderUseCase
         }
     }
 
     private let dependencies: Dependencies
 
-    public init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
-        routes.get("genders", use: index)
+    func boot(routes: any RoutesBuilder) throws {
+        let genders = routes.grouped("genders")
+        genders.get(use: index)
+        genders.get(":genderID", use: show)
     }
 
     @Sendable
@@ -37,6 +42,22 @@ package struct GenderController: RouteCollection, Sendable {
         let genderResponseModels = genderDTOs.map(GenderResponseModelMapper.map)
 
         return genderResponseModels
+    }
+
+    @Sendable
+    func show(req: Request) async throws -> GenderResponseModel {
+        guard
+            let genderIDString = req.parameters.get("genderID", as: String.self),
+            let genderID = UUID(uuidString: genderIDString)
+        else {
+            throw Abort(.notFound)
+        }
+
+        let useCase = dependencies.fetchGenderUseCase()
+        let genderDTO = try await useCase.execute(id: genderID)
+        let genderResponseModel = GenderResponseModelMapper.map(from: genderDTO)
+
+        return genderResponseModel
     }
 
 }

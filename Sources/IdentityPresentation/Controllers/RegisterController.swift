@@ -8,9 +8,9 @@
 import IdentityApplication
 import Vapor
 
-package struct RegisterController: RouteCollection, Sendable {
+struct RegisterController: RouteCollection, Sendable {
 
-    package struct Dependencies: Sendable {
+    struct Dependencies: Sendable {
         package let registerUserUseCase: @Sendable () -> any RegisterUserUseCase
 
         package init(registerUserUseCase: @escaping @Sendable () -> any RegisterUserUseCase) {
@@ -20,11 +20,11 @@ package struct RegisterController: RouteCollection, Sendable {
 
     private let dependencies: Dependencies
 
-    package init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         routes.post("register", use: register)
     }
 

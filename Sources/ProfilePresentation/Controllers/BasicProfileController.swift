@@ -10,9 +10,9 @@ import JWT
 import ProfileApplication
 import Vapor
 
-package struct BasicProfileController: RouteCollection, Sendable {
+struct BasicProfileController: RouteCollection, Sendable {
 
-    package struct Dependencies {
+    struct Dependencies {
         package let createBasicProfileUseCase: @Sendable () -> any CreateBasicProfileUseCase
         package let fetchBasicProfileUseCase: @Sendable () -> any FetchBasicProfileUseCase
 
@@ -27,11 +27,11 @@ package struct BasicProfileController: RouteCollection, Sendable {
 
     private let dependencies: Dependencies
 
-    package init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         routes.get("me", "basic", use: showMe)
         routes.get(":profileID", "basic", use: show)
         routes.post("me", "basic", use: create)

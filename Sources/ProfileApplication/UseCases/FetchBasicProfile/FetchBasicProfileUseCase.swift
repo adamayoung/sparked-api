@@ -9,7 +9,7 @@ import Foundation
 
 package protocol FetchBasicProfileUseCase {
 
-    func execute(id: BasicProfileDTO.ID) async throws(FetchBasicProfileError) -> BasicProfileDTO
+    func execute(id: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO
 
     func execute(userID: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO
 

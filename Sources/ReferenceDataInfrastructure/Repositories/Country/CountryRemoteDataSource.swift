@@ -9,8 +9,10 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-package protocol CountryRemoteDataSource {
+protocol CountryRemoteDataSource {
 
-    func countries() async throws(FetchCountriesError) -> [Country]
+    func fetchAll() async throws(FetchCountriesError) -> [Country]
+
+    func fetch(byID id: Country.ID) async throws(FetchCountryError) -> Country
 
 }

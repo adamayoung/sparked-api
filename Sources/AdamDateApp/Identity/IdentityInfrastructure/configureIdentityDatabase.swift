@@ -14,7 +14,7 @@ func configureIdentityDatabase(on app: Application) throws -> (id: DatabaseID, d
     let databaseID: DatabaseID = .identity
     try createDatabaseConfiguration(on: app, databaseID: databaseID)
 
-    let migrations = IdentityInfrastructure.migrations()
+    let migrations = IdentityInfrastructureFactory.makeMigrations()
     for migration in migrations {
         app.migrations.add(migration, to: databaseID)
     }

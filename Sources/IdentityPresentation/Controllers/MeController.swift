@@ -9,9 +9,9 @@ import AdamDateAuth
 import IdentityApplication
 import Vapor
 
-package struct MeController: RouteCollection, Sendable {
+struct MeController: RouteCollection, Sendable {
 
-    package struct Dependencies: Sendable {
+    struct Dependencies: Sendable {
         let fetchUserUseCase: @Sendable () -> any FetchUserUseCase
 
         package init(fetchUserUseCase: @escaping @Sendable () -> any FetchUserUseCase) {
@@ -21,11 +21,11 @@ package struct MeController: RouteCollection, Sendable {
 
     private let dependencies: Dependencies
 
-    package init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         routes.get("me", use: me)
     }
 

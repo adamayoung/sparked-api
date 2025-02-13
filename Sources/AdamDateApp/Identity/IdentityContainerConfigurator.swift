@@ -46,15 +46,9 @@ extension IdentityContainerConfigurator {
             database
         }
 
-        c.register(type: UserRemoteDataSource.self) { c in
-            UserFluentRemoteDataSource(
-                database: c.resolve(Database.self, name: DatabaseID.identity.string)
-            )
-        }
-
         c.register(type: UserRepository.self) { c in
-            UserDefaultRepository(
-                remoteDataSource: c.resolve(UserRemoteDataSource.self)
+            IdentityInfrastructureFactory.makeUserRepository(
+                database: c.resolve(Database.self, name: DatabaseID.identity.string)
             )
         }
     }
@@ -65,48 +59,44 @@ extension IdentityContainerConfigurator {
         }
 
         c.register(type: RegisterUserUseCase.self) { c in
-            RegisterUser(
+            IdentityApplicationFactory.makeRegisterUserUseCase(
                 repository: c.resolve(UserRepository.self),
                 hasher: c.resolve(PasswordHasherService.self)
             )
         }
 
         c.register(type: AuthenticateUserUseCase.self) { c in
-            AuthenticateUser(
+            IdentityApplicationFactory.makeAuthenticateUserUseCase(
                 repository: c.resolve(UserRepository.self),
                 hasher: c.resolve(PasswordHasherService.self)
             )
         }
 
         c.register(type: FetchUserUseCase.self) { c in
-            FetchUser(repository: c.resolve(UserRepository.self))
+            IdentityApplicationFactory.makeFetchUserUseCase(
+                repository: c.resolve(UserRepository.self)
+            )
         }
     }
 
     private func configurePresentation(in c: Container) {
-        c.register(type: MeController.self) { c in
-            let dependencies = MeController.Dependencies(
+        c.register(type: RouteCollection.self, name: "MeController") { c in
+            IdentityPresentationFactory.makeMeController(
                 fetchUserUseCase: { [c] in c.resolve(FetchUserUseCase.self) }
             )
-
-            return MeController(dependencies: dependencies)
         }
 
-        c.register(type: RegisterController.self) { c in
-            let dependencies = RegisterController.Dependencies(
+        c.register(type: RouteCollection.self, name: "RegisterController") { c in
+            IdentityPresentationFactory.makeRegisterController(
                 registerUserUseCase: { [c] in c.resolve(RegisterUserUseCase.self) }
             )
-
-            return RegisterController(dependencies: dependencies)
         }
 
-        c.register(type: TokenController.self) { c in
-            let dependencies = TokenController.Dependencies(
+        c.register(type: RouteCollection.self, name: "TokenController") { c in
+            IdentityPresentationFactory.makeTokenController(
                 authenticateUserUseCase: { [c] in c.resolve(AuthenticateUserUseCase.self) },
                 tokenPayloadProvider: { [c] in c.resolve(TokenPayloadProvider.self) }
             )
-
-            return TokenController(dependencies: dependencies)
         }
     }
 

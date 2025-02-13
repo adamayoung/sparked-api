@@ -15,11 +15,11 @@ import Testing
 struct RegisterUserTests {
 
     let useCase: RegisterUser
-    let repository: RegisterUserStubRepository
+    let repository: UserStubRepository
     let hasher: PasswordHasherStubService
 
     init() {
-        self.repository = RegisterUserStubRepository()
+        self.repository = UserStubRepository()
         self.hasher = PasswordHasherStubService()
         self.useCase = RegisterUser(repository: repository, hasher: hasher)
     }
@@ -68,7 +68,7 @@ struct RegisterUserTests {
         hasher.hashResult = .success("")
         repository.createResult = .failure(.unknown())
 
-        await #expect(throws: RegisterUserError.unknown()) {
+        await #expect(throws: RegisterUserError.unknown(UserRepositoryError.unknown())) {
             _ = try await useCase.execute(input: input)
         }
         #expect(repository.createWasCalled)

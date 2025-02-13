@@ -39,21 +39,22 @@ struct GenderDefaultRepositoryTests {
                 name: "Female"
             )
         ]
-        remoteDataSource.gendersResult = .success(expectedCountries)
+        remoteDataSource.fetchAllResult = .success(expectedCountries)
 
-        let genders = try await repository.genders()
+        let genders = try await repository.fetchAll()
 
         #expect(genders == expectedCountries)
-        #expect(remoteDataSource.gendersWasCalled)
+        #expect(remoteDataSource.fetchAllWasCalled)
     }
 
     @Test("genders when fails throws error")
     func gendersWhenFailsThrowsError() async throws {
-        remoteDataSource.gendersResult = .failure(.unknown())
+        remoteDataSource.fetchAllResult = .failure(.unknown())
 
         await #expect(throws: FetchGendersError.unknown()) {
-            try await repository.genders()
+            try await repository.fetchAll()
         }
+        #expect(remoteDataSource.fetchAllWasCalled)
     }
 
 }

@@ -2,18 +2,18 @@
 //  CountryService.swift
 //  AdamDateApp
 //
-//  Created by Adam Young on 04/02/2025.
+//  Created by Adam Young on 13/02/2025.
 //
 
 import Foundation
 
 package protocol CountryService {
 
-    func countries() async throws(CountryServiceError) -> [CountryDTO]
+    func doesCountryExist(withID id: UUID) async throws(CountryServiceError) -> Bool
 
 }
 
-package enum CountryServiceError: LocalizedError, Equatable {
+package enum CountryServiceError: LocalizedError, Equatable, Sendable {
 
     case unknown(Error? = nil)
 
@@ -27,7 +27,7 @@ package enum CountryServiceError: LocalizedError, Equatable {
     package static func == (lhs: CountryServiceError, rhs: CountryServiceError) -> Bool {
         switch (lhs, rhs) {
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?.localizedDescription
+            lhsError?.localizedDescription == rhsError?.localizedDescription
         }
     }
 

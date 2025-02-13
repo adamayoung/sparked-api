@@ -8,16 +8,24 @@
 import Foundation
 import IdentityDomain
 
-package final class FetchUser: FetchUserUseCase {
+final class FetchUser: FetchUserUseCase {
 
-    private let repository: any FetchUserRepository
+    private let repository: any UserRepository
 
-    package init(repository: some FetchUserRepository) {
+    init(repository: some UserRepository) {
         self.repository = repository
     }
 
-    package func execute(id: User.ID) async throws(FetchUserError) -> UserDTO {
-        let user = try await repository.fetch(byID: id)
+    func execute(id: User.ID) async throws(FetchUserError) -> UserDTO {
+        let user: User
+        do {
+            user = try await repository.fetch(byID: id)
+        } catch UserRepositoryError.notFound {
+            throw .notFoundByID(userID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let userDTO = UserDTOMapper.map(from: user)
 
         return userDTO

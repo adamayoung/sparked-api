@@ -8,27 +8,31 @@
 import ReferenceDataApplication
 import Vapor
 
-package struct CountryController: RouteCollection, Sendable {
+struct CountryController: RouteCollection, Sendable {
 
-    package struct Dependencies {
+    struct Dependencies {
         let fetchCountriesUseCase: @Sendable () -> any FetchCountriesUseCase
+        let fetchCountryUseCase: @Sendable () -> any FetchCountryUseCase
 
-        package init(
-            fetchCountriesUseCase: @escaping @Sendable () -> any FetchCountriesUseCase
+        init(
+            fetchCountriesUseCase: @escaping @Sendable () -> any FetchCountriesUseCase,
+            fetchCountryUseCase: @escaping @Sendable () -> any FetchCountryUseCase
         ) {
             self.fetchCountriesUseCase = fetchCountriesUseCase
+            self.fetchCountryUseCase = fetchCountryUseCase
         }
     }
 
     private let dependencies: Dependencies
 
-    package init(dependencies: Dependencies) {
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
 
-    package func boot(routes: any RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         let countries = routes.grouped("countries")
         countries.get(use: index)
+        countries.get(":countryID", use: show)
     }
 
     @Sendable
@@ -38,6 +42,22 @@ package struct CountryController: RouteCollection, Sendable {
         let countryResponseModels = countryDTOs.map(CountryResponseModelMapper.map)
 
         return countryResponseModels
+    }
+
+    @Sendable
+    func show(req: Request) async throws -> CountryResponseModel {
+        guard
+            let countryIDString = req.parameters.get("countryID", as: String.self),
+            let countryID = UUID(uuidString: countryIDString)
+        else {
+            throw Abort(.notFound)
+        }
+
+        let useCase = dependencies.fetchCountryUseCase()
+        let countryDTO = try await useCase.execute(id: countryID)
+        let countryResponseModel = CountryResponseModelMapper.map(from: countryDTO)
+
+        return countryResponseModel
     }
 
 }

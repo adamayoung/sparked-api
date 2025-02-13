@@ -14,10 +14,10 @@ import Testing
 struct FetchCountriesTests {
 
     let useCase: FetchCountries
-    let repository: FetchCountriesStubRepository
+    let repository: CountryStubRepository
 
     init() {
-        self.repository = FetchCountriesStubRepository()
+        self.repository = CountryStubRepository()
         self.useCase = FetchCountries(repository: repository)
     }
 
@@ -48,21 +48,22 @@ struct FetchCountriesTests {
                 name: "United States"
             )
         ]
-        repository.countriesResult = .success(countries)
+        repository.fetchAllResult = .success(countries)
 
         let countryDTOs = try await useCase.execute()
 
         #expect(countryDTOs == expectedCountryDTOs)
-        #expect(repository.countriesWasCalled)
+        #expect(repository.fetchAllWasCalled)
     }
 
     @Test("execute when fails throws error")
     func executeWhenFailsThrowsError() async {
-        repository.countriesResult = .failure(.unknown())
+        repository.fetchAllResult = .failure(.unknown())
 
         await #expect(throws: FetchCountriesError.unknown()) {
             try await useCase.execute()
         }
+        #expect(repository.fetchAllWasCalled)
     }
 
 }
