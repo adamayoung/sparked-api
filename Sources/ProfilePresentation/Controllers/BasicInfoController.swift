@@ -12,28 +12,6 @@ import Vapor
 
 struct BasicInfoController: RouteCollection, Sendable {
 
-    struct Dependencies {
-        package let createBasicInfoUseCase: @Sendable () -> any CreateBasicInfoUseCase
-        package let fetchBasicInfoUseCase: @Sendable () -> any FetchBasicInfoUseCase
-        package let fetchBasicProfileUseCase: @Sendable () -> any FetchBasicProfileUseCase
-
-        package init(
-            createBasicInfoUseCase: @escaping @Sendable () -> any CreateBasicInfoUseCase,
-            fetchBasicInfoUseCase: @escaping @Sendable () -> any FetchBasicInfoUseCase,
-            fetchBasicProfileUseCase: @escaping @Sendable () -> any FetchBasicProfileUseCase
-        ) {
-            self.createBasicInfoUseCase = createBasicInfoUseCase
-            self.fetchBasicInfoUseCase = fetchBasicInfoUseCase
-            self.fetchBasicProfileUseCase = fetchBasicProfileUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", "info", use: showMe)
         routes.get(":profileID", "info", use: show)
@@ -47,8 +25,7 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let basicInfoDTO = try await dependencies.fetchBasicInfoUseCase()
-            .execute(userID: userID)
+        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(userID: userID)
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
 
         return basicInfoResponseModel
@@ -64,8 +41,7 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicInfoDTO = try await dependencies.fetchBasicInfoUseCase()
-            .execute(profileID: profileID)
+        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(profileID: profileID)
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
 
         return basicInfoResponseModel
@@ -78,8 +54,7 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await dependencies.fetchBasicProfileUseCase()
-            .execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
 
         let createBasicInfoRequestModel: CreateBasicInfoRequestModel
         do {
@@ -94,8 +69,7 @@ struct BasicInfoController: RouteCollection, Sendable {
             userID: userID,
             profileID: basicProfileDTO.id
         )
-        let basicInfo = try await dependencies.createBasicInfoUseCase()
-            .execute(input: input)
+        let basicInfo = try await req.createBasicInfoUseCase.execute(input: input)
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
 
         return basicInfoResponseModel

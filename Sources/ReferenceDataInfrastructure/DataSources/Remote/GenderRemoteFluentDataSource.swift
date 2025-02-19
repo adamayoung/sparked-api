@@ -18,7 +18,7 @@ final class GenderRemoteFluentDataSource: GenderRemoteDataSource {
         self.database = database
     }
 
-    func fetchAll() async throws(FetchGendersError) -> [Gender] {
+    func fetchAll() async throws(GenderRepositoryError) -> [Gender] {
         let genderModels: [GenderModel]
         do {
             genderModels = try await GenderModel.query(on: database).all()
@@ -36,7 +36,7 @@ final class GenderRemoteFluentDataSource: GenderRemoteDataSource {
         return genders
     }
 
-    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender {
+    func fetch(byID id: Gender.ID) async throws(GenderRepositoryError) -> Gender {
         let genderModel: GenderModel?
         do {
             genderModel = try await GenderModel.find(id, on: database)
@@ -45,7 +45,7 @@ final class GenderRemoteFluentDataSource: GenderRemoteDataSource {
         }
 
         guard let genderModel else {
-            throw .notFound(genderID: id)
+            throw .notFound
         }
 
         let gender: Gender

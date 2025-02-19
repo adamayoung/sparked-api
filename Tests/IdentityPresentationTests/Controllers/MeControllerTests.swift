@@ -22,10 +22,7 @@ struct MeControllerTests {
 
     init() throws {
         self.fetchUserUseCase = FetchUserStubUseCase()
-        let dependencies = MeController.Dependencies(
-            fetchUserUseCase: { [fetchUserUseCase] in fetchUserUseCase }
-        )
-        self.controller = MeController(dependencies: dependencies)
+        self.controller = MeController()
     }
 
     @Test("me when valid JWT token with matching user returns user")
@@ -54,6 +51,8 @@ struct MeControllerTests {
         fetchUserUseCase.executeResult = .success(userDTO)
 
         try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
+            app.identityUseCases.use { _ in fetchUserUseCase }
+
             try await app.testing().test(
                 .GET, "me",
                 beforeRequest: { req in

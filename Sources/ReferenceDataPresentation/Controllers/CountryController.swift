@@ -10,25 +10,6 @@ import Vapor
 
 struct CountryController: RouteCollection, Sendable {
 
-    struct Dependencies {
-        let fetchCountriesUseCase: @Sendable () -> any FetchCountriesUseCase
-        let fetchCountryUseCase: @Sendable () -> any FetchCountryUseCase
-
-        init(
-            fetchCountriesUseCase: @escaping @Sendable () -> any FetchCountriesUseCase,
-            fetchCountryUseCase: @escaping @Sendable () -> any FetchCountryUseCase
-        ) {
-            self.fetchCountriesUseCase = fetchCountriesUseCase
-            self.fetchCountryUseCase = fetchCountryUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         let countries = routes.grouped("countries")
         countries.get(use: index)
@@ -37,8 +18,7 @@ struct CountryController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [CountryResponseModel] {
-        let useCase = dependencies.fetchCountriesUseCase()
-        let countryDTOs = try await useCase.execute()
+        let countryDTOs = try await req.fetchCountriesUseCase.execute()
         let countryResponseModels = countryDTOs.map(CountryResponseModelMapper.map)
 
         return countryResponseModels
@@ -53,8 +33,7 @@ struct CountryController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let useCase = dependencies.fetchCountryUseCase()
-        let countryDTO = try await useCase.execute(id: countryID)
+        let countryDTO = try await req.fetchCountryUseCase.execute(id: countryID)
         let countryResponseModel = CountryResponseModelMapper.map(from: countryDTO)
 
         return countryResponseModel

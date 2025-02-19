@@ -22,11 +22,7 @@ struct CountryControllerTests {
     init() throws {
         self.fetchCountriesUseCase = FetchCountriesStubUseCase()
         self.fetchCountryUseCase = FetchCountryStubUseCase()
-        let dependencies = CountryController.Dependencies(
-            fetchCountriesUseCase: { [fetchCountriesUseCase] in fetchCountriesUseCase },
-            fetchCountryUseCase: { [fetchCountryUseCase] in fetchCountryUseCase }
-        )
-        self.controller = CountryController(dependencies: dependencies)
+        self.controller = CountryController()
     }
 
     @Test("index returns countries")
@@ -58,6 +54,8 @@ struct CountryControllerTests {
         fetchCountriesUseCase.executeResult = .success(countriesDTOs)
 
         try await testWithApp(controller) { app in
+            app.referenceDataUseCases.use { _ in fetchCountriesUseCase }
+
             try await app.testing().test(
                 .GET, "countries",
                 afterResponse: { res async throws in
@@ -75,6 +73,8 @@ struct CountryControllerTests {
         fetchCountriesUseCase.executeResult = .failure(.unknown())
 
         try await testWithApp(controller) { app in
+            app.referenceDataUseCases.use { _ in fetchCountriesUseCase }
+
             try await app.testing().test(
                 .GET, "countries",
                 afterResponse: { res async throws in

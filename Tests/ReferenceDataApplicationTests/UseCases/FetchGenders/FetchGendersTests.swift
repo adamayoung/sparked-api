@@ -60,7 +60,7 @@ struct FetchGendersTests {
     func executeWhenFailsThrowsError() async {
         repository.fetchAllResult = .failure(.unknown())
 
-        await #expect(throws: FetchGendersError.unknown()) {
+        await #expect(throws: FetchGendersError.unknown(GenderRepositoryError.unknown())) {
             try await useCase.execute()
         }
         #expect(repository.fetchAllWasCalled)

@@ -20,16 +20,12 @@ struct TokenControllerTests {
 
     let controller: TokenController
     let authenticateUserUseCase: AuthenticateUserStubUseCase
-    let tokenPayloadProvider: TokenPayloadStubProvider
+    let tokenPayloadService: TokenPayloadStubService
 
     init() throws {
         self.authenticateUserUseCase = AuthenticateUserStubUseCase()
-        self.tokenPayloadProvider = TokenPayloadStubProvider()
-        let dependencies = TokenController.Dependencies(
-            authenticateUserUseCase: { [authenticateUserUseCase] in authenticateUserUseCase },
-            tokenPayloadProvider: { [tokenPayloadProvider] in tokenPayloadProvider }
-        )
-        self.controller = TokenController(dependencies: dependencies)
+        self.tokenPayloadService = TokenPayloadStubService()
+        self.controller = TokenController()
     }
 
     @Test("token when correct email and password returns token")
@@ -59,9 +55,12 @@ struct TokenControllerTests {
             dateProvider: { Date(timeIntervalSince1970: 0) }
         )
         authenticateUserUseCase.executeResult = .success(userDTO)
-        tokenPayloadProvider.tokenPayloadResult = tokenPayload
+        tokenPayloadService.tokenPayloadResult = tokenPayload
 
         try await testWithApp(controller) { app in
+            app.identityUseCases.use { _ in authenticateUserUseCase }
+            app.identityServices.use { _ in tokenPayloadService }
+
             try await app.testing().test(
                 .POST, "token",
                 beforeRequest: { req in
@@ -104,6 +103,8 @@ struct TokenControllerTests {
         authenticateUserUseCase.executeResult = .failure(.invalidEmailOrPassword)
 
         try await testWithApp(controller) { app in
+            app.identityUseCases.use { _ in authenticateUserUseCase }
+
             try await app.testing().test(
                 .POST, "token",
                 beforeRequest: { req in

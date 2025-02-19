@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ReferenceDataDomain
 
 final class FetchCountry: FetchCountryUseCase {
 
@@ -16,7 +17,15 @@ final class FetchCountry: FetchCountryUseCase {
     }
 
     func execute(id: CountryDTO.ID) async throws(FetchCountryError) -> CountryDTO {
-        let country = try await repository.fetch(byID: id)
+        let country: Country
+        do {
+            country = try await repository.fetch(byID: id)
+        } catch CountryRepositoryError.notFound {
+            throw .notFound(countryID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let countryDTO = CountryDTOMapper.map(from: country)
 
         return countryDTO

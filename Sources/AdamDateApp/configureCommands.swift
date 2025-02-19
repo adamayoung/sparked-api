@@ -6,19 +6,14 @@
 //
 
 import AdamDateCommands
-import IdentityApplication
-import IdentityDomain
 import Vapor
 
-func configureCommands(_ app: Application, container: Container) {
-    app.asyncCommands.use(
-        CreateUserCommand(
-            registerUserUseCase: { container.resolve(RegisterUserUseCase.self) }
-        ),
-        as: "createuser"
-    )
+func configureCommands(_ app: Application) {
+    app.commandUseCases.use(.default)
+
+    app.asyncCommands.use(CommandFactory.makeCreateUserCommand(), as: "createuser")
 
     if app.environment == .development {
-        app.asyncCommands.use(SeedCommand(), as: "seed")
+        app.asyncCommands.use(CommandFactory.makeSeedCommand(), as: "seed")
     }
 }

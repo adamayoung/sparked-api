@@ -22,11 +22,7 @@ struct GenderControllerTests {
     init() throws {
         self.fetchGendersUseCase = FetchGendersStubUseCase()
         self.fetchGenderUseCase = FetchGenderStubUseCase()
-        let dependencies = GenderController.Dependencies(
-            fetchGendersUseCase: { [fetchGendersUseCase] in fetchGendersUseCase },
-            fetchGenderUseCase: { [fetchGenderUseCase] in fetchGenderUseCase }
-        )
-        self.controller = GenderController(dependencies: dependencies)
+        self.controller = GenderController()
     }
 
     @Test("index returns countries")
@@ -58,6 +54,8 @@ struct GenderControllerTests {
         fetchGendersUseCase.executeResult = .success(countriesDTOs)
 
         try await testWithApp(controller) { app in
+            app.referenceDataUseCases.use { _ in fetchGendersUseCase }
+
             try await app.testing().test(
                 .GET, "genders",
                 afterResponse: { res async throws in
@@ -75,6 +73,8 @@ struct GenderControllerTests {
         fetchGendersUseCase.executeResult = .failure(.unknown())
 
         try await testWithApp(controller) { app in
+            app.referenceDataUseCases.use { _ in fetchGendersUseCase }
+
             try await app.testing().test(
                 .GET, "genders",
                 afterResponse: { res async throws in

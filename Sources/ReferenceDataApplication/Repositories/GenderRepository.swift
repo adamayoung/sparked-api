@@ -10,8 +10,26 @@ import ReferenceDataDomain
 
 package protocol GenderRepository {
 
-    func fetchAll() async throws(FetchGendersError) -> [Gender]
+    func fetchAll() async throws(GenderRepositoryError) -> [Gender]
 
-    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender
+    func fetch(byID id: Gender.ID) async throws(GenderRepositoryError) -> Gender
+
+}
+
+package enum GenderRepositoryError: Error, Equatable {
+
+    case notFound
+    case unknown(Error? = nil)
+
+    package static func == (lhs: GenderRepositoryError, rhs: GenderRepositoryError) -> Bool {
+        switch (lhs, rhs) {
+        case (.notFound, .notFound):
+            return true
+        case (.unknown(let lhsError), .unknown(let rhsError)):
+            return lhsError?.localizedDescription == rhsError?.localizedDescription
+        default:
+            return false
+        }
+    }
 
 }

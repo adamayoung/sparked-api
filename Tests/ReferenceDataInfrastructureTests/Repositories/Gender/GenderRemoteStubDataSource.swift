@@ -13,21 +13,21 @@ import ReferenceDataDomain
 
 final class GenderRemoteStubDataSource: GenderRemoteDataSource {
 
-    var fetchAllResult: Result<[Gender], FetchGendersError> = .failure(.unknown())
+    var fetchAllResult: Result<[Gender], GenderRepositoryError> = .failure(.unknown())
     private(set) var fetchAllWasCalled = false
 
-    var fetchByIDResult: Result<Gender, FetchGenderError> = .failure(.unknown())
+    var fetchByIDResult: Result<Gender, GenderRepositoryError> = .failure(.unknown())
     private(set) var fetchByIDWasCalled = false
     private(set) var lastFetchByIDID: Gender.ID?
 
     init() {}
 
-    func fetchAll() async throws(FetchGendersError) -> [Gender] {
+    func fetchAll() async throws(GenderRepositoryError) -> [Gender] {
         fetchAllWasCalled = true
         return try fetchAllResult.get()
     }
 
-    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender {
+    func fetch(byID id: Gender.ID) async throws(GenderRepositoryError) -> Gender {
         fetchByIDWasCalled = true
         lastFetchByIDID = id
         return try fetchByIDResult.get()

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ReferenceDataDomain
 
 final class FetchGenders: FetchGendersUseCase {
 
@@ -16,7 +17,13 @@ final class FetchGenders: FetchGendersUseCase {
     }
 
     func execute() async throws(FetchGendersError) -> [GenderDTO] {
-        let genders = try await repository.fetchAll()
+        let genders: [Gender]
+        do {
+            genders = try await repository.fetchAll()
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let genderDTOS = genders.map(GenderDTOMapper.map)
             .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
 

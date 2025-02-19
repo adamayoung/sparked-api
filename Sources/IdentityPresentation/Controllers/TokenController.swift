@@ -11,25 +11,6 @@ import Vapor
 
 struct TokenController: RouteCollection, Sendable {
 
-    struct Dependencies: Sendable {
-        package let authenticateUserUseCase: @Sendable () -> any AuthenticateUserUseCase
-        package let tokenPayloadProvider: @Sendable () -> any TokenPayloadProvider
-
-        package init(
-            authenticateUserUseCase: @escaping @Sendable () -> any AuthenticateUserUseCase,
-            tokenPayloadProvider: @escaping @Sendable () -> any TokenPayloadProvider
-        ) {
-            self.authenticateUserUseCase = authenticateUserUseCase
-            self.tokenPayloadProvider = tokenPayloadProvider
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         routes.post("token", use: token)
     }
@@ -44,13 +25,11 @@ struct TokenController: RouteCollection, Sendable {
         }
 
         let credential = UserCredentialMapper.map(from: userCredentialRequestModel)
-
-        let useCase = dependencies.authenticateUserUseCase()
-        let userDTO = try await useCase.execute(credential: credential)
-        let tokenPayload = dependencies.tokenPayloadProvider().tokenPayload(for: userDTO)
+        let userDTO = try await req.authenticateUserUseCase.execute(credential: credential)
+        let tokenPayload = req.tokenPayloadService.tokenPayload(for: userDTO)
         let signedToken = try await req.jwt.sign(tokenPayload)
-
         let tokenResponseModel = TokenResponseModel(token: signedToken)
+
         return tokenResponseModel
     }
 

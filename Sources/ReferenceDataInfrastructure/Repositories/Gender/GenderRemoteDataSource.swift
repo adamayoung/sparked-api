@@ -11,8 +11,8 @@ import ReferenceDataDomain
 
 protocol GenderRemoteDataSource {
 
-    func fetchAll() async throws(FetchGendersError) -> [Gender]
+    func fetchAll() async throws(GenderRepositoryError) -> [Gender]
 
-    func fetch(byID id: Gender.ID) async throws(FetchGenderError) -> Gender
+    func fetch(byID id: Gender.ID) async throws(GenderRepositoryError) -> Gender
 
 }

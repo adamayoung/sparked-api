@@ -17,11 +17,14 @@ struct GenderDefaultRepositoryTests {
 
     let repository: GenderDefaultRepository
     let remoteDataSource: GenderRemoteStubDataSource
+    let cacheDataSource: GenderCacheStubDataSource
 
     init() {
         self.remoteDataSource = GenderRemoteStubDataSource()
+        self.cacheDataSource = GenderCacheStubDataSource()
         self.repository = GenderDefaultRepository(
-            remoteDataSource: self.remoteDataSource
+            remoteDataSource: self.remoteDataSource,
+            cacheDataSource: self.cacheDataSource
         )
     }
 
@@ -51,7 +54,7 @@ struct GenderDefaultRepositoryTests {
     func gendersWhenFailsThrowsError() async throws {
         remoteDataSource.fetchAllResult = .failure(.unknown())
 
-        await #expect(throws: FetchGendersError.unknown()) {
+        await #expect(throws: GenderRepositoryError.unknown()) {
             try await repository.fetchAll()
         }
         #expect(remoteDataSource.fetchAllWasCalled)

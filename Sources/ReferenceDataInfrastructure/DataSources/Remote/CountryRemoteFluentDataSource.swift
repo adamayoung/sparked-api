@@ -18,7 +18,7 @@ final class CountryRemoteFluentDataSource: CountryRemoteDataSource {
         self.database = database
     }
 
-    func fetchAll() async throws(FetchCountriesError) -> [Country] {
+    func fetchAll() async throws(CountryRepositoryError) -> [Country] {
         let countryModels: [CountryModel]
         do {
             countryModels = try await CountryModel.query(on: database).all()
@@ -36,7 +36,7 @@ final class CountryRemoteFluentDataSource: CountryRemoteDataSource {
         return countries
     }
 
-    func fetch(byID id: Country.ID) async throws(FetchCountryError) -> Country {
+    func fetch(byID id: Country.ID) async throws(CountryRepositoryError) -> Country {
         let countryModel: CountryModel?
         do {
             countryModel = try await CountryModel.find(id, on: database)
@@ -45,7 +45,7 @@ final class CountryRemoteFluentDataSource: CountryRemoteDataSource {
         }
 
         guard let countryModel else {
-            throw .notFound(countryID: id)
+            throw .notFound
         }
 
         let country: Country

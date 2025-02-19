@@ -10,25 +10,6 @@ import Vapor
 
 struct GenderController: RouteCollection, Sendable {
 
-    struct Dependencies {
-        let fetchGendersUseCase: @Sendable () -> any FetchGendersUseCase
-        let fetchGenderUseCase: @Sendable () -> any FetchGenderUseCase
-
-        init(
-            fetchGendersUseCase: @escaping @Sendable () -> any FetchGendersUseCase,
-            fetchGenderUseCase: @escaping @Sendable () -> any FetchGenderUseCase
-        ) {
-            self.fetchGendersUseCase = fetchGendersUseCase
-            self.fetchGenderUseCase = fetchGenderUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         let genders = routes.grouped("genders")
         genders.get(use: index)
@@ -37,8 +18,7 @@ struct GenderController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [GenderResponseModel] {
-        let useCase = dependencies.fetchGendersUseCase()
-        let genderDTOs = try await useCase.execute()
+        let genderDTOs = try await req.fetchGendersUseCase.execute()
         let genderResponseModels = genderDTOs.map(GenderResponseModelMapper.map)
 
         return genderResponseModels
@@ -53,8 +33,7 @@ struct GenderController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let useCase = dependencies.fetchGenderUseCase()
-        let genderDTO = try await useCase.execute(id: genderID)
+        let genderDTO = try await req.fetchGenderUseCase.execute(id: genderID)
         let genderResponseModel = GenderResponseModelMapper.map(from: genderDTO)
 
         return genderResponseModel

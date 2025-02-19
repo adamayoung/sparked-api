@@ -12,25 +12,6 @@ import Vapor
 
 struct BasicProfileController: RouteCollection, Sendable {
 
-    struct Dependencies {
-        package let createBasicProfileUseCase: @Sendable () -> any CreateBasicProfileUseCase
-        package let fetchBasicProfileUseCase: @Sendable () -> any FetchBasicProfileUseCase
-
-        package init(
-            createBasicProfileUseCase: @escaping @Sendable () -> any CreateBasicProfileUseCase,
-            fetchBasicProfileUseCase: @escaping @Sendable () -> any FetchBasicProfileUseCase
-        ) {
-            self.createBasicProfileUseCase = createBasicProfileUseCase
-            self.fetchBasicProfileUseCase = fetchBasicProfileUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", "basic", use: showMe)
         routes.get(":profileID", "basic", use: show)
@@ -44,8 +25,7 @@ struct BasicProfileController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let useCase = dependencies.fetchBasicProfileUseCase()
-        let basicProfileDTO = try await useCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         return basicProfileResponseModel
@@ -61,8 +41,7 @@ struct BasicProfileController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let useCase = dependencies.fetchBasicProfileUseCase()
-        let basicProfileDTO = try await useCase.execute(id: profileID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(id: profileID)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         return basicProfileResponseModel
@@ -87,8 +66,7 @@ struct BasicProfileController: RouteCollection, Sendable {
             from: createBasicProfileRequestModel,
             userID: userID
         )
-        let useCase = dependencies.createBasicProfileUseCase()
-        let basicProfile = try await useCase.execute(input: input)
+        let basicProfile = try await req.createBasicProfileUseCase.execute(input: input)
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfile)
 
         return basicProfileResponseModel

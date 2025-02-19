@@ -12,22 +12,6 @@ import Vapor
 
 struct ProfileController: RouteCollection, Sendable {
 
-    struct Dependencies {
-        package let fetchProfileUseCase: @Sendable () -> any FetchProfileUseCase
-
-        package init(
-            fetchProfileUseCase: @escaping @Sendable () -> any FetchProfileUseCase
-        ) {
-            self.fetchProfileUseCase = fetchProfileUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", use: showMe)
         routes.get(":profileID", use: show)
@@ -40,9 +24,7 @@ struct ProfileController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let profileDTO = try await dependencies.fetchProfileUseCase()
-            .execute(userID: userID)
-
+        let profileDTO = try await req.fetchProfileUseCase.execute(userID: userID)
         let profileResponseModel = ProfileResponseModelMapper.map(from: profileDTO)
 
         return profileResponseModel
@@ -58,9 +40,7 @@ struct ProfileController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let profileDTO = try await dependencies.fetchProfileUseCase()
-            .execute(id: profileID)
-
+        let profileDTO = try await req.fetchProfileUseCase.execute(id: profileID)
         let profileResponseModel = ProfileResponseModelMapper.map(from: profileDTO)
 
         return profileResponseModel

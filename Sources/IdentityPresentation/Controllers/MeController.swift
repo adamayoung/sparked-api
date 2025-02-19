@@ -11,20 +11,6 @@ import Vapor
 
 struct MeController: RouteCollection, Sendable {
 
-    struct Dependencies: Sendable {
-        let fetchUserUseCase: @Sendable () -> any FetchUserUseCase
-
-        package init(fetchUserUseCase: @escaping @Sendable () -> any FetchUserUseCase) {
-            self.fetchUserUseCase = fetchUserUseCase
-        }
-    }
-
-    private let dependencies: Dependencies
-
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
-
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", use: me)
     }
@@ -36,10 +22,9 @@ struct MeController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let useCase = dependencies.fetchUserUseCase()
-        let userDTO = try await useCase.execute(id: userID)
-
+        let userDTO = try await req.fetchUserUseCase.execute(id: userID)
         let userResponseModel = UserResponseModelMapper.map(from: userDTO)
+
         return userResponseModel
     }
 

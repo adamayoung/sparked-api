@@ -60,7 +60,7 @@ struct FetchCountriesTests {
     func executeWhenFailsThrowsError() async {
         repository.fetchAllResult = .failure(.unknown())
 
-        await #expect(throws: FetchCountriesError.unknown()) {
+        await #expect(throws: FetchCountriesError.unknown(CountryRepositoryError.unknown())) {
             try await useCase.execute()
         }
         #expect(repository.fetchAllWasCalled)

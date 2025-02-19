@@ -11,8 +11,8 @@ import ReferenceDataDomain
 
 protocol CountryRemoteDataSource {
 
-    func fetchAll() async throws(FetchCountriesError) -> [Country]
+    func fetchAll() async throws(CountryRepositoryError) -> [Country]
 
-    func fetch(byID id: Country.ID) async throws(FetchCountryError) -> Country
+    func fetch(byID id: Country.ID) async throws(CountryRepositoryError) -> Country
 
 }

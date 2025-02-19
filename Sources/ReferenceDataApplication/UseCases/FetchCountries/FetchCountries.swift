@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ReferenceDataDomain
 
 final class FetchCountries: FetchCountriesUseCase {
 
@@ -16,7 +17,13 @@ final class FetchCountries: FetchCountriesUseCase {
     }
 
     func execute() async throws(FetchCountriesError) -> [CountryDTO] {
-        let countries = try await repository.fetchAll()
+        let countries: [Country]
+        do {
+            countries = try await repository.fetchAll()
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let countryDTOs = countries.map(CountryDTOMapper.map)
             .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
 

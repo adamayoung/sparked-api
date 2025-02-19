@@ -17,11 +17,14 @@ struct CountryDefaultRepositoryTests {
 
     let repository: CountryDefaultRepository
     let remoteDataSource: CountryRemoteStubDataSource
+    let cacheDataSource: CountryCacheStubDataSource
 
     init() {
         self.remoteDataSource = CountryRemoteStubDataSource()
+        self.cacheDataSource = CountryCacheStubDataSource()
         self.repository = CountryDefaultRepository(
-            remoteDataSource: self.remoteDataSource
+            remoteDataSource: self.remoteDataSource,
+            cacheDataSource: self.cacheDataSource
         )
     }
 
@@ -51,7 +54,7 @@ struct CountryDefaultRepositoryTests {
     func countriesWhenFailsThrowsError() async throws {
         remoteDataSource.fetchAllResult = .failure(.unknown())
 
-        await #expect(throws: FetchCountriesError.unknown()) {
+        await #expect(throws: CountryRepositoryError.unknown()) {
             try await repository.fetchAll()
         }
         #expect(remoteDataSource.fetchAllWasCalled)

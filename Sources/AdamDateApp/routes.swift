@@ -7,10 +7,10 @@
 
 import Vapor
 
-func routes(_ routes: RoutesBuilder, container: Container) throws {
+func routes(_ routes: RoutesBuilder) throws {
     let apiRouter = routes.grouped("api")
 
-    try profileRoutes(apiRouter, container: container)
-    try identityRoutes(apiRouter, container: container)
-    try referenceDataRoutes(apiRouter, container: container)
+    try profileRoutes(apiRouter)
+    try identityRoutes(apiRouter)
+    try referenceDataRoutes(apiRouter)
 }

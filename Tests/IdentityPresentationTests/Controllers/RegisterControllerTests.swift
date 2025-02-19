@@ -21,10 +21,7 @@ struct RegisterControllerTests {
 
     init() throws {
         self.registerUserUseCase = RegisterUserStubUseCase()
-        let dependencies = RegisterController.Dependencies(
-            registerUserUseCase: { [registerUserUseCase] in registerUserUseCase }
-        )
-        self.controller = RegisterController(dependencies: dependencies)
+        self.controller = RegisterController()
     }
 
     @Test("register when request body is valid returns registered user")
@@ -48,6 +45,8 @@ struct RegisterControllerTests {
         registerUserUseCase.executeResult = .success(userDTO)
 
         try await testWithApp(controller) { app in
+            app.identityUseCases.use { _ in registerUserUseCase }
+
             try await app.testing().test(
                 .POST, "register",
                 beforeRequest: { req in
@@ -65,6 +64,8 @@ struct RegisterControllerTests {
         registerUserUseCase.executeResult = .failure(.unknown())
 
         try await testWithApp(controller) { app in
+            app.identityUseCases.use { _ in registerUserUseCase }
+
             try await app.testing().test(
                 .POST, "register",
                 beforeRequest: { req in

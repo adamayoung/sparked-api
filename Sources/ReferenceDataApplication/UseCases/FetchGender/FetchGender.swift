@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ReferenceDataDomain
 
 final class FetchGender: FetchGenderUseCase {
 
@@ -16,7 +17,15 @@ final class FetchGender: FetchGenderUseCase {
     }
 
     func execute(id: GenderDTO.ID) async throws(FetchGenderError) -> GenderDTO {
-        let gender = try await repository.fetch(byID: id)
+        let gender: Gender
+        do {
+            gender = try await repository.fetch(byID: id)
+        } catch GenderRepositoryError.notFound {
+            throw .notFound(genderID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
         let genderDTO = GenderDTOMapper.map(from: gender)
 
         return genderDTO

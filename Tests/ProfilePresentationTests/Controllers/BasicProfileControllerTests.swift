@@ -25,11 +25,7 @@ struct BasicProfileControllerTests {
     init() {
         self.createBasicProfileUseCase = CreateBasicProfileStubUseCase()
         self.fetchBasicProfileUseCase = FetchBasicProfileStubUseCase()
-        let dependencies = BasicProfileController.Dependencies(
-            createBasicProfileUseCase: { [createBasicProfileUseCase] in createBasicProfileUseCase },
-            fetchBasicProfileUseCase: { [fetchBasicProfileUseCase] in fetchBasicProfileUseCase }
-        )
-        self.controller = BasicProfileController(dependencies: dependencies)
+        self.controller = BasicProfileController()
     }
 
     @Test("show me when valid JWT token returns basic profile")
@@ -41,6 +37,8 @@ struct BasicProfileControllerTests {
         let expectedResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
+            app.profileUseCases.use { _ in fetchBasicProfileUseCase }
+
             try await app.testing().test(
                 .GET, "me/basic",
                 beforeRequest: { req in

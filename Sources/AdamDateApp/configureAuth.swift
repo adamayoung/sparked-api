@@ -10,7 +10,7 @@ import IdentityDomain
 import JWT
 import Vapor
 
-func configureAuth(_ app: Application) async -> JWTConfiguration {
+func configureAuth(_ app: Application) async {
     guard
         let secret = Environment.get("JWT_SECRET"),
         let expirationString = Environment.get("JWT_EXPIRATION"),
@@ -32,5 +32,5 @@ func configureAuth(_ app: Application) async -> JWTConfiguration {
 
     app.passwords.use(.bcrypt)
 
-    return jwtConfiguration
+    app.jwtConfiguration = jwtConfiguration
 }
