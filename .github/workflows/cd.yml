@@ -1,10 +1,13 @@
-name: Build and Deploy
+name: CD
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+
+concurrency:
+  group: "build-deploy"
 
 permissions:
   id-token: write

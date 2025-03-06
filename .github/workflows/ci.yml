@@ -17,7 +17,6 @@ jobs:
   build-test:
     name: Build and Test
     runs-on: ubuntu-latest
-    image: swift:6.0-noble
     steps:
       - name: Checkout
         uses: actions/checkout@v4
