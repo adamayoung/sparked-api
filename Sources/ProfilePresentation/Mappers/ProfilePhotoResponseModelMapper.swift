@@ -27,11 +27,15 @@ struct ProfilePhotoResponseModelMapper {
 extension ProfilePhotoResponseModelMapper {
 
     private static func mapPhotoURL(from dto: ProfilePhotoDTO) -> URL {
-        if dto.isLocalFile {
-            return URL(string: "/api/profiles/\(dto.profileID)/photos/\(dto.id)/image")!
+        if !dto.isLocalFile {
+            return dto.url
         }
 
-        return dto.url
+        guard let url = URL(string: "/api/profiles/\(dto.profileID)/photos/\(dto.id)/image") else {
+            fatalError("Invalid URL string")
+        }
+
+        return url
     }
 
 }

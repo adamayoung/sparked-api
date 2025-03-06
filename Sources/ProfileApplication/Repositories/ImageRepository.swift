@@ -17,7 +17,7 @@ package protocol ImageRepository {
 }
 
 package enum ImageRepositoryError: Error, Equatable {
-    
+
     case unknown(Error? = nil)
 
     package static func == (
@@ -31,4 +31,3 @@ package enum ImageRepositoryError: Error, Equatable {
     }
 
 }
-

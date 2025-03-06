@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import ProfileDomain
 import ProfileApplication
+import ProfileDomain
 
 final class ImageRemoteStorageDataSource: ImageRemoteDataSource {
 

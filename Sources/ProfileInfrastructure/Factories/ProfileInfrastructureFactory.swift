@@ -40,7 +40,8 @@ package final class ProfileInfrastructureFactory: Sendable {
     package static func makeImageRepository(
         fileStorageService: some FileStorageService
     ) -> some ImageRepository {
-        let remoteDataSource = Self.makeImageRemoteDataSource(fileStorageService: fileStorageService)
+        let remoteDataSource = Self.makeImageRemoteDataSource(
+            fileStorageService: fileStorageService)
 
         return ImageDefaultRepository(remoteDataSource: remoteDataSource)
     }

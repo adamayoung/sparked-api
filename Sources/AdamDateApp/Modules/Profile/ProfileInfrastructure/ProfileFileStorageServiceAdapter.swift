@@ -5,8 +5,8 @@
 //  Created by Adam Young on 20/02/2025.
 //
 
-import ProfileInfrastructure
 import Foundation
+import ProfileInfrastructure
 
 final class ProfileFileStorageServiceAdapter: FileStorageService {
 

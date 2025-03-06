@@ -24,7 +24,8 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         self.imageRepository = imageRepository
     }
 
-    func execute(input: AddProfilePhotoInput) async throws(AddProfilePhotoError) -> ProfilePhotoDTO {
+    func execute(input: AddProfilePhotoInput) async throws(AddProfilePhotoError) -> ProfilePhotoDTO
+    {
         let basicProfile: BasicProfile
         do {
             basicProfile = try await basicProfileRepository.fetch(byID: input.profileID)
@@ -44,7 +45,7 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         } catch let error {
             throw .unknown(error)
         }
-        
+
         let profilePhoto = ProfilePhoto(
             userID: basicProfile.userID,
             profileID: basicProfile.id,
@@ -57,7 +58,7 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         } catch let error {
             throw .unknown(error)
         }
-        
+
         let profilePhotoDTO = ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: photoURL)
 
         return profilePhotoDTO

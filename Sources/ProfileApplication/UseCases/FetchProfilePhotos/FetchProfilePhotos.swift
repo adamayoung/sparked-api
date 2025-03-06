@@ -41,7 +41,8 @@ final class FetchProfilePhotos: FetchProfilePhotosUseCase {
             throw .unknown(error)
         }
 
-        let profilePhotoDTOs = results
+        let profilePhotoDTOs =
+            results
             .map { (profilePhoto, url) in
                 ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: url)
             }

@@ -5,7 +5,6 @@
 //  Created by Adam Young on 06/03/2025.
 //
 
-
 import Foundation
 
 package enum FetchProfilePhotoError: LocalizedError, Equatable, Sendable {

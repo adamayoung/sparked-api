@@ -21,7 +21,8 @@ final class LocalFileStorage: FileStorage {
     func write(data: Data, to path: String) async throws {
         let buffer = ByteBuffer(data: data)
         let fullPath = self.fullPath(for: path)
-        let fileHandle = try NIOFileHandle(path: fullPath, mode: .write, flags: .allowFileCreation())
+        let fileHandle = try NIOFileHandle(
+            path: fullPath, mode: .write, flags: .allowFileCreation())
         defer {
             try? fileHandle.close()
         }
@@ -35,7 +36,9 @@ final class LocalFileStorage: FileStorage {
 
     func url(for path: String) async throws -> URL {
         let fullPath = self.fullPath(for: path)
-        let url = URL(string: fullPath)!
+        guard let url = URL(string: fullPath) else {
+            fatalError("Cannot create URL from path: \(fullPath)")
+        }
 
         return url
     }
