@@ -1,18 +1,18 @@
 param location string = resourceGroup().location
-param appServicePlanName string = 'AdamDateAppServicePlan'
-param webAppName string = 'adam-date'
-param dockerImage string = 'adamayoung/adam-date-app:latest'
-param pgServerName string = 'adam-date-postgres'
+param appServicePlanName string = ''
+param webAppName string = ''
+param dockerImage string = ''
+param databaseServerName string = ''
 @secure()
-param pgAdminUser string = 'adadmin' // Secure value should be passed at deployment time
+param databaseUser string = ''
 @secure()
-param pgAdminPassword string = 'Password123' // Secure value should be passed at deployment time
-param storageAccountName string = 'adamdatestorage'
+param databasePassword string = ''
+param storageAccountName string = ''
 @secure()
-param jwtSecret string = '00d3c9c0e7845d7a28cd9a03ff733f82537adfa12de8a65fd5af87be15c5368d906470d82e9239b7c05346b4ca43281f82a5f00f0bee69a22196b8928943c2c4b579bf8e36890cc174023825d1d153a5bbe7c66dd9f0db67912278594f2c87da635263bd84b01bb392a18de83f44497c0dd7dd6c22f888f1a23558f1a02a6797420793237146797203e827f3ad383e86a9e0367e5d55a6deef434af6907b96f7b338cbcfeb5cbf878d39b6aafaa878436b43b3b1773f1d819b302723355e15385348159343bf814ae38e9e8f98666bf565461859dc581918de09f2b36ee9e744211f175312164ff77117c8fb9a6eb6291c6b87cfb3d8e7370a8a1fdc12467399'
-param jwtExpiration string = '3600'
-param jwtIssuer string = 'AdamDate'
-param jwtAudience string = 'AdamDate'
+param jwtSecret string = ''
+param jwtExpiration int = 3600
+param jwtIssuer string = ''
+param jwtAudience string = ''
 
 // App Service Plan
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
@@ -33,7 +33,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
 resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webAppName
   location: location
-  properties: { 
+  properties: {
     serverFarmId: appServicePlan.id
     httpsOnly: true
     siteConfig: {
@@ -44,16 +44,20 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
           value: 'false'
         }
         {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: 'https://index.docker.io'
+        }
+        {
           name: 'POSTGRES_HOSTNAME'
           value: pgServer.properties.fullyQualifiedDomainName
         }
         {
           name: 'POSTGRES_USER'
-          value: pgAdminUser
+          value: databaseUser
         }
         {
           name: 'POSTGRES_PASSWORD'
-          value: pgAdminPassword
+          value: databasePassword
         }
         {
           name: 'POSTGRES_IDENTITY_DATABASE'
@@ -68,28 +72,20 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
           value: 'postgres'
         }
         {
-          name: 'POSTGRES_PORT'
-          value: '5432'
+          name: 'JWT_SECRET'
+          value: jwtSecret
         }
         {
-          name: 'DOCKER_REGISTRY_SERVER_URL'
-          value: 'https://index.docker.io'
+          name: 'JWT_EXPIRATION'
+          value: string(jwtExpiration)
         }
         {
-            name: 'JWT_SECRET'
-            value: jwtSecret
+          name: 'JWT_ISSUER'
+          value: jwtIssuer
         }
         {
-            name: 'JWT_EXPIRATION'
-            value: jwtExpiration
-        }
-        {
-            name: 'JWT_ISSUER'
-            value: jwtIssuer
-        }
-        {
-            name: 'JWT_AUDIENCE'
-            value: jwtAudience
+          name: 'JWT_AUDIENCE'
+          value: jwtAudience
         }
       ]
     }
@@ -98,11 +94,11 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
 
 // PostgreSQL Server
 resource pgServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
-  name: pgServerName
+  name: databaseServerName
   location: location
   properties: {
-    administratorLogin: pgAdminUser
-    administratorLoginPassword: pgAdminPassword
+    administratorLogin: databaseUser
+    administratorLoginPassword: databasePassword
     version: '11'
     sslEnforcement: 'Enabled'
     createMode: 'Default'
@@ -123,3 +119,5 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
   kind: 'StorageV2'
 }
+
+output postgresHostname string = pgServer.properties.fullyQualifiedDomainName

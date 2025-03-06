@@ -13,35 +13,40 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+        version: ${{ steps.build.outputs.VERSION }}
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Create version
         id: version
-        run: echo "VERSION=$(date '+%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
+        run: |
+            echo "VERSION=$(date '+%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and tag Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/adam-date-app:latest -t ${{ secrets.DOCKER_USERNAME }}/adam-date-app:${{ env.VERSION }} -f Dockerfile .
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:latest -t ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ env.VERSION }} -f Dockerfile .
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/adam-date-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/adam-date-app:${{ env.VERSION }}
+          docker push ${{ vars.DOCKER_USERNAME }}/adam-date-app:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/adam-date-app:${{ env.VERSION }}
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    depends-on: build
     environment: production
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Log in to Azure
@@ -51,17 +56,32 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy ARM Template
-        uses: azure/arm-deploy@v1
+      - name: Create Resource Group
+        run: az group create --name ${{ var.RESOURCE_GROUP_NAME }} --location ${{ var.RESOURCE_GROUP_LOCATION }}
+
+      - name: Deploy
+        uses: azure/bicep-deploy@v2
         with:
-          scope: "resourcegroup"
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          template: ./azure-deploy.json
-          parameters: >
-            location=${{ secrets.AZURE_LOCATION }} 
-            dockerImage=${{ secrets.DOCKER_USERNAME }}/adam-date-app:${{ env.VERSION }} 
-            pgAdminPassword=${{ secrets.PG_ADMIN_PASSWORD }}
+          type: deployment
+          operation: create
+          name: AdamDate-${{ needs.build.outputs.version }}
+          location: ${{ var.RESOURCE_GROUP_LOCATION }}
+          scope: resourceGroup
+          resource-group-name: ${{ var.RESOURCE_GROUP_NAME }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          template-file: ./main.bicep
+          parameters:
+              appServicePlanName: ${{ var.APP_SERVICE_PLAN_NAME}} 
+              webAppName: ${{ var.WEB_APP_NAME }}
+              dockerImage: ${{ var.DOCKERHUB_USERNAME }}/adam-date-app:${{ needs.build.outputs.version }}
+              databaseServerName: ${{ var.DATABASE_SERVER_NAME }}
+              databaseUser: ${{ secrets.DATABASE_USER }}
+              databasePassword: ${{ secrets.DATABASE_PASSWORD }}
+              storageAccountName: ${{ var.STORAGE_ACCOUNT_NAME }}
+              jwtSecret: ${{ secrets.JWT_SECRET }}
+              jwtExpiration: ${{ var.JWT_EXPIRATION }}
+              jwtIssuer: ${{ var.JWT_ISSUER }}
+              jwtAudience: ${{ var.JWT_AUDIENCE }}
 
       - name: Logout from Azure
         run: az logout
