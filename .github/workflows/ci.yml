@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: "ci-${{ github.head_ref || github.run_id }}"
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    image: swift:6.0-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint
+        run: swift format lint -r -p .
+
+      - name: Build
+        run: swift build --build-tests
+
+      - name: Test
+        run: swift test --filter *Tests --skip-build

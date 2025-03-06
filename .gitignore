@@ -6,7 +6,4 @@ DerivedData/
 /.swiftpm
 .netrc
 /postgres-data/
-.env
-.env.*
-!.env.example
 /storage
