@@ -53,6 +53,28 @@ extension Application.ProfileUseCases.Provider {
                     repository: app.basicInfoRepository
                 )
             }
+
+            app.profileUseCases.use { app in
+                ProfileApplicationFactory.makeAddProfilePhotoUseCase(
+                    repository: app.profilePhotoRepository,
+                    basicProfileRepository: app.basicProfileRepository,
+                    imageRepository: app.imageRepository
+                )
+            }
+
+            app.profileUseCases.use { app in
+                ProfileApplicationFactory.makeFetchProfilePhotosUseCase(
+                    repository: app.profilePhotoRepository,
+                    imageRepository: app.imageRepository
+                )
+            }
+
+            app.profileUseCases.use { app in
+                ProfileApplicationFactory.makeFetchProfilePhotoUseCase(
+                    repository: app.profilePhotoRepository,
+                    imageRepository: app.imageRepository
+                )
+            }
         }
     }
 
@@ -69,6 +91,20 @@ extension Application {
     var basicInfoRepository: any BasicInfoRepository {
         ProfileInfrastructureFactory.makeBasicInfoRepository(
             database: self.db(DatabaseID.profile)
+        )
+    }
+
+    var profilePhotoRepository: any ProfilePhotoRepository {
+        ProfileInfrastructureFactory.makeProfilePhotoRepository(
+            database: self.db(DatabaseID.profile)
+        )
+    }
+
+    var imageRepository: any ImageRepository {
+        ProfileInfrastructureFactory.makeImageRepository(
+            fileStorageService: ProfileAdapterFactory.makeProfileFileStorageService(
+                fileStorage: CoreInfrastructureFactory.makeFileStorage(fileIO: self.fileio)
+            )
         )
     }
 

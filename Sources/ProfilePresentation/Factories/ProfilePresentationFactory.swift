@@ -25,4 +25,8 @@ package final class ProfilePresentationFactory: Sendable {
         BasicInfoController()
     }
 
+    package static func makePhotoController() -> some RouteCollection {
+        PhotoController()
+    }
+
 }

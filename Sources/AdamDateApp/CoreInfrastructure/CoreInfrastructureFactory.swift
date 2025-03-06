@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NIO
 import Vapor
 
 final class CoreInfrastructureFactory {
@@ -20,6 +21,12 @@ final class CoreInfrastructureFactory {
         vaporPasswordHasher: some Vapor.PasswordHasher
     ) -> some PasswordHasher {
         VaporPasswordHasher(hasher: vaporPasswordHasher)
+    }
+
+    static func makeFileStorage(
+        fileIO: NonBlockingFileIO
+    ) -> some FileStorage {
+        LocalFileStorage(fileIO: fileIO)
     }
 
 }

@@ -20,4 +20,7 @@ func profileRoutes(_ routes: RoutesBuilder) throws {
     try profilesRouter.register(
         collection: ProfilePresentationFactory.makeBasicInfoController()
     )
+    try profilesRouter.register(
+        collection: ProfilePresentationFactory.makePhotoController()
+    )
 }

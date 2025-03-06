@@ -54,4 +54,36 @@ package final class ProfileApplicationFactory {
         FetchBasicInfo(repository: repository)
     }
 
+    package static func makeAddProfilePhotoUseCase(
+        repository: some ProfilePhotoRepository,
+        basicProfileRepository: some BasicProfileRepository,
+        imageRepository: some ImageRepository
+    ) -> some AddProfilePhotoUseCase {
+        AddProfilePhoto(
+            repository: repository,
+            basicProfileRepository: basicProfileRepository,
+            imageRepository: imageRepository
+        )
+    }
+
+    package static func makeFetchProfilePhotosUseCase(
+        repository: some ProfilePhotoRepository,
+        imageRepository: some ImageRepository
+    ) -> some FetchProfilePhotosUseCase {
+        FetchProfilePhotos(
+            repository: repository,
+            imageRepository: imageRepository
+        )
+    }
+
+    package static func makeFetchProfilePhotoUseCase(
+        repository: some ProfilePhotoRepository,
+        imageRepository: some ImageRepository
+    ) -> some FetchProfilePhotoUseCase {
+        FetchProfilePhoto(
+            repository: repository,
+            imageRepository: imageRepository
+        )
+    }
+
 }

@@ -30,6 +30,10 @@ extension Application {
 
             var makeFetchProfileUseCase: ((Application) -> FetchProfileUseCase)?
 
+            var makeAddProfilePhotoUseCase: ((Application) -> AddProfilePhotoUseCase)?
+            var makeFetchProfilePhotosUseCase: ((Application) -> FetchProfilePhotosUseCase)?
+            var makeFetchProfilePhotoUseCase: ((Application) -> FetchProfilePhotoUseCase)?
+
             init() {}
 
         }
@@ -81,6 +85,30 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var addProfilePhotoUseCase: AddProfilePhotoUseCase {
+            guard let makeUseCase = self.storage.makeAddProfilePhotoUseCase else {
+                fatalError(
+                    "No AddProfilePhotoUseCase configured. Configure with app.useCases.use(...)")
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
+            guard let makeUseCase = self.storage.makeFetchProfilePhotosUseCase else {
+                fatalError(
+                    "No FetchProfilePhotosUseCase configured. Configure with app.useCases.use(...)")
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
+            guard let makeUseCase = self.storage.makeFetchProfilePhotoUseCase else {
+                fatalError(
+                    "No FetchProfilePhotoUseCase configured. Configure with app.useCases.use(...)")
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
@@ -103,6 +131,18 @@ extension Application {
 
         package func use(_ makeUseCase: @escaping (Application) -> FetchProfileUseCase) {
             self.storage.makeFetchProfileUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> AddProfilePhotoUseCase) {
+            self.storage.makeAddProfilePhotoUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchProfilePhotosUseCase) {
+            self.storage.makeFetchProfilePhotosUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchProfilePhotoUseCase) {
+            self.storage.makeFetchProfilePhotoUseCase = makeUseCase
         }
 
         func initialize() {
@@ -148,6 +188,18 @@ extension Request {
 
     var fetchProfileUseCase: FetchProfileUseCase {
         application.profileUseCases.fetchProfileUseCase
+    }
+
+    var addProfilePhotoUseCase: AddProfilePhotoUseCase {
+        application.profileUseCases.addProfilePhotoUseCase
+    }
+
+    var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
+        application.profileUseCases.fetchProfilePhotosUseCase
+    }
+
+    var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
+        application.profileUseCases.fetchProfilePhotoUseCase
     }
 
 }
