@@ -37,13 +37,12 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ vars.DOCKER_USERNAME }}/adam-date-app:latest
-          docker push ${{ vars.DOCKER_USERNAME }}/adam-date-app:${{ env.VERSION }}
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:latest
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ env.VERSION }}
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    depends-on: build
     environment: production
     steps:
       - name: Checkout
@@ -57,7 +56,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Create Resource Group
-        run: az group create --name ${{ var.RESOURCE_GROUP_NAME }} --location ${{ var.RESOURCE_GROUP_LOCATION }}
+        run: az group create --name ${{ vars.RESOURCE_GROUP_NAME }} --location ${{ vars.RESOURCE_GROUP_LOCATION }}
 
       - name: Deploy
         uses: azure/bicep-deploy@v2
@@ -65,23 +64,12 @@ jobs:
           type: deployment
           operation: create
           name: AdamDate-${{ needs.build.outputs.version }}
-          location: ${{ var.RESOURCE_GROUP_LOCATION }}
+          location: ${{ vars.RESOURCE_GROUP_LOCATION }}
           scope: resourceGroup
-          resource-group-name: ${{ var.RESOURCE_GROUP_NAME }}
+          resource-group-name: ${{ vars.RESOURCE_GROUP_NAME }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template-file: ./main.bicep
-          parameters:
-              appServicePlanName: ${{ var.APP_SERVICE_PLAN_NAME}} 
-              webAppName: ${{ var.WEB_APP_NAME }}
-              dockerImage: ${{ var.DOCKERHUB_USERNAME }}/adam-date-app:${{ needs.build.outputs.version }}
-              databaseServerName: ${{ var.DATABASE_SERVER_NAME }}
-              databaseUser: ${{ secrets.DATABASE_USER }}
-              databasePassword: ${{ secrets.DATABASE_PASSWORD }}
-              storageAccountName: ${{ var.STORAGE_ACCOUNT_NAME }}
-              jwtSecret: ${{ secrets.JWT_SECRET }}
-              jwtExpiration: ${{ var.JWT_EXPIRATION }}
-              jwtIssuer: ${{ var.JWT_ISSUER }}
-              jwtAudience: ${{ var.JWT_AUDIENCE }}
+          parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ needs.build.outputs.version }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":"${{ vars.JWT_EXPIRATION }}", "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
 
       - name: Logout from Azure
         run: az logout
