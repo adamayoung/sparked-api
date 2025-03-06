@@ -18,12 +18,7 @@ package struct User: Identifiable, Equatable, Hashable, Sendable, Codable {
     package let isActive: Bool
 
     package var fullName: String {
-        var components = PersonNameComponents()
-        components.givenName = firstName
-        components.familyName = familyName
-
-        let formatter = PersonNameComponentsFormatter()
-        return formatter.string(from: components)
+        "\(firstName) \(familyName)"
     }
 
     package init(

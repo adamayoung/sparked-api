@@ -16,6 +16,10 @@ lint:
 build:
 	swift build -Xswiftc -warnings-as-errors
 
+.PHONY: build-docker
+build-docker:
+	docker build -t adamayoung/adam-data-app .
+
 .PHONY: build-tests
 build-tests:
 	swift build --build-tests -Xswiftc -warnings-as-errors

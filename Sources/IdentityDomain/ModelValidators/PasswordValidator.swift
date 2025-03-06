@@ -20,17 +20,17 @@ package struct PasswordValidator: Validator {
         }
 
         // Check for at least one lowercase character
-        guard NSPredicate(format: "SELF MATCHES %@", ".*[a-z]+.*").evaluate(with: password) else {
+        guard password.contains(/.*[a-z]+.*/) else {
             throw .lowercaseCharacter
         }
 
         // Check for at least one uppercase character
-        guard NSPredicate(format: "SELF MATCHES %@", ".*[A-Z]+.*").evaluate(with: password) else {
+        guard password.contains(/.*[A-Z]+.*/) else {
             throw .uppercaseCharacter
         }
 
         // Check for at least one digit
-        guard NSPredicate(format: "SELF MATCHES %@", ".*[0-9]+.*").evaluate(with: password) else {
+        guard password.contains(/.*[0-9]+.*/) else {
             throw .digit
         }
     }
