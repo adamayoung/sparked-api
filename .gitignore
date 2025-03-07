@@ -8,3 +8,4 @@ DerivedData/
 /postgres-data/
 /storage
 .env.*
+*.bicepparam

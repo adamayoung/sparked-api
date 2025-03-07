@@ -53,22 +53,14 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
         }
         {
           name: 'POSTGRES_USER'
-          value: databaseUser
+          value: '${databaseUser}@${pgServer.properties.fullyQualifiedDomainName}'
         }
         {
           name: 'POSTGRES_PASSWORD'
           value: databasePassword
         }
         {
-          name: 'POSTGRES_IDENTITY_DATABASE'
-          value: 'postgres'
-        }
-        {
-          name: 'POSTGRES_PROFILE_DATABASE'
-          value: 'postgres'
-        }
-        {
-          name: 'POSTGRES_REFERENCE_DATA_DATABASE'
+          name: 'POSTGRES_DATABASE'
           value: 'postgres'
         }
         {
@@ -107,6 +99,15 @@ resource pgServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
     name: 'B_Gen5_1'
     tier: 'Basic'
     capacity: 1
+  }
+}
+
+resource allowAllWindowsAzureIps 'Microsoft.DBforPostgreSQL/servers/firewallRules@2017-12-01' = {
+  name: 'AllowAllWindowsAzureIps'
+  parent: pgServer
+  properties: {
+    endIpAddress: '0.0.0.0'
+    startIpAddress: '0.0.0.0'
   }
 }
 
