@@ -23,6 +23,7 @@ jobs:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     outputs:
+        version: ${{ steps.meta.outputs.version }}
         dockerImage: "${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
     steps:
       - name: Checkout
@@ -63,14 +64,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  aay:
-    name: Test docker image output
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Output
-        run: echo ${{ needs.build.outputs.dockerImage }}
-
   deploy:
     name: Deploy to Azure
     needs: build
@@ -94,7 +87,7 @@ jobs:
         with:
           type: deployment
           operation: create
-          name: AdamDate-${{ needs.build.outputs.version.VERSION }}
+          name: AdamDate-${{ needs.build.outputs.version }}
           scope: resourceGroup
           resource-group-name: ${{ vars.RESOURCE_GROUP_NAME }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
