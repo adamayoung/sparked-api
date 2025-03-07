@@ -27,11 +27,7 @@ struct UserTests {
             isActive: true
         )
 
-        var components = PersonNameComponents()
-        components.givenName = firstName
-        components.familyName = familyName
-        let formatter = PersonNameComponentsFormatter()
-        let expectedFullName = formatter.string(from: components)
+        let expectedFullName = "\(firstName) \(familyName)"
 
         let fullName = user.fullName
 

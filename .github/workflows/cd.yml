@@ -65,7 +65,6 @@ jobs:
           type: deployment
           operation: create
           name: AdamDate-${{ needs.build.outputs.version }}
-          location: ${{ vars.RESOURCE_GROUP_LOCATION }}
           scope: resourceGroup
           resource-group-name: ${{ vars.RESOURCE_GROUP_NAME }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
