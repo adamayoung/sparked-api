@@ -84,19 +84,19 @@ extension Application {
 
     var basicProfileRepository: any BasicProfileRepository {
         ProfileInfrastructureFactory.makeBasicProfileRepository(
-            database: self.db(DatabaseID.profile)
+            database: self.db(DatabaseID.adamDate)
         )
     }
 
     var basicInfoRepository: any BasicInfoRepository {
         ProfileInfrastructureFactory.makeBasicInfoRepository(
-            database: self.db(DatabaseID.profile)
+            database: self.db(DatabaseID.adamDate)
         )
     }
 
     var profilePhotoRepository: any ProfilePhotoRepository {
         ProfileInfrastructureFactory.makeProfilePhotoRepository(
-            database: self.db(DatabaseID.profile)
+            database: self.db(DatabaseID.adamDate)
         )
     }
 

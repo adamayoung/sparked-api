@@ -24,6 +24,10 @@ docker-build:
 docker-push:
 	docker push adamayoung/adam-date-app:latest
 
+.PHONY: deploy-prod
+deploy-prod:
+	az deployment group create --name LocalDeployment-$(date '+%Y.%m.%d.%H%M%S') --resource-group AdamDateRG --template-file main.bicep
+
 .PHONY: build-tests
 build-tests:
 	swift build --build-tests -Xswiftc -warnings-as-errors

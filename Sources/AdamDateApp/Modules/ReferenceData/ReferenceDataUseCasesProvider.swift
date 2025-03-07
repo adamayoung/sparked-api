@@ -48,14 +48,14 @@ extension Application {
 
     var countryRepository: any CountryRepository {
         ReferenceDataInfrastructureFactory.makeCountryRepository(
-            database: self.db(DatabaseID.referenceData),
+            database: self.db(DatabaseID.adamDate),
             cacheProvider: self.referenceDataCacheProvider
         )
     }
 
     var genderRepository: any GenderRepository {
         ReferenceDataInfrastructureFactory.makeGenderRepository(
-            database: self.db(DatabaseID.referenceData),
+            database: self.db(DatabaseID.adamDate),
             cacheProvider: self.referenceDataCacheProvider
         )
     }

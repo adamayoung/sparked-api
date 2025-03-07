@@ -45,7 +45,7 @@ extension Application {
 
     var userRepository: any UserRepository {
         IdentityInfrastructureFactory.makeUserRepository(
-            database: self.db(DatabaseID.identity)
+            database: self.db(DatabaseID.adamDate)
         )
     }
 
