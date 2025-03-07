@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 concurrency:
@@ -12,6 +14,9 @@ concurrency:
 permissions:
   id-token: write
   contents: read
+
+env:
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -22,26 +27,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create version
-        id: version
-        run: |
-            echo "VERSION=$(date '+%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
-            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          logout: true
 
-      - name: Build and tag Docker image
-        run: |
-          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:latest -t ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ env.VERSION }} -f Dockerfile .
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:latest
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ env.VERSION }}
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: TAG=${{ steps.meta.outputs.version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     needs: build
@@ -69,7 +90,7 @@ jobs:
           resource-group-name: ${{ vars.RESOURCE_GROUP_NAME }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template-file: ./main.bicep
-          parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ vars.DOCKERHUB_USERNAME }}/adam-date-app:${{ needs.build.outputs.version.VERSION }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
+          parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ needs.build.outputs.version }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
 
       - name: Logout from Azure
         run: az logout
