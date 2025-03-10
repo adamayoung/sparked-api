@@ -121,4 +121,4 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   kind: 'StorageV2'
 }
 
-output postgresHostname string = pgServer.properties.fullyQualifiedDomainName
+output webAppURL string = 'https://${webApp.properties.defaultHostName}'

@@ -68,7 +68,9 @@ jobs:
     name: Deploy to Azure
     needs: build
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+        name: production
+        url: ${{ steps.deployment.outputs.webAppURL }}
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout
@@ -83,6 +85,7 @@ jobs:
         run: az group create --name ${{ vars.RESOURCE_GROUP_NAME }} --location ${{ vars.RESOURCE_GROUP_LOCATION }}
 
       - name: Deploy
+        id: deployment
         uses: azure/bicep-deploy@v2
         with:
           type: deployment
