@@ -37,7 +37,7 @@ struct BasicProfileControllerTests {
         let expectedResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         try await testWithApp(controller, jwtPayload: tokenPayload) { app, jwt in
-            app.profileUseCases.use { _ in fetchBasicProfileUseCase }
+            app.profileWebAPIUseCases.use { _ in fetchBasicProfileUseCase }
 
             try await app.testing().test(
                 .GET, "me/basic",

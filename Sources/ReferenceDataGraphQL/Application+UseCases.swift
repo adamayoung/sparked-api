@@ -11,7 +11,7 @@ import Vapor
 
 extension Application {
 
-    package struct ReferenceDataWebAPIUseCases {
+    package struct ReferenceDataGraphQLUseCases {
         package struct Provider {
             let run: (Application) -> Void
 
@@ -110,7 +110,7 @@ extension Application {
         }
     }
 
-    package var referenceDataWebAPIUseCases: ReferenceDataWebAPIUseCases {
+    package var referenceDataGraphQLUseCases: ReferenceDataGraphQLUseCases {
         .init(application: self)
     }
 
@@ -119,19 +119,19 @@ extension Application {
 extension Request {
 
     var fetchCountriesUseCase: FetchCountriesUseCase {
-        application.referenceDataWebAPIUseCases.fetchCountriesUseCase
+        application.referenceDataGraphQLUseCases.fetchCountriesUseCase
     }
 
     var fetchCountryUseCase: FetchCountryUseCase {
-        application.referenceDataWebAPIUseCases.fetchCountryUseCase
+        application.referenceDataGraphQLUseCases.fetchCountryUseCase
     }
 
     var fetchGendersUseCase: FetchGendersUseCase {
-        application.referenceDataWebAPIUseCases.fetchGendersUseCase
+        application.referenceDataGraphQLUseCases.fetchGendersUseCase
     }
 
     var fetchGenderUseCase: FetchGenderUseCase {
-        application.referenceDataWebAPIUseCases.fetchGenderUseCase
+        application.referenceDataGraphQLUseCases.fetchGenderUseCase
     }
 
 }

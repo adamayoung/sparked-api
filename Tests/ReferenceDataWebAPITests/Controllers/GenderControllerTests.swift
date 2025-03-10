@@ -54,7 +54,7 @@ struct GenderControllerTests {
         fetchGendersUseCase.executeResult = .success(countriesDTOs)
 
         try await testWithApp(controller) { app in
-            app.referenceDataUseCases.use { _ in fetchGendersUseCase }
+            app.referenceDataWebAPIUseCases.use { _ in fetchGendersUseCase }
 
             try await app.testing().test(
                 .GET, "genders",
@@ -73,7 +73,7 @@ struct GenderControllerTests {
         fetchGendersUseCase.executeResult = .failure(.unknown())
 
         try await testWithApp(controller) { app in
-            app.referenceDataUseCases.use { _ in fetchGendersUseCase }
+            app.referenceDataWebAPIUseCases.use { _ in fetchGendersUseCase }
 
             try await app.testing().test(
                 .GET, "genders",

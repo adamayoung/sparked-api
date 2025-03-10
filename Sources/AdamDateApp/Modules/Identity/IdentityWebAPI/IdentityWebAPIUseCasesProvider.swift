@@ -40,19 +40,3 @@ extension Application.IdentityUseCases.Provider {
     }
 
 }
-
-extension Application {
-
-    var userRepository: any UserRepository {
-        IdentityInfrastructureFactory.makeUserRepository(
-            database: self.db(DatabaseID.adamDate)
-        )
-    }
-
-    var passwordHasherService: any PasswordHasherService {
-        IdentityAdapterFactory.makePasswordHasherService(
-            hasher: self.passwordHasher
-        )
-    }
-
-}

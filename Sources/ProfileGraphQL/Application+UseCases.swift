@@ -1,8 +1,8 @@
 //
-//  Request+UseCases.swift
+//  Application+UseCases.swift
 //  AdamDateApp
 //
-//  Created by Adam Young on 13/02/2025.
+//  Created by Adam Young on 10/03/2025.
 //
 
 import Foundation
@@ -11,7 +11,7 @@ import Vapor
 
 extension Application {
 
-    package struct ProfileWebAPIUseCases {
+    package struct ProfileGraphQLUseCases {
         package struct Provider {
             let run: (Application) -> Void
 
@@ -47,7 +47,7 @@ extension Application {
         var createBasicProfileUseCase: CreateBasicProfileUseCase {
             guard let makeUseCase = self.storage.makeCreateBasicProfileUseCase else {
                 fatalError(
-                    "No CreateBasicProfileUserCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No CreateBasicProfileUserCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -56,7 +56,7 @@ extension Application {
         var fetchBasicProfileUseCase: FetchBasicProfileUseCase {
             guard let makeUseCase = self.storage.makeFetchBasicProfileUseCase else {
                 fatalError(
-                    "No FetchBasicProfileUserCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No FetchBasicProfileUserCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -65,7 +65,7 @@ extension Application {
         var createBasicInfoUseCase: CreateBasicInfoUseCase {
             guard let makeUseCase = self.storage.makeCreateBasicInfoUseCase else {
                 fatalError(
-                    "No CreateBasicInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No CreateBasicInfoUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -74,7 +74,7 @@ extension Application {
         var fetchBasicInfoUseCase: FetchBasicInfoUseCase {
             guard let makeUseCase = self.storage.makeFetchBasicInfoUseCase else {
                 fatalError(
-                    "No FetchBasicInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No FetchBasicInfoUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -83,7 +83,7 @@ extension Application {
         var fetchProfileUseCase: FetchProfileUseCase {
             guard let makeUseCase = self.storage.makeFetchProfileUseCase else {
                 fatalError(
-                    "No FetchProfileUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No FetchProfileUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -92,7 +92,7 @@ extension Application {
         var addProfilePhotoUseCase: AddProfilePhotoUseCase {
             guard let makeUseCase = self.storage.makeAddProfilePhotoUseCase else {
                 fatalError(
-                    "No AddProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No AddProfilePhotoUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -101,7 +101,7 @@ extension Application {
         var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
             guard let makeUseCase = self.storage.makeFetchProfilePhotosUseCase else {
                 fatalError(
-                    "No FetchProfilePhotosUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No FetchProfilePhotosUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -110,7 +110,7 @@ extension Application {
         var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
             guard let makeUseCase = self.storage.makeFetchProfilePhotoUseCase else {
                 fatalError(
-                    "No FetchProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                    "No FetchProfilePhotoUseCase configured. Configure with app.profileGraphQLUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -169,7 +169,7 @@ extension Application {
         }
     }
 
-    package var profileWebAPIUseCases: ProfileWebAPIUseCases {
+    package var profileGraphQLUseCases: ProfileGraphQLUseCases {
         .init(application: self)
     }
 
@@ -178,35 +178,35 @@ extension Application {
 extension Request {
 
     var createBasicProfileUseCase: CreateBasicProfileUseCase {
-        application.profileWebAPIUseCases.createBasicProfileUseCase
+        application.profileGraphQLUseCases.createBasicProfileUseCase
     }
 
     var fetchBasicProfileUseCase: FetchBasicProfileUseCase {
-        application.profileWebAPIUseCases.fetchBasicProfileUseCase
+        application.profileGraphQLUseCases.fetchBasicProfileUseCase
     }
 
     var createBasicInfoUseCase: CreateBasicInfoUseCase {
-        application.profileWebAPIUseCases.createBasicInfoUseCase
+        application.profileGraphQLUseCases.createBasicInfoUseCase
     }
 
     var fetchBasicInfoUseCase: FetchBasicInfoUseCase {
-        application.profileWebAPIUseCases.fetchBasicInfoUseCase
+        application.profileGraphQLUseCases.fetchBasicInfoUseCase
     }
 
     var fetchProfileUseCase: FetchProfileUseCase {
-        application.profileWebAPIUseCases.fetchProfileUseCase
+        application.profileGraphQLUseCases.fetchProfileUseCase
     }
 
     var addProfilePhotoUseCase: AddProfilePhotoUseCase {
-        application.profileWebAPIUseCases.addProfilePhotoUseCase
+        application.profileGraphQLUseCases.addProfilePhotoUseCase
     }
 
     var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
-        application.profileWebAPIUseCases.fetchProfilePhotosUseCase
+        application.profileGraphQLUseCases.fetchProfilePhotosUseCase
     }
 
     var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
-        application.profileWebAPIUseCases.fetchProfilePhotoUseCase
+        application.profileGraphQLUseCases.fetchProfilePhotoUseCase
     }
 
 }

@@ -8,13 +8,12 @@
 import Vapor
 
 func configure(_ app: Application) async throws {
-    app.routes.defaultMaxBodySize = "10mb"
-
     try await configureCoreInfrastructure(on: app)
     await configureAuth(on: app)
 
     configureModules(on: app)
     configureCommands(on: app)
 
-    try routes(app)
+    app.routes.defaultMaxBodySize = "10mb"
+    try routes(app, environment: app.environment)
 }

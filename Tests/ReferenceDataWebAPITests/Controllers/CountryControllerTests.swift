@@ -54,7 +54,7 @@ struct CountryControllerTests {
         fetchCountriesUseCase.executeResult = .success(countriesDTOs)
 
         try await testWithApp(controller) { app in
-            app.referenceDataUseCases.use { _ in fetchCountriesUseCase }
+            app.referenceDataWebAPIUseCases.use { _ in fetchCountriesUseCase }
 
             try await app.testing().test(
                 .GET, "countries",
@@ -73,7 +73,7 @@ struct CountryControllerTests {
         fetchCountriesUseCase.executeResult = .failure(.unknown())
 
         try await testWithApp(controller) { app in
-            app.referenceDataUseCases.use { _ in fetchCountriesUseCase }
+            app.referenceDataWebAPIUseCases.use { _ in fetchCountriesUseCase }
 
             try await app.testing().test(
                 .GET, "countries",

@@ -28,10 +28,12 @@ let package = Package(
             dependencies: [
                 "AdamDateCommands",
                 "ProfileWebAPI",
+                "ProfileGraphQL",
                 "ProfileApplication",
                 "ProfileInfrastructure",
                 "ProfileDomain",
                 "ReferenceDataWebAPI",
+                "ReferenceDataGraphQL",
                 "ReferenceDataApplication",
                 "ReferenceDataInfrastructure",
                 "ReferenceDataDomain",
@@ -83,6 +85,25 @@ let package = Package(
                 "ProfileApplication",
                 "APITesting",
                 .product(name: "VaporTesting", package: "vapor")
+            ]
+        ),
+
+        .target(
+            name: "ProfileGraphQL",
+            dependencies: [
+                "ProfileApplication",
+                "AuthKit",
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOPosix", package: "swift-nio"),
+                .product(name: "GraphQLKit", package: "graphql-kit"),
+                .product(name: "GraphiQLVapor", package: "graphiql-vapor")
+            ]
+        ),
+        .testTarget(
+            name: "ProfileGraphQLTests",
+            dependencies: [
+                "ProfileGraphQL"
             ]
         ),
 
@@ -204,6 +225,24 @@ let package = Package(
                 "APITesting",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
+            ]
+        ),
+
+        .target(
+            name: "ReferenceDataGraphQL",
+            dependencies: [
+                "ReferenceDataApplication",
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOPosix", package: "swift-nio"),
+                .product(name: "GraphQLKit", package: "graphql-kit"),
+                .product(name: "GraphiQLVapor", package: "graphiql-vapor")
+            ]
+        ),
+        .testTarget(
+            name: "ReferenceDataGraphQLTests",
+            dependencies: [
+                "ReferenceDataGraphQL"
             ]
         ),
 
