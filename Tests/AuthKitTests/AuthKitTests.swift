@@ -1,5 +1,5 @@
 //
-//  AdamDateAuthTests.swift
+//  AuthKitTests.swift
 //  AdamDateApp
 //
 //  Created by Adam Young on 22/01/2025.
@@ -7,10 +7,10 @@
 
 import Testing
 
-@testable import AdamDateAuth
+@testable import AuthKit
 
 @Suite
-struct AdamDateAuthTests {
+struct AuthKitTests {
 
     @Test
     func example() async throws {

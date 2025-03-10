@@ -6,7 +6,7 @@
 //
 
 import APITesting
-import AdamDateAuth
+import AuthKit
 import Foundation
 import JWT
 import ProfileApplication

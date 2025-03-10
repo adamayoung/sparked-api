@@ -62,7 +62,7 @@ extension Application {
 
     var referenceDataCacheProvider: any CacheProvider {
         ReferenceDataCacheAdapter(
-            cacheStore: CoreInfrastructureFactory.makeCacheStore()
+            cacheStore: self.cacheStore
         )
     }
 

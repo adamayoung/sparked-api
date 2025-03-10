@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CacheStore: Actor {
+package protocol CacheStore: Actor {
 
     func get<CacheItem: Codable & Sendable>(forKey key: String) async throws -> CacheItem?
 

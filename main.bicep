@@ -8,6 +8,7 @@ param databaseUser string = ''
 @secure()
 param databasePassword string = ''
 param storageAccountName string = ''
+param storageContainerNames array = []
 @secure()
 param jwtSecret string = ''
 param jwtExpiration int = 3600
@@ -64,6 +65,14 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
           value: 'postgres'
         }
         {
+          name: 'AZURE_STORAGE_ACCOUNT_NAME'
+          value: storageAccount.name
+        }
+        {
+          name: 'AZURE_STORAGE_ACCOUNT_KEY'
+          value: storageAccount.listKeys().keys[0].value
+        }
+        {
           name: 'JWT_SECRET'
           value: jwtSecret
         }
@@ -115,10 +124,29 @@ resource allowAllWindowsAzureIps 'Microsoft.DBforPostgreSQL/servers/firewallRule
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: storageAccountName
   location: location
+  properties: {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: true
+    publicNetworkAccess: 'Enabled'
+    supportsHttpsTrafficOnly: true
+  }
   sku: {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
 }
+
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2019-06-01' = {
+  name: 'default'
+  parent: storageAccount
+}
+
+resource containers 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = [for name in storageContainerNames: {
+  name: name
+  parent: blobService
+  properties: {
+    publicAccess: 'Blob'
+  }
+}]
 
 output webAppURL string = 'https://${webApp.properties.defaultHostName}'

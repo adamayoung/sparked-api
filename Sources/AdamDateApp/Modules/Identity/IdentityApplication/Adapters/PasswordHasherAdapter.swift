@@ -5,6 +5,7 @@
 //  Created by Adam Young on 24/01/2025.
 //
 
+import AuthKit
 import Foundation
 import IdentityApplication
 

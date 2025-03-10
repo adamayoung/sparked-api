@@ -71,7 +71,6 @@ jobs:
     environment:
         name: production
         url: ${{ steps.deployment.outputs.webAppURL }}
-    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -95,7 +94,7 @@ jobs:
           resource-group-name: ${{ vars.RESOURCE_GROUP_NAME }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template-file: ./main.bicep
-          parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ needs.build.outputs.dockerImage }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
+          parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ needs.build.outputs.dockerImage }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "storageContainerNames": ${{ vars.STORAGE_ACCOUNT_CONTAINER_NAMES }}, "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
 
       - name: Logout from Azure
         run: az logout

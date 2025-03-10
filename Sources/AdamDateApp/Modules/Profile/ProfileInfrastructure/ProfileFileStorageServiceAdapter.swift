@@ -5,37 +5,26 @@
 //  Created by Adam Young on 20/02/2025.
 //
 
+import FileStorageKit
 import Foundation
 import ProfileInfrastructure
 
 final class ProfileFileStorageServiceAdapter: FileStorageService {
 
     private let fileStorage: any FileStorage
-    private let bucketName: String
+    private let containerName: String
 
-    init(fileStorage: some FileStorage, bucketName: String) {
+    init(fileStorage: some FileStorage, containerName: String) {
         self.fileStorage = fileStorage
-        self.bucketName = bucketName
+        self.containerName = containerName
     }
 
     func save(_ data: Data, filename: String) async throws {
-        let path = path(for: filename)
-
-        try await fileStorage.write(data: data, to: path)
+        try await fileStorage.upload(data, containerName: containerName, filename: filename)
     }
 
     func url(for filename: String) async throws -> URL {
-        let path = path(for: filename)
-
-        return try await fileStorage.url(for: path)
-    }
-
-}
-
-extension ProfileFileStorageServiceAdapter {
-
-    private func path(for filename: String) -> String {
-        "\(bucketName)/\(filename)"
+        try await fileStorage.url(containerName: containerName, filename: filename)
     }
 
 }

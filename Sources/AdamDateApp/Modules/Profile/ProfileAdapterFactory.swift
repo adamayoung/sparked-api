@@ -5,6 +5,7 @@
 //  Created by Adam Young on 19/02/2025.
 //
 
+import FileStorageKit
 import Foundation
 import IdentityApplication
 import ProfileApplication
@@ -31,16 +32,13 @@ final class ProfileAdapterFactory {
         ProfileUserServiceAdapter(fetchUserUseCase: fetchUserUseCase)
     }
 
-}
-
-extension ProfileAdapterFactory {
-
     static func makeProfileFileStorageService(
-        fileStorage: some FileStorage
+        fileStorage: some FileStorage,
+        containerName: String
     ) -> some FileStorageService {
         ProfileFileStorageServiceAdapter(
             fileStorage: fileStorage,
-            bucketName: "profile"
+            containerName: containerName
         )
     }
 

@@ -5,12 +5,12 @@
 //  Created by Adam Young on 28/01/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import IdentityDomain
 import JWT
 import Vapor
 
-func configureAuth(_ app: Application) async {
+func configureAuth(on app: Application) async {
     guard
         let secret = Environment.get("JWT_SECRET"),
         let expirationString = Environment.get("JWT_EXPIRATION"),
@@ -33,4 +33,25 @@ func configureAuth(_ app: Application) async {
     app.passwords.use(.bcrypt)
 
     app.jwtConfiguration = jwtConfiguration
+}
+
+struct JWTConfigurationKey: StorageKey {
+    typealias Value = JWTConfiguration
+}
+
+extension Application {
+
+    var jwtConfiguration: JWTConfiguration {
+        get {
+            guard let value = self.storage[JWTConfigurationKey.self] else {
+                fatalError("jwtConfiguration not set")
+            }
+
+            return value
+        }
+        set {
+            self.storage[JWTConfigurationKey.self] = newValue
+        }
+    }
+
 }

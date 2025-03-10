@@ -10,7 +10,7 @@ import ProfilePresentation
 import ReferenceDataPresentation
 import Vapor
 
-func configureModules(_ app: Application) {
+func configureModules(on app: Application) {
     app.profileUseCases.use(.default)
     app.identityUseCases.use(.default)
     app.identityServices.use(.default)

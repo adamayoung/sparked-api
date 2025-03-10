@@ -5,7 +5,7 @@
 //  Created by Adam Young on 30/01/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import Foundation
 import Testing
 

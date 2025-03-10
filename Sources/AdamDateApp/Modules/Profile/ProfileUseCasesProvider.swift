@@ -103,7 +103,8 @@ extension Application {
     var imageRepository: any ImageRepository {
         ProfileInfrastructureFactory.makeImageRepository(
             fileStorageService: ProfileAdapterFactory.makeProfileFileStorageService(
-                fileStorage: CoreInfrastructureFactory.makeFileStorage(fileIO: self.fileio)
+                fileStorage: self.fileStorage,
+                containerName: "profile"
             )
         )
     }

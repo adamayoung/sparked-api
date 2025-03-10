@@ -5,7 +5,7 @@
 //  Created by Adam Young on 19/02/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import Foundation
 import IdentityPresentation
 import Vapor
@@ -19,27 +19,6 @@ extension Application.IdentityServices.Provider {
                     jwtConfiguration: app.jwtConfiguration
                 )
             }
-        }
-    }
-
-}
-
-struct JWTConfigurationKey: StorageKey {
-    typealias Value = JWTConfiguration
-}
-
-extension Application {
-
-    var jwtConfiguration: JWTConfiguration {
-        get {
-            guard let value = self.storage[JWTConfigurationKey.self] else {
-                fatalError("jwtConfiguration not set")
-            }
-
-            return value
-        }
-        set {
-            self.storage[JWTConfigurationKey.self] = newValue
         }
     }
 

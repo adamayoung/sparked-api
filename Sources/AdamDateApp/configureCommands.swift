@@ -8,7 +8,7 @@
 import AdamDateCommands
 import Vapor
 
-func configureCommands(_ app: Application) {
+func configureCommands(on app: Application) {
     app.commandUseCases.use(.default)
 
     app.asyncCommands.use(CommandFactory.makeCreateUserCommand(), as: "createuser")
