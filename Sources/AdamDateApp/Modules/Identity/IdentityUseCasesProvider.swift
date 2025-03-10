@@ -51,9 +51,7 @@ extension Application {
 
     var passwordHasherService: any PasswordHasherService {
         IdentityAdapterFactory.makePasswordHasherService(
-            hasher: CoreInfrastructureFactory.makePasswordHasher(
-                vaporPasswordHasher: self.password
-            )
+            hasher: self.passwordHasher
         )
     }
 

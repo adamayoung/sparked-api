@@ -5,7 +5,7 @@
 //  Created by Adam Young on 05/02/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import IdentityApplication
 import Vapor
 

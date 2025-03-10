@@ -5,7 +5,7 @@
 //  Created by Adam Young on 09/01/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import JWT
 import ProfileApplication
 import Vapor

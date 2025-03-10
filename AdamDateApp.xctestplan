@@ -21,8 +21,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "AdamDateAuthTests",
-        "name" : "AdamDateAuthTests"
+        "identifier" : "FileStorageKitTests",
+        "name" : "FileStorageKitTests"
       }
     },
     {
@@ -35,41 +35,6 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfileDomainTests",
-        "name" : "ProfileDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityPresentationTests",
-        "name" : "IdentityPresentationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityDomainTests",
-        "name" : "IdentityDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ProfileInfrastructureTests",
-        "name" : "ProfileInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityInfrastructureTests",
-        "name" : "IdentityInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "ProfilePresentationTests",
         "name" : "ProfilePresentationTests"
       }
@@ -77,22 +42,22 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfileApplicationTests",
-        "name" : "ProfileApplicationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataInfrastructureTests",
-        "name" : "ReferenceDataInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "ReferenceDataPresentationTests",
         "name" : "ReferenceDataPresentationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataApplicationTests",
+        "name" : "ReferenceDataApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CacheKitTests",
+        "name" : "CacheKitTests"
       }
     },
     {
@@ -112,8 +77,57 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ReferenceDataApplicationTests",
-        "name" : "ReferenceDataApplicationTests"
+        "identifier" : "IdentityPresentationTests",
+        "name" : "IdentityPresentationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityInfrastructureTests",
+        "name" : "IdentityInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AuthKitTests",
+        "name" : "AuthKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityDomainTests",
+        "name" : "IdentityDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataInfrastructureTests",
+        "name" : "ReferenceDataInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileApplicationTests",
+        "name" : "ProfileApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileInfrastructureTests",
+        "name" : "ProfileInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
       }
     }
   ],

@@ -5,7 +5,7 @@
 //  Created by Adam Young on 19/02/2025.
 //
 
-import AdamDateAuth
+import AuthKit
 import Foundation
 import IdentityApplication
 import IdentityPresentation

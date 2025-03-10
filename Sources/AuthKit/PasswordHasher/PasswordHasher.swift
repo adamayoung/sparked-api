@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol PasswordHasher: Sendable {
+package protocol PasswordHasher: Sendable {
 
     func hash(_ password: String) throws -> String
 

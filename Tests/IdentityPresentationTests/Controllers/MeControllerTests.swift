@@ -6,7 +6,7 @@
 //
 
 import APITesting
-import AdamDateAuth
+import AuthKit
 import Foundation
 import IdentityApplication
 import Testing

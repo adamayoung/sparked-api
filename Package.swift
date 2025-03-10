@@ -37,6 +37,8 @@ let package = Package(
                 "IdentityApplication",
                 "IdentityInfrastructure",
                 "IdentityDomain",
+                "CacheKit",
+                "FileStorageKit",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -66,7 +68,7 @@ let package = Package(
             name: "ProfilePresentation",
             dependencies: [
                 "ProfileApplication",
-                "AdamDateAuth",
+                "AuthKit",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
@@ -126,7 +128,7 @@ let package = Package(
             name: "IdentityPresentation",
             dependencies: [
                 "IdentityApplication",
-                "AdamDateAuth",
+                "AuthKit",
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
@@ -238,15 +240,33 @@ let package = Package(
         ),
 
         // --------------------------------------
-        // Auth
+        // Infrastructure
 
         .target(
-            name: "AdamDateAuth",
+            name: "AuthKit",
             dependencies: [.product(name: "JWT", package: "jwt")]
         ),
         .testTarget(
-            name: "AdamDateAuthTests",
-            dependencies: ["AdamDateAuth"]
+            name: "AuthKitTests",
+            dependencies: ["AuthKit"]
+        ),
+
+        .target(name: "CacheKit"),
+        .testTarget(
+            name: "CacheKitTests",
+            dependencies: ["CacheKit"]
+        ),
+
+        .target(
+            name: "FileStorageKit",
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "NIOCore", package: "swift-nio")
+            ]
+        ),
+        .testTarget(
+            name: "FileStorageKitTests",
+            dependencies: ["FileStorageKit"]
         ),
 
         // --------------------------------------
@@ -255,7 +275,7 @@ let package = Package(
         .target(
             name: "APITesting",
             dependencies: [
-                "AdamDateAuth",
+                "AuthKit",
                 .product(name: "VaporTesting", package: "vapor"),
                 .product(name: "JWT", package: "jwt")
             ]
