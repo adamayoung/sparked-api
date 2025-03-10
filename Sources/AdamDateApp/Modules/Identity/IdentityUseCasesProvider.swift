@@ -10,7 +10,7 @@ import Foundation
 import IdentityApplication
 import IdentityDomain
 import IdentityInfrastructure
-import IdentityPresentation
+import IdentityWebAPI
 import Vapor
 
 extension Application.IdentityUseCases.Provider {

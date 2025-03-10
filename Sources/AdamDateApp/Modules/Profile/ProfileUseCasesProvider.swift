@@ -11,7 +11,7 @@ import IdentityApplication
 import ProfileApplication
 import ProfileDomain
 import ProfileInfrastructure
-import ProfilePresentation
+import ProfileWebAPI
 import ReferenceDataApplication
 import Vapor
 

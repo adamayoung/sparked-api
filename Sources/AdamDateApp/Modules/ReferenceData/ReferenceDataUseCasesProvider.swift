@@ -9,7 +9,7 @@ import Fluent
 import Foundation
 import ReferenceDataApplication
 import ReferenceDataInfrastructure
-import ReferenceDataPresentation
+import ReferenceDataWebAPI
 import Vapor
 
 extension Application.ReferenceDataUseCases.Provider {

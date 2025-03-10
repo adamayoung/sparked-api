@@ -8,7 +8,7 @@
 import AuthKit
 import Foundation
 import IdentityApplication
-import IdentityPresentation
+import IdentityWebAPI
 
 final class IdentityAdapterFactory {
 

@@ -17,7 +17,9 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
-        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0")
+        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
+        .package(url: "https://github.com/alexsteinerde/graphql-kit.git", from: "3.0.0"),
+        .package(url: "https://github.com/alexsteinerde/graphiql-vapor.git", from: "2.4.0")
     ],
 
     targets: [
@@ -25,15 +27,15 @@ let package = Package(
             name: "AdamDateApp",
             dependencies: [
                 "AdamDateCommands",
-                "ProfilePresentation",
+                "ProfileWebAPI",
                 "ProfileApplication",
                 "ProfileInfrastructure",
                 "ProfileDomain",
-                "ReferenceDataPresentation",
+                "ReferenceDataWebAPI",
                 "ReferenceDataApplication",
                 "ReferenceDataInfrastructure",
                 "ReferenceDataDomain",
-                "IdentityPresentation",
+                "IdentityWebAPI",
                 "IdentityApplication",
                 "IdentityInfrastructure",
                 "IdentityDomain",
@@ -65,7 +67,7 @@ let package = Package(
         // Profile
 
         .target(
-            name: "ProfilePresentation",
+            name: "ProfileWebAPI",
             dependencies: [
                 "ProfileApplication",
                 "AuthKit",
@@ -75,9 +77,9 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "ProfilePresentationTests",
+            name: "ProfileWebAPITests",
             dependencies: [
-                "ProfilePresentation",
+                "ProfileWebAPI",
                 "ProfileApplication",
                 "APITesting",
                 .product(name: "VaporTesting", package: "vapor")
@@ -125,7 +127,7 @@ let package = Package(
         // Identity
 
         .target(
-            name: "IdentityPresentation",
+            name: "IdentityWebAPI",
             dependencies: [
                 "IdentityApplication",
                 "AuthKit",
@@ -135,9 +137,9 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "IdentityPresentationTests",
+            name: "IdentityWebAPITests",
             dependencies: [
-                "IdentityPresentation",
+                "IdentityWebAPI",
                 "IdentityApplication",
                 "APITesting",
                 .product(name: "JWT", package: "jwt"),
@@ -186,7 +188,7 @@ let package = Package(
         // Reference Data
 
         .target(
-            name: "ReferenceDataPresentation",
+            name: "ReferenceDataWebAPI",
             dependencies: [
                 "ReferenceDataApplication",
                 .product(name: "Vapor", package: "vapor"),
@@ -195,9 +197,9 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "ReferenceDataPresentationTests",
+            name: "ReferenceDataWebAPITests",
             dependencies: [
-                "ReferenceDataPresentation",
+                "ReferenceDataWebAPI",
                 "ReferenceDataApplication",
                 "APITesting",
                 .product(name: "JWT", package: "jwt"),

@@ -5,9 +5,9 @@
 //  Created by Adam Young on 19/02/2025.
 //
 
-import IdentityPresentation
-import ProfilePresentation
-import ReferenceDataPresentation
+import IdentityWebAPI
+import ProfileWebAPI
+import ReferenceDataWebAPI
 import Vapor
 
 func configureModules(on app: Application) {

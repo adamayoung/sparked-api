@@ -7,7 +7,7 @@
 
 import AuthKit
 import Foundation
-import IdentityPresentation
+import IdentityWebAPI
 import Vapor
 
 extension Application.IdentityServices.Provider {

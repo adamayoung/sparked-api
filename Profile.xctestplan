@@ -17,13 +17,6 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfilePresentationTests",
-        "name" : "ProfilePresentationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "ProfileApplicationTests",
         "name" : "ProfileApplicationTests"
       }
@@ -40,6 +33,13 @@
         "containerPath" : "container:",
         "identifier" : "ProfileDomainTests",
         "name" : "ProfileDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileWebAPITests",
+        "name" : "ProfileWebAPITests"
       }
     }
   ],
