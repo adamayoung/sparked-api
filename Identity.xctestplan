@@ -17,8 +17,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityInfrastructureTests",
-        "name" : "IdentityInfrastructureTests"
+        "identifier" : "IdentityApplicationTests",
+        "name" : "IdentityApplicationTests"
       }
     },
     {
@@ -31,15 +31,15 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityApplicationTests",
-        "name" : "IdentityApplicationTests"
+        "identifier" : "IdentityInfrastructureTests",
+        "name" : "IdentityInfrastructureTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityPresentationTests",
-        "name" : "IdentityPresentationTests"
+        "identifier" : "IdentityWebAPITests",
+        "name" : "IdentityWebAPITests"
       }
     }
   ],

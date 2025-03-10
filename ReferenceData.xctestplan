@@ -17,6 +17,20 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "ReferenceDataDomainTests",
+        "name" : "ReferenceDataDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataWebAPITests",
+        "name" : "ReferenceDataWebAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "ReferenceDataInfrastructureTests",
         "name" : "ReferenceDataInfrastructureTests"
       }
@@ -24,22 +38,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ReferenceDataPresentationTests",
-        "name" : "ReferenceDataPresentationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "ReferenceDataApplicationTests",
         "name" : "ReferenceDataApplicationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataDomainTests",
-        "name" : "ReferenceDataDomainTests"
       }
     }
   ],
