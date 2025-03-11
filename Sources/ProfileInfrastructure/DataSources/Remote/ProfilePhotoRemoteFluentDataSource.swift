@@ -40,10 +40,6 @@ final class ProfilePhotoRemoteFluentDataSource: ProfilePhotoRemoteDataSource {
             throw .unknown(error)
         }
 
-        guard !profilePhotoModels.isEmpty else {
-            throw .notFound
-        }
-
         let profilePhotos: [ProfilePhoto]
         do {
             profilePhotos = try profilePhotoModels.map(ProfilePhotoMapper.map)
@@ -74,6 +70,50 @@ final class ProfilePhotoRemoteFluentDataSource: ProfilePhotoRemoteDataSource {
         }
 
         return profilePhoto
+    }
+
+    func update(profilePhotos: [ProfilePhoto]) async throws(ProfilePhotoRepositoryError) {
+        do {
+            try await database.transaction { database in
+                for profilePhoto in profilePhotos {
+                    guard
+                        var profilePhotoModel = try await ProfilePhotoModel.find(
+                            profilePhoto.id,
+                            on: database
+                        )
+                    else {
+                        throw ProfilePhotoRepositoryError.notFound
+                    }
+
+                    ProfilePhotoModelMapper.map(from: profilePhoto, to: &profilePhotoModel)
+                    try await profilePhotoModel.update(on: database)
+                }
+
+            }
+        } catch let error as ProfilePhotoRepositoryError {
+            throw error
+        } catch let error {
+            throw .unknown(error)
+        }
+    }
+
+    func delete(id: UUID) async throws(ProfilePhotoRepositoryError) {
+        let profilePhotoModel: ProfilePhotoModel?
+        do {
+            profilePhotoModel = try await ProfilePhotoModel.find(id, on: database)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        guard let profilePhotoModel else {
+            throw .notFound
+        }
+
+        do {
+            try await profilePhotoModel.delete(force: true, on: database)
+        } catch let error {
+            throw .unknown(error)
+        }
     }
 
 }

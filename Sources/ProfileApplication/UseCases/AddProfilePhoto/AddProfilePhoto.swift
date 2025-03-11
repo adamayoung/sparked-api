@@ -10,6 +10,10 @@ import ProfileDomain
 
 final class AddProfilePhoto: AddProfilePhotoUseCase {
 
+    private static var maxPhotoCount: Int {
+        ProfilePhotoConfiguration.maxCount
+    }
+
     private let repository: any ProfilePhotoRepository
     private let basicProfileRepository: any BasicProfileRepository
     private let imageRepository: any ImageRepository
@@ -24,32 +28,20 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         self.imageRepository = imageRepository
     }
 
-    func execute(input: AddProfilePhotoInput) async throws(AddProfilePhotoError) -> ProfilePhotoDTO
-    {
-        let basicProfile: BasicProfile
-        do {
-            basicProfile = try await basicProfileRepository.fetch(byID: input.profileID)
-        } catch BasicProfileRepositoryError.notFound {
-            throw .profileNotFound(profileID: input.profileID)
-        } catch let error {
-            throw .unknown(error)
-        }
+    func execute(
+        input: AddProfilePhotoInput
+    ) async throws(AddProfilePhotoError) -> ProfilePhotoDTO {
+        let basicProfile = try await basicProfile(withID: input.profileID)
+        let nextPhotoIndex = try await nextPhotoIndex(forProfileID: basicProfile.id)
 
         let photoID = UUID()
         let filename = "\(basicProfile.id)_\(photoID).\(input.photoType)"
-
-        let photoURL: URL
-        do {
-            try await imageRepository.create(input.photoData, filename: filename)
-            photoURL = try await imageRepository.url(for: filename)
-        } catch let error {
-            throw .unknown(error)
-        }
+        let photoURL = try await addPhoto(input.photoData, filename: filename)
 
         let profilePhoto = ProfilePhoto(
             userID: basicProfile.userID,
             profileID: basicProfile.id,
-            index: 0,
+            index: nextPhotoIndex,
             filename: filename
         )
 
@@ -62,6 +54,53 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         let profilePhotoDTO = ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: photoURL)
 
         return profilePhotoDTO
+    }
+
+}
+
+extension AddProfilePhoto {
+
+    private func basicProfile(withID id: UUID) async throws(AddProfilePhotoError) -> BasicProfile {
+        let basicProfile: BasicProfile
+        do {
+            basicProfile = try await basicProfileRepository.fetch(byID: id)
+        } catch BasicProfileRepositoryError.notFound {
+            throw .profileNotFound(profileID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return basicProfile
+    }
+
+    private func nextPhotoIndex(forProfileID id: UUID) async throws(AddProfilePhotoError) -> Int {
+        let profilePhotosCount: Int
+        do {
+            profilePhotosCount = try await repository.fetchAll(forProfileID: id).count
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        guard profilePhotosCount < Self.maxPhotoCount else {
+            throw .tooManyPhotos(maxCount: Self.maxPhotoCount)
+        }
+
+        return profilePhotosCount
+    }
+
+    private func addPhoto(
+        _ photoData: Data,
+        filename: String
+    ) async throws(AddProfilePhotoError) -> URL {
+        let photoURL: URL
+        do {
+            try await imageRepository.create(photoData, filename: filename)
+            photoURL = try await imageRepository.url(for: filename)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return photoURL
     }
 
 }

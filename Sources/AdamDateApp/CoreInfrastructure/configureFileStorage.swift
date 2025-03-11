@@ -11,8 +11,11 @@ import Vapor
 func configureFileStorage(on app: Application) throws {
     guard
         let accountName = Environment.get("AZURE_STORAGE_ACCOUNT_NAME"),
-        let accountKey = Environment.get("AZURE_STORAGE_ACCOUNT_KEY")
+        let accountKey = Environment.get("AZURE_STORAGE_ACCOUNT_KEY"),
+        !accountName.isEmpty,
+        !accountKey.isEmpty
     else {
+        app.logger.info("Using local file storage")
         return
     }
 
@@ -20,6 +23,8 @@ func configureFileStorage(on app: Application) throws {
         accountName: accountName,
         accountKey: accountKey
     )
+
+    app.logger.info("Using Azure file storage")
 
     app.azureStorageConfiguration = azureStorageConfiguration
 }

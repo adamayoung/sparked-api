@@ -1,16 +1,16 @@
 //
-//  AddProfilePhotoError.swift
+//  DeleteProfilePhotoError.swift
 //  AdamDateApp
 //
-//  Created by Adam Young on 19/02/2025.
+//  Created by Adam Young on 11/03/2025.
 //
 
 import Foundation
 
-package enum AddProfilePhotoError: LocalizedError, Equatable, Sendable {
+package enum DeleteProfilePhotoError: LocalizedError, Equatable, Sendable {
 
     case profileNotFound(profileID: UUID)
-    case tooManyPhotos(maxCount: Int)
+    case profilePhotoNotFound(profilePhotoID: UUID)
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -18,21 +18,27 @@ package enum AddProfilePhotoError: LocalizedError, Equatable, Sendable {
         case .profileNotFound(let profileID):
             "Profile \(profileID) not found"
 
-        case .tooManyPhotos(let maxCount):
-            "Too many photos (maximum: \(maxCount))"
+        case .profilePhotoNotFound(let profilePhotoID):
+            "Profile photo \(profilePhotoID) not found"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
         }
     }
 
-    package static func == (lhs: AddProfilePhotoError, rhs: AddProfilePhotoError) -> Bool {
+    package static func == (
+        lhs: DeleteProfilePhotoError,
+        rhs: DeleteProfilePhotoError
+    ) -> Bool {
         switch (lhs, rhs) {
         case (.profileNotFound(let lhsProfileID), .profileNotFound(let rhsProfileID)):
             lhsProfileID == rhsProfileID
 
-        case (.tooManyPhotos(let lhsMaxCount), .tooManyPhotos(let rhsMaxCount)):
-            lhsMaxCount == rhsMaxCount
+        case (
+            .profilePhotoNotFound(let lhsProfilePhotoID),
+            .profilePhotoNotFound(let rhsProfilePhotoID)
+        ):
+            lhsProfilePhotoID == rhsProfilePhotoID
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

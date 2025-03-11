@@ -72,6 +72,22 @@ extension Application.ProfileWebAPIUseCases.Provider {
                     imageRepository: app.imageRepository
                 )
             }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeChangeProfilePhotoOrderUseCase(
+                    repository: app.profilePhotoRepository,
+                    basicProfileRepository: app.basicProfileRepository,
+                    imageRepository: app.imageRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeDeleteProfilePhotoUseCase(
+                    repository: app.profilePhotoRepository,
+                    basicProfileRepository: app.basicProfileRepository,
+                    imageRepository: app.imageRepository
+                )
+            }
         }
     }
 

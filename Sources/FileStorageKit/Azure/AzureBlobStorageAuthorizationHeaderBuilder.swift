@@ -14,7 +14,7 @@ struct AzureBlobStorageAuthorizationHeaderBuilder {
 
     static func build(
         httpMethod: String,
-        contentLength: Int,
+        contentLength: Int = 0,
         contentType: String,
         date: String,
         storageAccount: String,
@@ -30,7 +30,7 @@ struct AzureBlobStorageAuthorizationHeaderBuilder {
             "\(httpMethod)\n"  // HTTP Verb (e.g., PUT)
             + "\n"  // Content Encoding
             + "\n"  // Content Language
-            + "\(contentLength)\n"  // Content Length
+            + "\(contentLength == 0 ? "" : "\(contentLength)" )\n"  // Content Length
             + "\n"  // Content MD5
             + "\(contentType)\n"  // Content Type
             + "\n"  // Date

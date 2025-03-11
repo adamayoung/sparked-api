@@ -29,4 +29,14 @@ package struct ProfilePhoto: Identifiable, Equatable, Hashable, Sendable, Codabl
         self.filename = filename
     }
 
+    package func withIndex(_ newIndex: Int) -> ProfilePhoto {
+        ProfilePhoto(
+            id: id,
+            userID: userID,
+            profileID: profileID,
+            index: newIndex,
+            filename: filename
+        )
+    }
+
 }

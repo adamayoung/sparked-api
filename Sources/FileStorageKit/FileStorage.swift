@@ -17,4 +17,6 @@ package protocol FileStorage {
 
     func url(containerName: String, filename: String) async throws(FileStorageError) -> URL
 
+    func delete(containerName: String, filename: String) async throws(FileStorageError)
+
 }

@@ -33,6 +33,11 @@ extension Application {
             var makeAddProfilePhotoUseCase: ((Application) -> AddProfilePhotoUseCase)?
             var makeFetchProfilePhotosUseCase: ((Application) -> FetchProfilePhotosUseCase)?
             var makeFetchProfilePhotoUseCase: ((Application) -> FetchProfilePhotoUseCase)?
+            var makeChangeProfilePhotoOrderUseCase:
+                (
+                    (Application) -> ChangeProfilePhotoOrderUseCase
+                )?
+            var makeDeleteProfilePhotoUseCase: ((Application) -> DeleteProfilePhotoUseCase)?
 
             init() {}
 
@@ -116,6 +121,24 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var changeProfilePhotoOrderUseCase: ChangeProfilePhotoOrderUseCase {
+            guard let makeUseCase = self.storage.makeChangeProfilePhotoOrderUseCase else {
+                fatalError(
+                    "No ChangeProfilePhotoOrderUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var deleteProfilePhotoUseCase: DeleteProfilePhotoUseCase {
+            guard let makeUseCase = self.storage.makeDeleteProfilePhotoUseCase else {
+                fatalError(
+                    "No DeleteProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
@@ -150,6 +173,14 @@ extension Application {
 
         package func use(_ makeUseCase: @escaping (Application) -> FetchProfilePhotoUseCase) {
             self.storage.makeFetchProfilePhotoUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> ChangeProfilePhotoOrderUseCase) {
+            self.storage.makeChangeProfilePhotoOrderUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> DeleteProfilePhotoUseCase) {
+            self.storage.makeDeleteProfilePhotoUseCase = makeUseCase
         }
 
         func initialize() {
@@ -207,6 +238,14 @@ extension Request {
 
     var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
         application.profileWebAPIUseCases.fetchProfilePhotoUseCase
+    }
+
+    var changeProfilePhotoOrderUseCase: ChangeProfilePhotoOrderUseCase {
+        application.profileWebAPIUseCases.changeProfilePhotoOrderUseCase
+    }
+
+    var deleteProfilePhotoUseCase: DeleteProfilePhotoUseCase {
+        application.profileWebAPIUseCases.deleteProfilePhotoUseCase
     }
 
 }

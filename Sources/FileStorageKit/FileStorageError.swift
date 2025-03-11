@@ -10,6 +10,7 @@ import Foundation
 package enum FileStorageError: Error {
 
     case invalidURL
+    case notFound
     case network(Error)
     case unknown(Error? = nil)
 

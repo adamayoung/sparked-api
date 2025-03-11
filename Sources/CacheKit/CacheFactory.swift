@@ -11,7 +11,7 @@ package final class CacheFactory {
 
     private init() {}
 
-    package static func makeCacheStore() -> some CacheStore {
+    package static func makeInMemoryCacheStore() -> some CacheStore {
         InMemoryCacheStore.shared
     }
 
