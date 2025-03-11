@@ -86,4 +86,28 @@ package final class ProfileApplicationFactory {
         )
     }
 
+    package static func makeChangeProfilePhotoOrderUseCase(
+        repository: some ProfilePhotoRepository,
+        basicProfileRepository: some BasicProfileRepository,
+        imageRepository: some ImageRepository
+    ) -> some ChangeProfilePhotoOrderUseCase {
+        ChangeProfilePhotoOrder(
+            repository: repository,
+            basicProfileRepository: basicProfileRepository,
+            imageRepository: imageRepository
+        )
+    }
+
+    package static func makeDeleteProfilePhotoUseCase(
+        repository: some ProfilePhotoRepository,
+        basicProfileRepository: some BasicProfileRepository,
+        imageRepository: some ImageRepository
+    ) -> some DeleteProfilePhotoUseCase {
+        DeleteProfilePhoto(
+            repository: repository,
+            basicProfileRepository: basicProfileRepository,
+            imageRepository: imageRepository
+        )
+    }
+
 }

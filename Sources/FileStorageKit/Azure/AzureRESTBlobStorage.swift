@@ -83,6 +83,49 @@ package final class AzureRESTBlobStorage: FileStorage, Sendable {
         return url
     }
 
+    package func delete(containerName: String, filename: String) async throws(FileStorageError) {
+        let url = try AzureBlobStorageResourceURLBuilder.build(
+            storageAccount: configuration.accountName,
+            containerName: containerName,
+            blobName: filename
+        )
+
+        let currentDate = Self.generateDate()
+        let httpMethod: HTTPMethod = .DELETE
+
+        let authorizationHeader = try AzureBlobStorageAuthorizationHeaderBuilder.build(
+            httpMethod: httpMethod.rawValue,
+            contentType: "",
+            date: currentDate,
+            storageAccount: configuration.accountName,
+            containerName: containerName,
+            blobName: filename,
+            accountKey: configuration.accountKey
+        )
+
+        var request = ClientRequest(url: URI(string: url.absoluteString))
+        request.method = httpMethod
+        request.headers.add(name: "Content-Type", value: "")
+        request.headers.add(name: "Content-Length", value: "0")
+        request.headers.add(name: "x-ms-blob-type", value: "BlockBlob")
+        request.headers.add(name: "x-ms-date", value: currentDate)
+        request.headers.add(name: "x-ms-version", value: "2021-04-10")
+        request.headers.add(name: "Authorization", value: authorizationHeader)
+
+        let response: ClientResponse
+        do {
+            response = try await client.send(request)
+        } catch let error {
+            throw .network(error)
+        }
+
+        switch response.status {
+        case .accepted: break
+        case .notFound: throw .notFound
+        default: throw .unknown()
+        }
+    }
+
 }
 
 extension AzureRESTBlobStorage {

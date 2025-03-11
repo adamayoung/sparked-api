@@ -25,4 +25,8 @@ final class ImageDefaultRepository: ImageRepository {
         try await remoteDataSource.url(for: filename)
     }
 
+    func delete(filename: String) async throws {
+        try await remoteDataSource.delete(filename: filename)
+    }
+
 }

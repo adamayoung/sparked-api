@@ -22,4 +22,11 @@ struct ProfilePhotoModelMapper {
         )
     }
 
+    static func map(from profilePhoto: ProfilePhoto, to model: inout ProfilePhotoModel) {
+        model.userID = profilePhoto.userID
+        model.profileID = profilePhoto.profileID
+        model.index = profilePhoto.index
+        model.filename = profilePhoto.filename
+    }
+
 }

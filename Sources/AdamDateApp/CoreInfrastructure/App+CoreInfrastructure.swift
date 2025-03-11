@@ -13,7 +13,7 @@ import Vapor
 extension Application {
 
     var cacheStore: any CacheStore {
-        CacheFactory.makeCacheStore()
+        CacheFactory.makeInMemoryCacheStore()
     }
 
     var fileStorage: any FileStorage {

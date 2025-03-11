@@ -19,4 +19,8 @@ package protocol ProfilePhotoRemoteDataSource {
 
     func fetch(byID id: UUID) async throws(ProfilePhotoRepositoryError) -> ProfilePhoto
 
+    func update(profilePhotos: [ProfilePhoto]) async throws(ProfilePhotoRepositoryError)
+
+    func delete(id: UUID) async throws(ProfilePhotoRepositoryError)
+
 }

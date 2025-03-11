@@ -27,4 +27,8 @@ final class ProfileFileStorageServiceAdapter: FileStorageService {
         try await fileStorage.url(containerName: containerName, filename: filename)
     }
 
+    func delete(filename: String) async throws {
+        try await fileStorage.delete(containerName: containerName, filename: filename)
+    }
+
 }

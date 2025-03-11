@@ -39,6 +39,8 @@ private func createDatabaseConfiguration(
         fatalError("Missing required database environment variables for \(databaseID.string)")
     }
 
+    app.logger.info("Using database \(hostname)")
+
     let configuration = try SQLPostgresConfiguration(
         hostname: hostname,
         username: username,

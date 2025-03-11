@@ -12,6 +12,8 @@ package protocol ImageRepository {
 
     func create(_ photoData: Data, filename: String) async throws
 
+    func delete(filename: String) async throws
+
     func url(for filename: String) async throws -> URL
 
 }

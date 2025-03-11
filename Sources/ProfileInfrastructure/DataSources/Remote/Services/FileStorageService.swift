@@ -14,4 +14,6 @@ package protocol FileStorageService {
 
     func url(for filename: String) async throws -> URL
 
+    func delete(filename: String) async throws
+
 }

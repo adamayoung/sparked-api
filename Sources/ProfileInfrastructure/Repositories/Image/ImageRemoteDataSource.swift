@@ -15,4 +15,6 @@ package protocol ImageRemoteDataSource {
 
     func url(for filename: String) async throws(ImageRepositoryError) -> URL
 
+    func delete(filename: String) async throws
+
 }

@@ -59,6 +59,16 @@ final class LocalFileStorage: FileStorage {
         return url
     }
 
+    func delete(containerName: String, filename: String) async throws(FileStorageError) {
+        let fullPath = self.fullPath(containerName: containerName, filename: filename)
+
+        do {
+            try await fileIO.remove(path: fullPath)
+        } catch let error {
+            throw .unknown(error)
+        }
+    }
+
 }
 
 extension LocalFileStorage {

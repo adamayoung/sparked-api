@@ -36,4 +36,8 @@ final class ImageRemoteStorageDataSource: ImageRemoteDataSource {
         return url
     }
 
+    func delete(filename: String) async throws {
+        try await fileStorageService.delete(filename: filename)
+    }
+
 }
