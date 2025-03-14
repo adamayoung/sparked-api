@@ -35,4 +35,36 @@ package final class ReferenceDataApplicationFactory {
         FetchGender(repository: genderRepository)
     }
 
+    package static func makeFetchInterestGroupsUseCase(
+        interestGroupRepository: some InterestGroupRepository,
+        interestRepository: some InterestRepository
+    ) -> some FetchInterestGroupsUseCase {
+        FetchInterestGroups(
+            repository: interestGroupRepository,
+            interestRepository: interestRepository
+        )
+    }
+
+    package static func makeFetchInterestGroupUseCase(
+        interestGroupRepository: some InterestGroupRepository,
+        interestRepository: some InterestRepository
+    ) -> some FetchInterestGroupUseCase {
+        FetchInterestGroup(
+            repository: interestGroupRepository,
+            interestRepository: interestRepository
+        )
+    }
+
+    package static func makeFetchInterestsUseCase(
+        interestRepository: some InterestRepository
+    ) -> some FetchInterestsUseCase {
+        FetchInterests(repository: interestRepository)
+    }
+
+    package static func makeFetchInterestUseCase(
+        interestRepository: some InterestRepository
+    ) -> some FetchInterestUseCase {
+        FetchInterest(repository: interestRepository)
+    }
+
 }

@@ -1,0 +1,53 @@
+# Docker Compose file for Vapor
+#
+# Install Docker on your system to run and test
+# your Vapor app in a production-like environment.
+#
+# Note: This file is intended for testing and does not
+# implement best practices for a production deployment.
+#
+# Learn more: https://docs.docker.com/compose/reference/
+#
+#   Build images: docker-compose build
+#      Start app: docker-compose up app
+#       Stop all: docker-compose down
+#
+
+x-shared_environment: &shared_environment
+  LOG_LEVEL: ${LOG_LEVEL:-debug}
+  
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    env_file: .env.development
+    environment:
+      <<: *shared_environment
+      POSTGRES_HOSTNAME: db
+    volumes:
+      - .filestorage:/app/.filestorage
+    depends_on:
+      - db
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+    #   interval: 1s
+    #   timeout: 5s
+    #   retries: 10
+
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    env_file: .env
+    volumes:
+      - ./.postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "runuser", "-u", "postgres", "--", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10

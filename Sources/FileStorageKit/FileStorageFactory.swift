@@ -13,8 +13,14 @@ package final class FileStorageFactory {
 
     private init() {}
 
-    package static func makeLocalFileStorage(fileIO: NonBlockingFileIO) -> some FileStorage {
-        LocalFileStorage(fileIO: fileIO)
+    package static func makeLocalFileStorage(
+        configuration: LocalStorageConfiguration,
+        fileIO: NonBlockingFileIO
+    ) -> some FileStorage {
+        LocalFileStorage(
+            configuration: configuration,
+            fileIO: fileIO
+        )
     }
 
     package static func makeAzureFileStorage(

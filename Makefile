@@ -38,8 +38,12 @@ test:
 	swift test --skip-build
 
 .PHONY: local-env
-local-env:
-	docker-compose -f docker-compose-dev.yml up --remove-orphans
+local:
+	docker-compose -f docker-compose.yml up --remove-orphans --build
+
+.PHONY: local-env
+local-dev:
+	docker-compose -f docker-compose-infro.yml up --remove-orphans
 
 .PHONY: run
 run:
@@ -54,6 +58,14 @@ deploy-prod:
 migrate:
 	swift run $(TARGET) migrate
 
+.PHONY: migrate-revert
+migrate-revert:
+	swift run $(TARGET) migrate --revert
+
 .PHONY: migrate-prod
 migrate-prod:
 	swift run $(TARGET) --env production migrate
+
+.PHONY: migrate-revert-prod
+migrate-revert-prod:
+	swift run $(TARGET) --env production migrate --revert

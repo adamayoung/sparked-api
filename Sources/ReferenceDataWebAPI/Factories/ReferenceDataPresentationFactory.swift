@@ -21,4 +21,12 @@ package final class ReferenceDataWebAPIFactory: Sendable {
         GenderController()
     }
 
+    package static func makeInterestGroupController() -> some RouteCollection {
+        InterestGroupController()
+    }
+
+    package static func makeInterestController() -> some RouteCollection {
+        InterestController()
+    }
+
 }

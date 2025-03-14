@@ -17,6 +17,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
         .package(url: "https://github.com/alexsteinerde/graphql-kit.git", from: "3.0.0"),
         .package(url: "https://github.com/alexsteinerde/graphiql-vapor.git", from: "2.4.0")
@@ -48,7 +49,8 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "Fluent", package: "fluent"),
-                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
+                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")
             ]
         ),
         .testTarget(

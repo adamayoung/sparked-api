@@ -7,22 +7,25 @@
 
 import Fluent
 import FluentPostgresDriver
+import FluentSQLiteDriver
 import IdentityInfrastructure
 import ProfileInfrastructure
 import ReferenceDataInfrastructure
 import Vapor
 
-func configureDatabase(on app: Application) throws {
+func configureDatabase(on app: Application) async throws {
     let databaseID: DatabaseID = .adamDate
-    try createDatabaseConfiguration(on: app, databaseID: databaseID)
 
-    let migrations =
-        IdentityInfrastructureFactory.makeMigrations()
-        + ProfileInfrastructureFactory.makeMigrations()
-        + ReferenceDataInfrastructureFactory.makeMigrations()
+    if app.environment == .testing {
+        createTestDatabaseConfiguration(on: app, databaseID: databaseID)
+    } else {
+        try createDatabaseConfiguration(on: app, databaseID: databaseID)
+    }
 
-    for migration in migrations {
-        app.migrations.add(migration, to: databaseID)
+    addMigrations(on: app, databaseID: databaseID)
+
+    if app.environment == .testing {
+        try await app.autoMigrate()
     }
 }
 
@@ -51,6 +54,21 @@ private func createDatabaseConfiguration(
 
     let configFactory = DatabaseConfigurationFactory.postgres(configuration: configuration)
     app.databases.use(configFactory, as: databaseID)
+}
+
+private func createTestDatabaseConfiguration(on app: Application, databaseID: DatabaseID) {
+    app.databases.use(.sqlite(.memory), as: databaseID)
+}
+
+private func addMigrations(on app: Application, databaseID: DatabaseID) {
+    let migrations =
+        IdentityInfrastructureFactory.makeMigrations()
+        + ProfileInfrastructureFactory.makeMigrations()
+        + ReferenceDataInfrastructureFactory.makeMigrations()
+
+    for migration in migrations {
+        app.migrations.add(migration, to: databaseID)
+    }
 }
 
 extension DatabaseID {

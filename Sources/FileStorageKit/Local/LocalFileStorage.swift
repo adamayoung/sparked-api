@@ -10,15 +10,15 @@ import NIO
 
 final class LocalFileStorage: FileStorage {
 
+    private let configuration: LocalStorageConfiguration
     private let fileIO: NonBlockingFileIO
-    private let basePath: String
 
     init(
-        fileIO: NonBlockingFileIO,
-        basePath: String = "./storage"
+        configuration: LocalStorageConfiguration,
+        fileIO: NonBlockingFileIO
     ) {
+        self.configuration = configuration
         self.fileIO = fileIO
-        self.basePath = basePath
     }
 
     func upload(
@@ -74,7 +74,7 @@ final class LocalFileStorage: FileStorage {
 extension LocalFileStorage {
 
     private func fullPath(containerName: String, filename: String) -> String {
-        "\(basePath)/\(containerName)/\(filename)"
+        "\(configuration.path)/\(containerName)/\(filename)"
     }
 
 }

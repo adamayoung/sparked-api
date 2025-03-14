@@ -8,7 +8,7 @@
 import Foundation
 import ReferenceDataDomain
 
-package protocol GenderRepository {
+package protocol GenderRepository: Sendable {
 
     func fetchAll() async throws(GenderRepositoryError) -> [Gender]
 

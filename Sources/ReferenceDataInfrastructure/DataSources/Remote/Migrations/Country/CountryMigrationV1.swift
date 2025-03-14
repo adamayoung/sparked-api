@@ -21,22 +21,6 @@ struct CountryMigrationV1: AsyncMigration {
             .unique(on: "code")
             .unique(on: "name")
             .create()
-
-        for isoCountryCode in NSLocale.isoCountryCodes {
-            let countryCode = NSLocale.localeIdentifier(
-                fromComponents: [NSLocale.Key.countryCode.rawValue: isoCountryCode]
-            )
-
-            guard
-                let name = NSLocale(localeIdentifier: "en_GB")
-                    .displayName(forKey: NSLocale.Key.identifier, value: countryCode)
-            else {
-                return
-            }
-
-            let country = CountryModel(code: isoCountryCode, name: name)
-            try await country.save(on: database)
-        }
     }
 
     func revert(on database: Database) async throws {

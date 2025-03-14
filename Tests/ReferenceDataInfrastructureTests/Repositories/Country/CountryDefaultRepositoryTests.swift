@@ -13,6 +13,7 @@ import Testing
 @testable import ReferenceDataInfrastructure
 
 @Suite("CountryDefaultRepository")
+@MainActor
 struct CountryDefaultRepositoryTests {
 
     let repository: CountryDefaultRepository

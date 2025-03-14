@@ -9,7 +9,7 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-protocol GenderCacheDataSource {
+protocol GenderCacheDataSource: Sendable {
 
     func fetchAll() async throws(GenderRepositoryError) -> [Gender]?
 

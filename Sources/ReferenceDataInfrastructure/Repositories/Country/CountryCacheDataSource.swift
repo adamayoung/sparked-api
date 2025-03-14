@@ -9,7 +9,7 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-protocol CountryCacheDataSource {
+protocol CountryCacheDataSource: Sendable {
 
     func fetchAll() async throws(CountryRepositoryError) -> [Country]?
 

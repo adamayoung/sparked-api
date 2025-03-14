@@ -9,7 +9,7 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
-protocol CountryRemoteDataSource {
+protocol CountryRemoteDataSource: Sendable {
 
     func fetchAll() async throws(CountryRepositoryError) -> [Country]
 

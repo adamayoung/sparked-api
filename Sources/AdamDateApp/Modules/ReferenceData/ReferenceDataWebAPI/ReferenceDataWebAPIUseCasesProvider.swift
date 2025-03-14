@@ -37,6 +37,32 @@ extension Application.ReferenceDataWebAPIUseCases.Provider {
                     genderRepository: app.genderRepository
                 )
             }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchInterestGroupsUseCase(
+                    interestGroupRepository: app.interestGroupRepository,
+                    interestRepository: app.interestRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchInterestGroupUseCase(
+                    interestGroupRepository: app.interestGroupRepository,
+                    interestRepository: app.interestRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchInterestsUseCase(
+                    interestRepository: app.interestRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchInterestUseCase(
+                    interestRepository: app.interestRepository
+                )
+            }
         }
     }
 

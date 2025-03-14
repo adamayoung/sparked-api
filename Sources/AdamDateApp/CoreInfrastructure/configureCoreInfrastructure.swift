@@ -8,6 +8,6 @@
 import Vapor
 
 func configureCoreInfrastructure(on app: Application) async throws {
-    try configureDatabase(on: app)
-    try configureFileStorage(on: app)
+    try await configureDatabase(on: app)
+    configureFileStorage(on: app)
 }
