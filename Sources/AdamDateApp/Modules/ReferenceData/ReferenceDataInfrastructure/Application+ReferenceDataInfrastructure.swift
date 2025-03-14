@@ -28,7 +28,23 @@ extension Application {
         )
     }
 
-    var referenceDataCacheProvider: any CacheProvider {
+    var interestGroupRepository: any InterestGroupRepository {
+        ReferenceDataInfrastructureFactory.makeInterestGroupRepository(
+            database: self.db(DatabaseID.adamDate)
+        )
+    }
+
+    var interestRepository: any InterestRepository {
+        ReferenceDataInfrastructureFactory.makeInterestRepository(
+            database: self.db(DatabaseID.adamDate)
+        )
+    }
+
+}
+
+extension Application {
+
+    fileprivate var referenceDataCacheProvider: any CacheProvider {
         ReferenceDataCacheAdapter(
             cacheStore: self.cacheStore
         )

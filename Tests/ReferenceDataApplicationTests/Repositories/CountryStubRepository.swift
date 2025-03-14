@@ -9,6 +9,7 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
+@MainActor
 final class CountryStubRepository: CountryRepository {
 
     var fetchAllResult: Result<[Country], CountryRepositoryError> = .failure(.unknown())

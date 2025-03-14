@@ -10,7 +10,8 @@ import Testing
 
 @testable import ReferenceDataApplication
 
-@Suite
+@Suite("FetchCountries")
+@MainActor
 struct FetchCountriesTests {
 
     let useCase: FetchCountries

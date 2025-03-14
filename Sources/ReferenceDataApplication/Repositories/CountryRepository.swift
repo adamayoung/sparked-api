@@ -8,7 +8,7 @@
 import Foundation
 import ReferenceDataDomain
 
-package protocol CountryRepository {
+package protocol CountryRepository: Sendable {
 
     func fetchAll() async throws(CountryRepositoryError) -> [Country]
 

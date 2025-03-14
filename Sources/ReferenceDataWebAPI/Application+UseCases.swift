@@ -28,6 +28,12 @@ extension Application {
             var makeFetchGendersUseCase: ((Application) -> FetchGendersUseCase)?
             var makeFetchGenderUseCase: ((Application) -> FetchGenderUseCase)?
 
+            var makeFetchInterestGroupsUseCase: ((Application) -> FetchInterestGroupsUseCase)?
+            var makeFetchInterestGroupUseCase: ((Application) -> FetchInterestGroupUseCase)?
+
+            var makeFetchInterestsUseCase: ((Application) -> FetchInterestsUseCase)?
+            var makeFetchInterestUseCase: ((Application) -> FetchInterestUseCase)?
+
             init() {}
         }
 
@@ -73,6 +79,42 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var fetchInterestGroupsUseCase: any FetchInterestGroupsUseCase {
+            guard let makeUseCase = self.storage.makeFetchInterestGroupsUseCase else {
+                fatalError(
+                    "No FetchInterestGroupsUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchInterestGroupUseCase: any FetchInterestGroupUseCase {
+            guard let makeUseCase = self.storage.makeFetchInterestGroupUseCase else {
+                fatalError(
+                    "No FetchInterestGroupUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchInterestsUseCase: any FetchInterestsUseCase {
+            guard let makeUseCase = self.storage.makeFetchInterestsUseCase else {
+                fatalError(
+                    "No FetchInterestsUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchInterestUseCase: any FetchInterestUseCase {
+            guard let makeUseCase = self.storage.makeFetchInterestUseCase else {
+                fatalError(
+                    "No FetchInterestUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
@@ -91,6 +133,22 @@ extension Application {
 
         package func use(_ makeUseCase: @escaping (Application) -> FetchGenderUseCase) {
             self.storage.makeFetchGenderUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestGroupsUseCase) {
+            self.storage.makeFetchInterestGroupsUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestGroupUseCase) {
+            self.storage.makeFetchInterestGroupUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestsUseCase) {
+            self.storage.makeFetchInterestsUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestUseCase) {
+            self.storage.makeFetchInterestUseCase = makeUseCase
         }
 
         func initialize() {
@@ -132,6 +190,22 @@ extension Request {
 
     var fetchGenderUseCase: FetchGenderUseCase {
         application.referenceDataWebAPIUseCases.fetchGenderUseCase
+    }
+
+    var fetchInterestGroupsUseCase: FetchInterestGroupsUseCase {
+        application.referenceDataWebAPIUseCases.fetchInterestGroupsUseCase
+    }
+
+    var fetchInterestGroupUseCase: FetchInterestGroupUseCase {
+        application.referenceDataWebAPIUseCases.fetchInterestGroupUseCase
+    }
+
+    var fetchInterestsUseCase: FetchInterestsUseCase {
+        application.referenceDataWebAPIUseCases.fetchInterestsUseCase
+    }
+
+    var fetchInterestUseCase: FetchInterestUseCase {
+        application.referenceDataWebAPIUseCases.fetchInterestUseCase
     }
 
 }

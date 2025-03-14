@@ -7,7 +7,7 @@
 
 import Foundation
 
-package protocol FetchCountryUseCase {
+package protocol FetchCountryUseCase: Sendable {
 
     func execute(id: CountryDTO.ID) async throws(FetchCountryError) -> CountryDTO
 

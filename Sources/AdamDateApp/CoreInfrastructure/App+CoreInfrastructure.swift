@@ -24,7 +24,14 @@ extension Application {
             )
         }
 
-        return FileStorageFactory.makeLocalFileStorage(fileIO: self.fileio)
+        guard let localStorageConfiguration else {
+            fatalError("No storage configuration found")
+        }
+
+        return FileStorageFactory.makeLocalFileStorage(
+            configuration: localStorageConfiguration,
+            fileIO: self.fileio
+        )
     }
 
     var passwordHasher: any AuthKit.PasswordHasher {

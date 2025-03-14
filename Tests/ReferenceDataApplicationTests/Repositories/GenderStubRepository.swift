@@ -9,6 +9,7 @@ import Foundation
 import ReferenceDataApplication
 import ReferenceDataDomain
 
+@MainActor
 final class GenderStubRepository: GenderRepository {
 
     var fetchAllResult: Result<[Gender], GenderRepositoryError> = .failure(.unknown())

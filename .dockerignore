@@ -1,7 +1,11 @@
 .build/
 .swiftpm/
-storage/
-postgres-data/
+.filestorage/
+.docker-filestorage/
+/.postgres-data/
 .github/
 .vscode/
-main.bicep
+/.env
+/.env.*
+*.bicep
+*.bicepparam

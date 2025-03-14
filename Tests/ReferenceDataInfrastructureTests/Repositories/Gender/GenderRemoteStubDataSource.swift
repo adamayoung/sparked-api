@@ -11,6 +11,7 @@ import ReferenceDataDomain
 
 @testable import ReferenceDataInfrastructure
 
+@MainActor
 final class GenderRemoteStubDataSource: GenderRemoteDataSource {
 
     var fetchAllResult: Result<[Gender], GenderRepositoryError> = .failure(.unknown())

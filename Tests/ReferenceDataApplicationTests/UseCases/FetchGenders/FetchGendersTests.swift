@@ -12,6 +12,7 @@ import Testing
 @testable import ReferenceDataApplication
 
 @Suite("FetchGenders")
+@MainActor
 struct FetchGendersTests {
 
     let useCase: FetchGenders

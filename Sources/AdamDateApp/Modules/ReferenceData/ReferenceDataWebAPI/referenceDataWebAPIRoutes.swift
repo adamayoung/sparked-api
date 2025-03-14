@@ -11,11 +11,15 @@ import Vapor
 func referenceDataWebAPIRoutes(_ routes: RoutesBuilder) throws {
     let referenceDataRouter = routes.grouped("reference-data")
 
+    try referenceDataRouter.register(collection: ReferenceDataWebAPIFactory.makeCountryController())
+
+    try referenceDataRouter.register(collection: ReferenceDataWebAPIFactory.makeGenderController())
+
     try referenceDataRouter.register(
-        collection: ReferenceDataWebAPIFactory.makeCountryController()
+        collection: ReferenceDataWebAPIFactory.makeInterestGroupController()
     )
 
     try referenceDataRouter.register(
-        collection: ReferenceDataWebAPIFactory.makeGenderController()
+        collection: ReferenceDataWebAPIFactory.makeInterestController()
     )
 }

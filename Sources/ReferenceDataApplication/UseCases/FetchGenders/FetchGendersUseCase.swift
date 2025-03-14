@@ -7,7 +7,7 @@
 
 import Foundation
 
-package protocol FetchGendersUseCase {
+package protocol FetchGendersUseCase: Sendable {
 
     func execute() async throws(FetchGendersError) -> [GenderDTO]
 

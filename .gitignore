@@ -5,7 +5,8 @@ xcuserdata/
 DerivedData/
 /.swiftpm
 .netrc
-/postgres-data/
-/storage
+/.postgres-data/
+/.filestorage
+/.docker-filestorage
 .env.*
 *.bicepparam

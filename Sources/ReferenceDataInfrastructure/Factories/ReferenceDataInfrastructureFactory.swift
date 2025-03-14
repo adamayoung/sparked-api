@@ -39,6 +39,22 @@ package final class ReferenceDataInfrastructureFactory: Sendable {
         )
     }
 
+    package static func makeInterestGroupRepository(
+        database: some Database
+    ) -> some InterestGroupRepository {
+        let remoteDataSource = Self.makeInterestGroupRemoteDataSource(database: database)
+
+        return InterestGroupDefaultRepository(remoteDataSource: remoteDataSource)
+    }
+
+    package static func makeInterestRepository(
+        database: some Database
+    ) -> some InterestRepository {
+        let remoteDataSource = Self.makeInterestRemoteDataSource(database: database)
+
+        return InterestDefaultRepository(remoteDataSource: remoteDataSource)
+    }
+
     package static func makeMigrations() -> [Migration] {
         ReferenceDataMigrations.all()
     }
@@ -57,6 +73,18 @@ extension ReferenceDataInfrastructureFactory {
         database: some Database
     ) -> some GenderRemoteDataSource {
         GenderRemoteFluentDataSource(database: database)
+    }
+
+    private static func makeInterestGroupRemoteDataSource(
+        database: some Database
+    ) -> some InterestGroupRemoteDataSource {
+        InterestGroupRemoteFluentDataSource(database: database)
+    }
+
+    private static func makeInterestRemoteDataSource(
+        database: some Database
+    ) -> some InterestRemoteDataSource {
+        InterestRemoteFluentDataSource(database: database)
     }
 
 }

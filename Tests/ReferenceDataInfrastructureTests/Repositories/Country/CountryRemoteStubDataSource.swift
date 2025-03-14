@@ -11,6 +11,7 @@ import ReferenceDataDomain
 
 @testable import ReferenceDataInfrastructure
 
+@MainActor
 final class CountryRemoteStubDataSource: CountryRemoteDataSource {
 
     var fetchAllResult: Result<[Country], CountryRepositoryError> = .failure(.unknown())

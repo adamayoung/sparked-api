@@ -24,7 +24,7 @@ services:
       - 5432:5432
     env_file: .env
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./.postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "runuser", "-u", "postgres", "--", "pg_isready"]
       interval: 1s
