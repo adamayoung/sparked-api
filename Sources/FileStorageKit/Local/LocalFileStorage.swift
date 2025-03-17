@@ -21,6 +21,15 @@ final class LocalFileStorage: FileStorage {
         self.fileIO = fileIO
     }
 
+    func url(containerName: String, filename: String) async throws(FileStorageError) -> URL {
+        let fullPath = self.fullPath(containerName: containerName, filename: filename)
+        guard let url = URL(string: fullPath) else {
+            throw .invalidURL
+        }
+
+        return url
+    }
+
     func upload(
         _ data: Data,
         containerName: String,
@@ -50,15 +59,6 @@ final class LocalFileStorage: FileStorage {
         }
     }
 
-    func url(containerName: String, filename: String) async throws(FileStorageError) -> URL {
-        let fullPath = self.fullPath(containerName: containerName, filename: filename)
-        guard let url = URL(string: fullPath) else {
-            throw .invalidURL
-        }
-
-        return url
-    }
-
     func delete(containerName: String, filename: String) async throws(FileStorageError) {
         let fullPath = self.fullPath(containerName: containerName, filename: filename)
 
@@ -67,6 +67,16 @@ final class LocalFileStorage: FileStorage {
         } catch let error {
             throw .unknown(error)
         }
+    }
+
+    func healthCheck() async -> Bool {
+        do {
+            _ = try await fileIO.listDirectory(path: configuration.path)
+        } catch {
+            return false
+        }
+
+        return true
     }
 
 }

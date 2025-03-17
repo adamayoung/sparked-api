@@ -14,11 +14,24 @@ struct PhotoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", "photos", use: index)
-        routes.get(":profileID", "photos", ":photoID", use: show)
-        routes.patch(":profileID", "photos", ":photoID", use: patch)
-        routes.delete(":profileID", "photos", ":photoID", use: delete)
-        routes.get(":profileID", "photos", ":photoID", "image", use: showImage)
+            .description("Get all photos for the authenticated user")
+
         routes.post("me", "photos", use: addPhoto)
+            .description("Add a photo for the authenticated user")
+
+        routes.group(":profileID", "photos") { photos in
+            photos.get(":photoID", use: show)
+                .description("Get a photo for a given profile")
+
+            photos.patch(":photoID", use: patch)
+                .description("Update a photo for a given profile")
+
+            photos.delete(":photoID", use: delete)
+                .description("Delete a photo for a given profile")
+
+            photos.get(":photoID", "image", use: showImage)
+                .description("Get an image for a given photo")
+        }
     }
 
     @Sendable

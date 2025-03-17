@@ -8,6 +8,7 @@
 import Vapor
 
 func configureModules(on app: Application) {
+    configureHealthModule(on: app)
     configureProfileModule(on: app)
     configureIdentityModule(on: app)
     configureReferenceDataModule(on: app)

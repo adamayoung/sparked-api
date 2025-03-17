@@ -7,7 +7,9 @@
 
 import Foundation
 
-package protocol FileStorage {
+package protocol FileStorage: Sendable {
+
+    func url(containerName: String, filename: String) async throws(FileStorageError) -> URL
 
     func upload(
         _ data: Data,
@@ -15,8 +17,8 @@ package protocol FileStorage {
         filename: String
     ) async throws(FileStorageError)
 
-    func url(containerName: String, filename: String) async throws(FileStorageError) -> URL
-
     func delete(containerName: String, filename: String) async throws(FileStorageError)
+
+    func healthCheck() async -> Bool
 
 }

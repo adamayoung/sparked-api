@@ -14,8 +14,13 @@ struct BasicInfoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", "info", use: showMe)
+            .description("Get basic information about the authenticated user")
+
         routes.get(":profileID", "info", use: show)
+            .description("Get basic information about a user")
+
         routes.post("me", "info", use: create)
+            .description("Create basic information about the authenticated user")
     }
 
     @Sendable

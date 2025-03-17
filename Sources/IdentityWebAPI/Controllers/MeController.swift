@@ -13,6 +13,7 @@ struct MeController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", use: me)
+            .description("Get the current user")
     }
 
     @Sendable

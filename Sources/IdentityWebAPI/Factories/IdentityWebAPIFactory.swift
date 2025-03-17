@@ -5,8 +5,6 @@
 //  Created by Adam Young on 10/02/2025.
 //
 
-import Foundation
-import IdentityApplication
 import Vapor
 
 package final class IdentityWebAPIFactory: Sendable {

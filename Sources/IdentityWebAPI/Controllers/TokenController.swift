@@ -13,6 +13,7 @@ struct TokenController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.post("token", use: token)
+            .description("Generate a JWT token for a user")
     }
 
     @Sendable

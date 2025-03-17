@@ -96,5 +96,8 @@ jobs:
           template-file: ./main.bicep
           parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ needs.build.outputs.dockerImage }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "storageContainerNames": ${{ vars.STORAGE_ACCOUNT_CONTAINER_NAMES }}, "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
 
+      - name: Restart App Service
+        run: az webapp restart --name ${{ vars.WEB_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP_NAME }}
+
       - name: Logout from Azure
         run: az logout

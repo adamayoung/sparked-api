@@ -13,7 +13,10 @@ struct InterestGroupController: RouteCollection, Sendable {
     func boot(routes: any RoutesBuilder) throws {
         let interestGroups = routes.grouped("interest-groups")
         interestGroups.get(use: index)
+            .description("Retrieves a list of interest groups")
+
         interestGroups.get(":interestGroupID", use: show)
+            .description("Retrieves a single interest group")
     }
 
     @Sendable

@@ -28,6 +28,7 @@ let package = Package(
             name: "AdamDateApp",
             dependencies: [
                 "AdamDateCommands",
+                "HealthWebAPI",
                 "ProfileWebAPI",
                 "ProfileGraphQL",
                 "ProfileApplication",
@@ -280,6 +281,26 @@ let package = Package(
         .testTarget(
             name: "ReferenceDataDomainTests",
             dependencies: ["ReferenceDataDomain"]
+        ),
+
+        // --------------------------------------
+        // Health
+
+        .target(
+            name: "HealthWebAPI",
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOPosix", package: "swift-nio")
+            ]
+        ),
+        .testTarget(
+            name: "HealthWebAPITests",
+            dependencies: [
+                "HealthWebAPI",
+                "APITesting",
+                .product(name: "VaporTesting", package: "vapor")
+            ]
         ),
 
         // --------------------------------------

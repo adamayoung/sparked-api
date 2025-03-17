@@ -27,7 +27,21 @@ package final class FileStorageFactory {
         configuration: AzureStorageConfiguration,
         client: some Client
     ) -> some FileStorage {
-        AzureRESTBlobStorage(configuration: configuration, client: client)
+        AzureRESTBlobStorage(
+            configuration: configuration,
+            signer: Self.makeSigner(accountKey: configuration.accountKey),
+            client: client
+        )
+    }
+
+}
+
+extension FileStorageFactory {
+
+    private static func makeSigner(
+        accountKey: String
+    ) -> some AzureBlobStorageSignatureSigning {
+        AzureBlobStorageSignatureSigner(accountKey: accountKey)
     }
 
 }

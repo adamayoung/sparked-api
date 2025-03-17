@@ -8,6 +8,7 @@
 import Vapor
 
 func webAPIRoutes(_ routes: RoutesBuilder) throws {
+    try healthWebAPIRoutes(routes)
     try profileWebAPIRoutes(routes)
     try identityWebAPIRoutes(routes)
     try referenceDataWebAPIRoutes(routes)

@@ -12,6 +12,7 @@ struct RegisterController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.post("register", use: register)
+            .description("Registers a new user")
     }
 
     @Sendable

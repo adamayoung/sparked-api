@@ -17,21 +17,22 @@ extension Application {
     }
 
     var fileStorage: any FileStorage {
-        if let azureStorageConfiguration {
+        guard let fileStorageConfiguration else {
+            fatalError("No storage configuration found")
+        }
+
+        switch fileStorageConfiguration {
+        case .azure(let azureStorageConfiguration):
             return FileStorageFactory.makeAzureFileStorage(
                 configuration: azureStorageConfiguration,
                 client: self.client
             )
+        case .local(let localStorageConfiguration):
+            return FileStorageFactory.makeLocalFileStorage(
+                configuration: localStorageConfiguration,
+                fileIO: self.fileio
+            )
         }
-
-        guard let localStorageConfiguration else {
-            fatalError("No storage configuration found")
-        }
-
-        return FileStorageFactory.makeLocalFileStorage(
-            configuration: localStorageConfiguration,
-            fileIO: self.fileio
-        )
     }
 
     var passwordHasher: any AuthKit.PasswordHasher {
