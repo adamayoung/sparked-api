@@ -9,15 +9,33 @@ import FileStorageKit
 import Vapor
 
 func configureFileStorage(on app: Application) {
-    let azureStorageConfigurationResult = configureAzureFileStorage(on: app)
-    if azureStorageConfigurationResult {
-        return
+    if let azureConfiguration = azureFileStorageConfiguration(on: app) {
+        app.fileStorageConfiguration = azureConfiguration
+    } else {
+        app.fileStorageConfiguration = localFileStorageConfiguration(on: app)
     }
 
-    configureLocalFileStorage(on: app)
+    app.logger.info("File storage: \(app.fileStorageConfiguration?.description ?? "Not set")")
 }
 
-private func configureLocalFileStorage(on app: Application) {
+private func azureFileStorageConfiguration(on app: Application) -> FileStorageConfiguration? {
+    guard
+        let accountName = Environment.get("AZURE_STORAGE_ACCOUNT_NAME"),
+        let accountKey = Environment.get("AZURE_STORAGE_ACCOUNT_KEY"),
+        !accountName.isEmpty,
+        !accountKey.isEmpty
+    else {
+        return nil
+    }
+
+    let configuration = AzureStorageConfiguration(
+        accountName: accountName,
+        accountKey: accountKey
+    )
+    return .azure(configuration)
+}
+
+private func localFileStorageConfiguration(on app: Application) -> FileStorageConfiguration {
     let path = {
         guard
             let envPath = Environment.get("LOCAL_FILE_STORAGE_PATH"),
@@ -29,58 +47,22 @@ private func configureLocalFileStorage(on app: Application) {
         return envPath
     }()
 
-    app.logger.info("Using local file storage at \(path)")
-
     let configuration = LocalStorageConfiguration(path: path)
-    app.localStorageConfiguration = configuration
+    return .local(configuration)
 }
 
-private func configureAzureFileStorage(on app: Application) -> Bool {
-    guard
-        let accountName = Environment.get("AZURE_STORAGE_ACCOUNT_NAME"),
-        let accountKey = Environment.get("AZURE_STORAGE_ACCOUNT_KEY"),
-        !accountName.isEmpty,
-        !accountKey.isEmpty
-    else {
-        return false
-    }
-
-    app.logger.info("Using Azure file storage")
-
-    let configuration = AzureStorageConfiguration(
-        accountName: accountName,
-        accountKey: accountKey
-    )
-    app.azureStorageConfiguration = configuration
-
-    return true
-}
-
-struct LocalStorageConfigurationKey: StorageKey {
-    typealias Value = LocalStorageConfiguration
-}
-
-struct AzureStorageConfigurationKey: StorageKey {
-    typealias Value = AzureStorageConfiguration
+struct FileStorageConfigurationKey: StorageKey {
+    typealias Value = FileStorageConfiguration
 }
 
 extension Application {
 
-    var localStorageConfiguration: LocalStorageConfiguration? {
+    var fileStorageConfiguration: FileStorageConfiguration? {
         get {
-            self.storage[LocalStorageConfigurationKey.self]
+            self.storage[FileStorageConfigurationKey.self]
         }
         set {
-            self.storage[LocalStorageConfigurationKey.self] = newValue
-        }
-    }
-
-    var azureStorageConfiguration: AzureStorageConfiguration? {
-        get {
-            self.storage[AzureStorageConfigurationKey.self]
-        }
-        set {
-            self.storage[AzureStorageConfigurationKey.self] = newValue
+            self.storage[FileStorageConfigurationKey.self] = newValue
         }
     }
 

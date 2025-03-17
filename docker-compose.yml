@@ -32,11 +32,11 @@ services:
       - .filestorage:/app/.filestorage
     depends_on:
       - db
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
-    #   interval: 1s
-    #   timeout: 5s
-    #   retries: 10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 
   db:
     image: postgres:latest

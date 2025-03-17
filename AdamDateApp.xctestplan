@@ -21,15 +21,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityWebAPITests",
-        "name" : "IdentityWebAPITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "CacheKitTests",
-        "name" : "CacheKitTests"
+        "identifier" : "ReferenceDataInfrastructureTests",
+        "name" : "ReferenceDataInfrastructureTests"
       }
     },
     {
@@ -49,36 +42,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "FileStorageKitTests",
-        "name" : "FileStorageKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataInfrastructureTests",
-        "name" : "ReferenceDataInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ProfileInfrastructureTests",
-        "name" : "ProfileInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataDomainTests",
-        "name" : "ReferenceDataDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityApplicationTests",
-        "name" : "IdentityApplicationTests"
+        "identifier" : "IdentityInfrastructureTests",
+        "name" : "IdentityInfrastructureTests"
       }
     },
     {
@@ -91,8 +56,36 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ReferenceDataApplicationTests",
-        "name" : "ReferenceDataApplicationTests"
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataDomainTests",
+        "name" : "ReferenceDataDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CacheKitTests",
+        "name" : "CacheKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileGraphQLTests",
+        "name" : "ProfileGraphQLTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityWebAPITests",
+        "name" : "IdentityWebAPITests"
       }
     },
     {
@@ -105,8 +98,43 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfileDomainTests",
-        "name" : "ProfileDomainTests"
+        "identifier" : "AuthKitTests",
+        "name" : "AuthKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityApplicationTests",
+        "name" : "IdentityApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "FileStorageKitTests",
+        "name" : "FileStorageKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "HealthWebAPITests",
+        "name" : "HealthWebAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataGraphQLTests",
+        "name" : "ReferenceDataGraphQLTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataApplicationTests",
+        "name" : "ReferenceDataApplicationTests"
       }
     },
     {
@@ -119,15 +147,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "AuthKitTests",
-        "name" : "AuthKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityInfrastructureTests",
-        "name" : "IdentityInfrastructureTests"
+        "identifier" : "ProfileInfrastructureTests",
+        "name" : "ProfileInfrastructureTests"
       }
     }
   ],

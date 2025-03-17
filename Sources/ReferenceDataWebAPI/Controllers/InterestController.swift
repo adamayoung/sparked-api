@@ -14,7 +14,10 @@ struct InterestController: RouteCollection, Sendable {
         let interestGroups = routes.grouped("interest-groups")
         interestGroups.group(":interestGroupID", "interests") { interests in
             interests.get(use: index)
+                .description("Get all interests for a given interest group")
+
             interests.get(":interestID", use: show)
+                .description("Get a given interest")
         }
     }
 

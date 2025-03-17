@@ -14,7 +14,10 @@ struct ProfileController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
         routes.get("me", use: showMe)
+            .description("Get the current user's profile")
+
         routes.get(":profileID", use: show)
+            .description("Get a user's profile")
     }
 
     @Sendable

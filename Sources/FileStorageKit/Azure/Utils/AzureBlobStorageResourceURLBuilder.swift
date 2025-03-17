@@ -14,10 +14,13 @@ struct AzureBlobStorageResourceURLBuilder {
     static func build(
         storageAccount: String,
         containerName: String,
-        blobName: String
+        blobName: String? = nil
     ) throws(FileStorageError) -> URL {
-        let urlString =
-            "https://\(storageAccount).blob.core.windows.net/\(containerName)/\(blobName)"
+        var urlString = "https://\(storageAccount).blob.core.windows.net/\(containerName)"
+        if let blobName {
+            urlString += "/\(blobName)"
+        }
+
         guard let url = URL(string: urlString) else {
             throw .invalidURL
         }

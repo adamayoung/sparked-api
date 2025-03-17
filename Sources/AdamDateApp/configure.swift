@@ -8,6 +8,8 @@
 import Vapor
 
 func configure(_ app: Application) async throws {
+    app.logger.info("Environment: \(app.environment.name.uppercased())")
+
     try await configureCoreInfrastructure(on: app)
     await configureAuth(on: app)
 

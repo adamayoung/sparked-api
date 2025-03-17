@@ -39,6 +39,7 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'DOCKER|docker.io/${dockerImage}'
+      healthCheckPath: '/api/health'
       appSettings: [
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
@@ -150,3 +151,5 @@ resource containers 'Microsoft.Storage/storageAccounts/blobServices/containers@2
 }]
 
 output webAppURL string = 'https://${webApp.properties.defaultHostName}'
+output databaseServerURL string = pgServer.properties.fullyQualifiedDomainName
+output storageURL string = storageAccount.properties.primaryEndpoints.blob

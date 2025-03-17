@@ -8,72 +8,26 @@
 import Foundation
 import Vapor
 
-package final class AzureRESTBlobStorage: FileStorage, Sendable {
+final class AzureRESTBlobStorage: FileStorage, Sendable {
+
+    private static let blobType = "BlockBlob"
+    private static let version = "2021-04-10"
 
     private let configuration: AzureStorageConfiguration
+    private let signer: any AzureBlobStorageSignatureSigning
     private let client: any Client
 
-    package init(
+    init(
         configuration: AzureStorageConfiguration,
+        signer: some AzureBlobStorageSignatureSigning,
         client: some Client
     ) {
         self.configuration = configuration
+        self.signer = signer
         self.client = client
     }
 
-    package func upload(
-        _ data: Data,
-        containerName: String,
-        filename: String
-    ) async throws(FileStorageError) {
-        let url = try AzureBlobStorageResourceURLBuilder.build(
-            storageAccount: configuration.accountName,
-            containerName: containerName,
-            blobName: filename
-        )
-
-        let currentDate = Self.generateDate()
-        let httpMethod: HTTPMethod = .PUT
-        let contentLength = data.count
-        let contentType = "image/jpeg"
-
-        let authorizationHeader = try AzureBlobStorageAuthorizationHeaderBuilder.build(
-            httpMethod: httpMethod.rawValue,
-            contentLength: contentLength,
-            contentType: contentType,
-            date: currentDate,
-            storageAccount: configuration.accountName,
-            containerName: containerName,
-            blobName: filename,
-            accountKey: configuration.accountKey
-        )
-
-        var request = ClientRequest(url: URI(string: url.absoluteString))
-        request.method = httpMethod
-        request.body = ByteBuffer(data: data)
-        request.headers.add(name: "Content-Type", value: contentType)
-        request.headers.add(name: "Content-Length", value: "\(contentLength)")
-        request.headers.add(name: "x-ms-blob-type", value: "BlockBlob")
-        request.headers.add(name: "x-ms-date", value: currentDate)
-        request.headers.add(name: "x-ms-version", value: "2021-04-10")
-        request.headers.add(name: "Authorization", value: authorizationHeader)
-
-        let response: ClientResponse
-        do {
-            response = try await client.send(request)
-        } catch let error {
-            throw .network(error)
-        }
-
-        guard response.status == .created else {
-            throw .unknown()
-        }
-    }
-
-    package func url(
-        containerName: String,
-        filename: String
-    ) async throws(FileStorageError) -> URL {
+    func url(containerName: String, filename: String) async throws(FileStorageError) -> URL {
         let url = try AzureBlobStorageResourceURLBuilder.build(
             storageAccount: configuration.accountName,
             containerName: containerName,
@@ -83,34 +37,88 @@ package final class AzureRESTBlobStorage: FileStorage, Sendable {
         return url
     }
 
-    package func delete(containerName: String, filename: String) async throws(FileStorageError) {
-        let url = try AzureBlobStorageResourceURLBuilder.build(
-            storageAccount: configuration.accountName,
+    func upload(
+        _ data: Data,
+        containerName: String,
+        filename: String
+    ) async throws(FileStorageError) {
+        let response = try await performRequest(
+            httpMethod: .PUT,
+            containerName: containerName,
+            blobName: filename,
+            data: data,
+            contentType: "image/jpeg"
+        )
+
+        guard response.status == .created else {
+            throw .unknown()
+        }
+    }
+
+    func delete(containerName: String, filename: String) async throws(FileStorageError) {
+        let response = try await performRequest(
+            httpMethod: .DELETE,
             containerName: containerName,
             blobName: filename
         )
 
-        let currentDate = Self.generateDate()
-        let httpMethod: HTTPMethod = .DELETE
+        switch response.status {
+        case .accepted: break
+        case .notFound: throw .notFound
+        default: throw .unknown()
+        }
+    }
 
-        let authorizationHeader = try AzureBlobStorageAuthorizationHeaderBuilder.build(
-            httpMethod: httpMethod.rawValue,
-            contentType: "",
-            date: currentDate,
+    func healthCheck() async -> Bool {
+        true
+    }
+
+}
+
+extension AzureRESTBlobStorage {
+
+    private func performRequest(
+        httpMethod: HTTPMethod,
+        containerName: String,
+        blobName: String? = nil,
+        data: Data? = nil,
+        contentType: String = ""
+    ) async throws(FileStorageError) -> ClientResponse {
+        let url = try AzureBlobStorageResourceURLBuilder.build(
             storageAccount: configuration.accountName,
             containerName: containerName,
-            blobName: filename,
-            accountKey: configuration.accountKey
+            blobName: blobName
         )
+
+        let currentDate = Self.generateDate()
+        let contentLength = data?.count ?? 0
+
+        let signature = AzureBlobStorageSignatureBuilder.build(
+            httpMethod: httpMethod.rawValue,
+            contentLength: contentLength,
+            contentType: contentType,
+            blobTypeHeader: "\(AzureHTTPHeader.blobType):\(Self.blobType)",
+            dateHeader: "\(AzureHTTPHeader.date):\(currentDate)",
+            versionHeader: "\(AzureHTTPHeader.version):\(Self.version)",
+            storageAccount: configuration.accountName,
+            containerName: containerName,
+            blobName: blobName
+        )
+
+        let signedSignature = try await signer.sign(signature)
+        let authorizationHeader = "SharedKey \(configuration.accountName):\(signedSignature)"
 
         var request = ClientRequest(url: URI(string: url.absoluteString))
         request.method = httpMethod
-        request.headers.add(name: "Content-Type", value: "")
-        request.headers.add(name: "Content-Length", value: "0")
-        request.headers.add(name: "x-ms-blob-type", value: "BlockBlob")
-        request.headers.add(name: "x-ms-date", value: currentDate)
-        request.headers.add(name: "x-ms-version", value: "2021-04-10")
-        request.headers.add(name: "Authorization", value: authorizationHeader)
+        if let data {
+            request.body = ByteBuffer(data: data)
+        }
+        request.headers.add(name: AzureHTTPHeader.contentType, value: contentType)
+        request.headers.add(name: AzureHTTPHeader.contentLength, value: "\(contentLength)")
+        request.headers.add(name: AzureHTTPHeader.blobType, value: Self.blobType)
+        request.headers.add(name: AzureHTTPHeader.date, value: currentDate)
+        request.headers.add(name: AzureHTTPHeader.version, value: Self.version)
+        request.headers.add(name: AzureHTTPHeader.authorization, value: authorizationHeader)
 
         let response: ClientResponse
         do {
@@ -119,11 +127,7 @@ package final class AzureRESTBlobStorage: FileStorage, Sendable {
             throw .network(error)
         }
 
-        switch response.status {
-        case .accepted: break
-        case .notFound: throw .notFound
-        default: throw .unknown()
-        }
+        return response
     }
 
 }
