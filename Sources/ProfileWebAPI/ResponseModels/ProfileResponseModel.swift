@@ -17,5 +17,7 @@ struct ProfileResponseModel: Content, Equatable {
     let location: String
     let homeTown: String?
     let workplace: String?
+    let photos: [ProfilePhotoResponseModel]
+    let interests: [InterestResponseModel]
 
 }

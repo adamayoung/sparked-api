@@ -17,7 +17,6 @@ struct ProfilePhotoResponseModelMapper {
 
         return ProfilePhotoResponseModel(
             id: dto.id,
-            index: dto.index,
             url: url
         )
     }

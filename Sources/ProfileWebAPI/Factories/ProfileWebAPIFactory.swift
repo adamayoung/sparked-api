@@ -27,4 +27,8 @@ package final class ProfileWebAPIFactory: Sendable {
         PhotoController()
     }
 
+    package static func makeInterestController() -> some RouteCollection {
+        InterestController()
+    }
+
 }

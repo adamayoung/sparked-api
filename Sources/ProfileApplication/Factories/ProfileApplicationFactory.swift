@@ -13,19 +13,30 @@ package final class ProfileApplicationFactory {
 
     package static func makeFetchProfileUseCase(
         basicProfileRepository: some BasicProfileRepository,
-        basicInfoRepository: some BasicInfoRepository
+        basicInfoRepository: some BasicInfoRepository,
+        profilePhotoRepository: some ProfilePhotoRepository,
+        imageRepository: some ImageRepository,
+        profileInterestRepository: some ProfileInterestRepository,
+        interestRepository: some InterestRepository
     ) -> some FetchProfileUseCase {
         FetchProfile(
             basicProfileRepository: basicProfileRepository,
-            basicInfoRepository: basicInfoRepository
+            basicInfoRepository: basicInfoRepository,
+            profilePhotoRepository: profilePhotoRepository,
+            imageRepository: imageRepository,
+            profileInterestRepository: profileInterestRepository,
+            interestRepository: interestRepository
         )
     }
 
     package static func makeCreateBasicProfileUseCase(
         repository: some BasicProfileRepository,
-        userService: some UserService
+        userRepository: some UserRepository
     ) -> some CreateBasicProfileUseCase {
-        CreateBasicProfile(repository: repository, userService: userService)
+        CreateBasicProfile(
+            repository: repository,
+            userRepository: userRepository
+        )
     }
 
     package static func makeFetchBasicProfileUseCase(
@@ -36,15 +47,15 @@ package final class ProfileApplicationFactory {
 
     package static func makeCreateBasicInfoUseCase(
         repository: some BasicInfoRepository,
-        userService: some UserService,
-        countryService: some CountryService,
-        genderService: some GenderService
+        userRepository: some UserRepository,
+        countryRepository: some CountryRepository,
+        genderRepository: some GenderRepository
     ) -> some CreateBasicInfoUseCase {
         CreateBasicInfo(
             repository: repository,
-            userService: userService,
-            countryService: countryService,
-            genderService: genderService
+            userRepository: userRepository,
+            countryRepository: countryRepository,
+            genderRepository: genderRepository
         )
     }
 
@@ -107,6 +118,40 @@ package final class ProfileApplicationFactory {
             repository: repository,
             basicProfileRepository: basicProfileRepository,
             imageRepository: imageRepository
+        )
+    }
+
+    package static func makeAddProfileInterestUseCase(
+        repository: some ProfileInterestRepository,
+        interestRepository: some InterestRepository,
+        basicProfileRepository: some BasicProfileRepository
+    ) -> some AddProfileInterestUseCase {
+        AddProfileInterest(
+            repository: repository,
+            interestRepository: interestRepository,
+            basicProfileRepository: basicProfileRepository
+        )
+    }
+
+    package static func makeFetchProfileInterestsUseCase(
+        repository: some ProfileInterestRepository,
+        interestRepository: some InterestRepository,
+        basicProfileRepository: some BasicProfileRepository
+    ) -> some FetchProfileInterestsUseCase {
+        FetchProfileInterests(
+            repository: repository,
+            interestRepository: interestRepository,
+            basicProfileRepository: basicProfileRepository
+        )
+    }
+
+    package static func makeRemoveProfileInterestUseCase(
+        repository: some ProfileInterestRepository,
+        basicProfileRepository: some BasicProfileRepository
+    ) -> some RemoveProfileInterestUseCase {
+        RemoveProfileInterest(
+            repository: repository,
+            basicProfileRepository: basicProfileRepository
         )
     }
 

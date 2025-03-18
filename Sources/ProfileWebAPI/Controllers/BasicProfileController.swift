@@ -13,14 +13,18 @@ import Vapor
 struct BasicProfileController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.get("me", "basic", use: showMe)
-            .description("Get the basic profile of the authenticated user")
+        routes.group("me", "basic") { meBasicProfile in
+            meBasicProfile.get(use: showMe)
+                .description("Get the basic profile of the authenticated user")
 
-        routes.get(":profileID", "basic", use: show)
-            .description("Get the basic profile of a user")
+            meBasicProfile.post(use: createMe)
+                .description("Create a new basic profile")
+        }
 
-        routes.post("me", "basic", use: create)
-            .description("Create a new basic profile")
+        routes.group(":profileID", "basic") { basicProfile in
+            basicProfile.get(use: show)
+                .description("Get the basic profile of a user")
+        }
     }
 
     @Sendable
@@ -53,7 +57,7 @@ struct BasicProfileController: RouteCollection, Sendable {
     }
 
     @Sendable
-    func create(req: Request) async throws -> BasicProfileResponseModel {
+    func createMe(req: Request) async throws -> BasicProfileResponseModel {
         let token = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = UUID(uuidString: token.subject.value) else {
             throw Abort(.forbidden)

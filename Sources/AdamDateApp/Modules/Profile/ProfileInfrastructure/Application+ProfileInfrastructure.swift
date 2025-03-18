@@ -43,26 +43,48 @@ extension Application {
         )
     }
 
-    var profileCountryService: any CountryService {
-        ProfileAdapterFactory.makeCountryService(
-            fetchCountryUseCase: ReferenceDataApplicationFactory.makeFetchCountryUseCase(
-                countryRepository: self.countryRepository
+    var profileInterestRepository: any ProfileApplication.ProfileInterestRepository {
+        ProfileInfrastructureFactory.makeProfileInterestRepository(
+            database: self.db(DatabaseID.adamDate)
+        )
+    }
+
+    var profileCountryRepository: any ProfileApplication.CountryRepository {
+        ProfileInfrastructureFactory.makeCountryRepository(
+            countryService: ProfileAdapterFactory.makeCountryService(
+                fetchCountryUseCase: ReferenceDataApplicationFactory.makeFetchCountryUseCase(
+                    countryRepository: self.countryRepository
+                )
             )
         )
     }
 
-    var profileGenderService: any GenderService {
-        ProfileAdapterFactory.makeGenderService(
-            fetchGenderUseCase: ReferenceDataApplicationFactory.makeFetchGenderUseCase(
-                genderRepository: self.genderRepository
+    var profileGenderRepository: any ProfileApplication.GenderRepository {
+        ProfileInfrastructureFactory.makeGenderRepository(
+            genderService: ProfileAdapterFactory.makeGenderService(
+                fetchGenderUseCase: ReferenceDataApplicationFactory.makeFetchGenderUseCase(
+                    genderRepository: self.genderRepository
+                )
             )
         )
     }
 
-    var profileUserService: any UserService {
-        ProfileAdapterFactory.makeUserService(
-            fetchUserUseCase: IdentityApplicationFactory.makeFetchUserUseCase(
-                repository: self.userRepository
+    var profileModuleInterestRepository: any ProfileApplication.InterestRepository {
+        ProfileInfrastructureFactory.makeInterestRepository(
+            interestService: ProfileAdapterFactory.makeInterestService(
+                fetchInterestUseCase: ReferenceDataApplicationFactory.makeFetchInterestUseCase(
+                    interestRepository: self.interestRepository
+                )
+            )
+        )
+    }
+
+    var profileUserRepository: any ProfileApplication.UserRepository {
+        ProfileInfrastructureFactory.makeUserRepository(
+            userService: ProfileAdapterFactory.makeUserService(
+                fetchUserUseCase: IdentityApplicationFactory.makeFetchUserUseCase(
+                    repository: self.userRepository
+                )
             )
         )
     }

@@ -10,7 +10,6 @@ import Vapor
 struct ProfilePhotoResponseModel: Content, Equatable {
 
     let id: UUID
-    let index: Int
     let url: URL
 
 }

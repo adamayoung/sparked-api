@@ -29,7 +29,9 @@ final class BasicProfileDefaultRepository: BasicProfileRepository {
         return basicProfile
     }
 
-    func fetch(byUserID userID: UUID) async throws(BasicProfileRepositoryError) -> BasicProfile {
+    func fetch(
+        byUserID userID: User.ID
+    ) async throws(BasicProfileRepositoryError) -> BasicProfile {
         let basicProfile = try await remoteDataSource.fetch(byUserID: userID)
 
         return basicProfile

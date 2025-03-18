@@ -16,14 +16,14 @@ struct CreateBasicProfileTests {
 
     let useCase: CreateBasicProfile
     let repository: BasicProfileStubRepository
-    let userService: UserStubService
+    let userRepository: UserStubRepository
 
     init() {
         self.repository = BasicProfileStubRepository()
-        self.userService = UserStubService()
+        self.userRepository = UserStubRepository()
         self.useCase = CreateBasicProfile(
             repository: repository,
-            userService: userService
+            userRepository: userRepository
         )
     }
 
@@ -32,8 +32,10 @@ struct CreateBasicProfileTests {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
         let input = try Self.createCreateBasicProfileInput(userID: userID)
         let basicProfile = try Self.createBasicProfile(userID: userID)
+        let user = User(id: userID, email: "some@email.com")
 
         repository.createResult = .success(Void())
+        userRepository.fetchByIDResult = .success(user)
 
         let basicProfileDTO = try await useCase.execute(input: input)
 
@@ -46,8 +48,10 @@ struct CreateBasicProfileTests {
     func executeWhenCreatingBasicProfileFailsThrowsError() async throws {
         let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
         let input = try Self.createCreateBasicProfileInput(userID: userID)
+        let user = User(id: userID, email: "some@email.com")
 
         repository.createResult = .failure(.unknown())
+        userRepository.fetchByIDResult = .success(user)
 
         await #expect(
             throws: CreateBasicProfileError.unknown(BasicProfileRepositoryError.unknown())

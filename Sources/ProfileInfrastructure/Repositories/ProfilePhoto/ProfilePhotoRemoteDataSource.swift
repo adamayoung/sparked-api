@@ -14,13 +14,13 @@ package protocol ProfilePhotoRemoteDataSource {
     func create(_ profilePhoto: ProfilePhoto) async throws(ProfilePhotoRepositoryError)
 
     func fetchAll(
-        forProfileID profileID: UUID
+        forProfileID profileID: BasicProfile.ID
     ) async throws(ProfilePhotoRepositoryError) -> [ProfilePhoto]
 
-    func fetch(byID id: UUID) async throws(ProfilePhotoRepositoryError) -> ProfilePhoto
+    func fetch(byID id: ProfilePhoto.ID) async throws(ProfilePhotoRepositoryError) -> ProfilePhoto
 
     func update(profilePhotos: [ProfilePhoto]) async throws(ProfilePhotoRepositoryError)
 
-    func delete(id: UUID) async throws(ProfilePhotoRepositoryError)
+    func delete(id: ProfilePhoto.ID) async throws(ProfilePhotoRepositoryError)
 
 }

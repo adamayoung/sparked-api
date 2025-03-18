@@ -51,7 +51,7 @@ final class FetchBasicInfo: FetchBasicInfoUseCase {
         do {
             basicInfo = try await repository.fetch(byProfileID: profileID)
         } catch BasicInfoRepositoryError.notFound {
-            throw .notFoundForProfile(profileID: profileID)
+            throw .profileNotFound(profileID: profileID)
         } catch let error {
             throw .unknown(error)
         }

@@ -12,11 +12,13 @@ package protocol BasicInfoRepository {
 
     func create(_ basicInfo: BasicInfo) async throws(BasicInfoRepositoryError)
 
-    func fetch(byID id: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo
+    func fetch(byID id: BasicInfo.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
-    func fetch(byUserID userID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo
+    func fetch(byUserID userID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
-    func fetch(byProfileID profileID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo
+    func fetch(
+        byProfileID profileID: BasicProfile.ID
+    ) async throws(BasicInfoRepositoryError) -> BasicInfo
 
 }
 

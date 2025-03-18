@@ -10,15 +10,15 @@ import Foundation
 package struct ProfilePhoto: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
-    package let userID: UUID
-    package let profileID: UUID
+    package let userID: User.ID
+    package let profileID: BasicProfile.ID
     package let index: Int
     package let filename: String
 
     package init(
         id: UUID = UUID(),
-        userID: UUID,
-        profileID: UUID,
+        userID: User.ID,
+        profileID: BasicProfile.ID,
         index: Int,
         filename: String
     ) {

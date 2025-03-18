@@ -17,6 +17,7 @@ struct ProfileMigrations {
         migrations.append(contentsOf: basicProfile())
         migrations.append(contentsOf: basicInfo())
         migrations.append(contentsOf: profilePhoto())
+        migrations.append(contentsOf: profileInterest())
         return migrations
     }
 
@@ -39,6 +40,12 @@ extension ProfileMigrations {
     package static func profilePhoto() -> [Migration] {
         [
             ProfilePhotoMigrationV1()
+        ]
+    }
+
+    package static func profileInterest() -> [Migration] {
+        [
+            ProfileInterestMigrationV1()
         ]
     }
 

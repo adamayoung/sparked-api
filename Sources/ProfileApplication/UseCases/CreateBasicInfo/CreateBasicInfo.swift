@@ -11,20 +11,20 @@ import ProfileDomain
 final class CreateBasicInfo: CreateBasicInfoUseCase {
 
     private let repository: any BasicInfoRepository
-    private let userService: any UserService
-    private let countryService: any CountryService
-    private let genderService: any GenderService
+    private let userRepository: any UserRepository
+    private let countryRepository: any CountryRepository
+    private let genderRepository: any GenderRepository
 
     init(
         repository: some BasicInfoRepository,
-        userService: some UserService,
-        countryService: some CountryService,
-        genderService: some GenderService
+        userRepository: some UserRepository,
+        countryRepository: some CountryRepository,
+        genderRepository: some GenderRepository
     ) {
         self.repository = repository
-        self.userService = userService
-        self.countryService = countryService
-        self.genderService = genderService
+        self.userRepository = userRepository
+        self.countryRepository = countryRepository
+        self.genderRepository = genderRepository
     }
 
     func execute(input: CreateBasicInfoInput) async throws(CreateBasicInfoError) -> BasicInfoDTO {
@@ -55,41 +55,32 @@ extension CreateBasicInfo {
     }
 
     private func validate(userID: UUID) async throws(CreateBasicInfoError) {
-        let userExists: Bool
         do {
-            userExists = try await userService.doesUserExist(withID: userID)
+            _ = try await userRepository.fetch(byID: userID)
+        } catch UserRepositoryError.notFound {
+            throw .userNotFound(userID: userID)
         } catch let error {
             throw .unknown(error)
-        }
-
-        guard userExists else {
-            throw .userNotFound(userID: userID)
         }
     }
 
     private func validate(countryID: UUID) async throws(CreateBasicInfoError) {
-        let countryExists: Bool
         do {
-            countryExists = try await countryService.doesCountryExist(withID: countryID)
+            _ = try await countryRepository.fetch(byID: countryID)
+        } catch CountryRepositoryError.notFound {
+            throw .countryNotFound(countryID: countryID)
         } catch let error {
             throw .unknown(error)
-        }
-
-        guard countryExists else {
-            throw .countryNotFound(countryID: countryID)
         }
     }
 
     private func validate(genderID: UUID) async throws(CreateBasicInfoError) {
-        let genderExists: Bool
         do {
-            genderExists = try await genderService.doesGenderExist(withID: genderID)
+            _ = try await genderRepository.fetch(byID: genderID)
+        } catch GenderRepositoryError.notFound {
+            throw .genderNotFound(genderID: genderID)
         } catch let error {
             throw .unknown(error)
-        }
-
-        guard genderExists else {
-            throw .genderNotFound(genderID: genderID)
         }
     }
 

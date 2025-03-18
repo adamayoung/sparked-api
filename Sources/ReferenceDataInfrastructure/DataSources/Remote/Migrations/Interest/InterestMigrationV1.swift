@@ -24,7 +24,7 @@ struct InterestMigrationV1: AsyncMigration {
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .field("deleted_at", .datetime)
-            .unique(on: "name")
+            .unique(on: "name", "interest_group_id")
             .create()
     }
 

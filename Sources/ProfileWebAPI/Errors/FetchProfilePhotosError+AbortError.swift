@@ -12,7 +12,7 @@ extension FetchProfilePhotosError: AbortError {
 
     package var status: HTTPResponseStatus {
         switch self {
-        case .notFoundForProfile: .notFound
+        case .profileNotFound: .notFound
         case .unknown: .internalServerError
         }
     }

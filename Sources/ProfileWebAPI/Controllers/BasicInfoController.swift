@@ -13,14 +13,21 @@ import Vapor
 struct BasicInfoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.get("me", "info", use: showMe)
-            .description("Get basic information about the authenticated user")
+        routes.group("me", "info") { meInfo in
+            meInfo.get(use: showMe)
+                .description("Get basic information about the authenticated user")
 
-        routes.get(":profileID", "info", use: show)
-            .description("Get basic information about a user")
+            meInfo.post(use: createMe)
+                .description("Create basic information about the authenticated user")
+        }
 
-        routes.post("me", "info", use: create)
-            .description("Create basic information about the authenticated user")
+        routes.group(":profileID", "info") { info in
+            info.get(use: show)
+                .description("Get basic information about a user")
+
+            info.post(use: create)
+                .description("Create basic information about a user")
+        }
     }
 
     @Sendable
@@ -53,13 +60,51 @@ struct BasicInfoController: RouteCollection, Sendable {
     }
 
     @Sendable
-    func create(req: Request) async throws -> BasicInfoResponseModel {
+    func createMe(req: Request) async throws -> BasicInfoResponseModel {
         let token = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = UUID(uuidString: token.subject.value) else {
             throw Abort(.forbidden)
         }
 
         let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+
+        let createBasicInfoRequestModel: CreateBasicInfoRequestModel
+        do {
+            createBasicInfoRequestModel = try req.content
+                .decode(CreateBasicInfoRequestModel.self)
+        } catch {
+            throw Abort(.badRequest, reason: "Request body is invalid")
+        }
+
+        let input = CreateBasicInfoInputMapper.map(
+            from: createBasicInfoRequestModel,
+            userID: userID,
+            profileID: basicProfileDTO.id
+        )
+        let basicInfo = try await req.createBasicInfoUseCase.execute(input: input)
+        let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
+
+        return basicInfoResponseModel
+    }
+
+    @Sendable
+    func create(req: Request) async throws -> BasicInfoResponseModel {
+        let token = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = UUID(uuidString: token.subject.value) else {
+            throw Abort(.forbidden)
+        }
+
+        guard
+            let profileIDString = req.parameters.get("profileID", as: String.self),
+            let profileID = UUID(uuidString: profileIDString)
+        else {
+            throw Abort(.notFound)
+        }
+
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        guard basicProfileDTO.id == profileID else {
+            throw Abort(.forbidden)
+        }
 
         let createBasicInfoRequestModel: CreateBasicInfoRequestModel
         do {

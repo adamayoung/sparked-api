@@ -22,12 +22,12 @@ final class ProfilePhotoDefaultRepository: ProfilePhotoRepository {
     }
 
     func fetchAll(
-        forProfileID profileID: UUID
+        forProfileID profileID: BasicProfile.ID
     ) async throws(ProfilePhotoRepositoryError) -> [ProfilePhoto] {
         try await remoteDataSource.fetchAll(forProfileID: profileID)
     }
 
-    func fetch(byID id: UUID) async throws(ProfilePhotoRepositoryError) -> ProfilePhoto {
+    func fetch(byID id: ProfilePhoto.ID) async throws(ProfilePhotoRepositoryError) -> ProfilePhoto {
         try await remoteDataSource.fetch(byID: id)
     }
 
@@ -35,7 +35,7 @@ final class ProfilePhotoDefaultRepository: ProfilePhotoRepository {
         try await remoteDataSource.update(profilePhotos: profilePhotos)
     }
 
-    func delete(id: UUID) async throws(ProfilePhotoRepositoryError) {
+    func delete(id: ProfilePhoto.ID) async throws(ProfilePhotoRepositoryError) {
         try await remoteDataSource.delete(id: id)
     }
 

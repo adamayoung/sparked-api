@@ -77,13 +77,6 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ProfileGraphQLTests",
-        "name" : "ProfileGraphQLTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "IdentityWebAPITests",
         "name" : "IdentityWebAPITests"
       }
@@ -121,13 +114,6 @@
         "containerPath" : "container:",
         "identifier" : "HealthWebAPITests",
         "name" : "HealthWebAPITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataGraphQLTests",
-        "name" : "ReferenceDataGraphQLTests"
       }
     },
     {

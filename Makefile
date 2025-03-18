@@ -43,7 +43,7 @@ local:
 
 .PHONY: local-env
 local-dev:
-	docker-compose -f docker-compose-infro.yml up --remove-orphans
+	docker-compose -f docker-compose-infra.yml up --remove-orphans
 
 .PHONY: run
 run:

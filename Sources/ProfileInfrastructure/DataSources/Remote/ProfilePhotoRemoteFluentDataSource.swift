@@ -28,9 +28,9 @@ final class ProfilePhotoRemoteFluentDataSource: ProfilePhotoRemoteDataSource {
         }
     }
 
-    func fetchAll(forProfileID profileID: UUID) async throws(ProfilePhotoRepositoryError)
-        -> [ProfilePhoto]
-    {
+    func fetchAll(
+        forProfileID profileID: UUID
+    ) async throws(ProfilePhotoRepositoryError) -> [ProfilePhoto] {
         let profilePhotoModels: [ProfilePhotoModel]
         do {
             profilePhotoModels = try await ProfilePhotoModel.query(on: database)

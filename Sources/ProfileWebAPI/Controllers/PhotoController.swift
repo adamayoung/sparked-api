@@ -13,13 +13,18 @@ import Vapor
 struct PhotoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.get("me", "photos", use: index)
-            .description("Get all photos for the authenticated user")
+        routes.group("me", "photos") { mePhotos in
+            mePhotos.get(use: meIndex)
+                .description("Get all photos for the authenticated user")
 
-        routes.post("me", "photos", use: addPhoto)
-            .description("Add a photo for the authenticated user")
+            mePhotos.post(use: addPhoto)
+                .description("Add a photo for the authenticated user")
+        }
 
         routes.group(":profileID", "photos") { photos in
+            photos.get(use: index)
+                .description("Get all photos for a given profile")
+
             photos.get(":photoID", use: show)
                 .description("Get a photo for a given profile")
 
@@ -36,6 +41,26 @@ struct PhotoController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [ProfilePhotoResponseModel] {
+        try await req.jwt.verify(as: TokenPayload.self)
+        guard
+            let profileIDString = req.parameters.get("profileID", as: String.self),
+            let profileID = UUID(uuidString: profileIDString)
+        else {
+            throw Abort(.notFound)
+        }
+
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(id: profileID)
+        let profilePhotoDTOs = try await req.fetchProfilePhotosUseCase.execute(
+            profileID: basicProfileDTO.id
+        )
+
+        let profilePhotoResponseModels = profilePhotoDTOs.map(ProfilePhotoResponseModelMapper.map)
+
+        return profilePhotoResponseModels
+    }
+
+    @Sendable
+    func meIndex(req: Request) async throws -> [ProfilePhotoResponseModel] {
         let token = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = UUID(uuidString: token.subject.value) else {
             throw Abort(.forbidden)

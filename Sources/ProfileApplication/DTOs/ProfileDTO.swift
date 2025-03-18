@@ -19,6 +19,8 @@ package struct ProfileDTO: Identifiable, Equatable, Sendable {
     package let location: String
     package let homeTown: String?
     package let workplace: String?
+    package let photos: [ProfilePhotoDTO]
+    package let interests: [ProfileInterestDTO]
 
     package init(
         id: UUID,
@@ -30,7 +32,9 @@ package struct ProfileDTO: Identifiable, Equatable, Sendable {
         countryID: UUID,
         location: String,
         homeTown: String? = nil,
-        workplace: String? = nil
+        workplace: String? = nil,
+        photos: [ProfilePhotoDTO],
+        interests: [ProfileInterestDTO]
     ) {
         self.id = id
         self.userID = userID
@@ -42,6 +46,8 @@ package struct ProfileDTO: Identifiable, Equatable, Sendable {
         self.location = location
         self.homeTown = homeTown
         self.workplace = workplace
+        self.photos = photos
+        self.interests = interests
     }
 
 }

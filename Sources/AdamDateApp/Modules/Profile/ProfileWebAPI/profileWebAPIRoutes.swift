@@ -23,4 +23,7 @@ func profileWebAPIRoutes(_ routes: RoutesBuilder) throws {
     try profilesRouter.register(
         collection: ProfileWebAPIFactory.makePhotoController()
     )
+    try profilesRouter.register(
+        collection: ProfileWebAPIFactory.makeInterestController()
+    )
 }
