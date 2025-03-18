@@ -10,7 +10,7 @@ import Foundation
 package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
-    package let userID: UUID
+    package let userID: User.ID
     package let displayName: String
     package let birthDate: Date
 
@@ -25,7 +25,7 @@ package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codabl
 
     package init(
         id: UUID = UUID(),
-        userID: UUID,
+        userID: User.ID,
         displayName: String,
         birthDate: Date
     ) {

@@ -18,9 +18,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
         .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
-        .package(url: "https://github.com/alexsteinerde/graphql-kit.git", from: "3.0.0"),
-        .package(url: "https://github.com/alexsteinerde/graphiql-vapor.git", from: "2.4.0")
+        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0")
     ],
 
     targets: [
@@ -30,12 +28,10 @@ let package = Package(
                 "AdamDateCommands",
                 "HealthWebAPI",
                 "ProfileWebAPI",
-                "ProfileGraphQL",
                 "ProfileApplication",
                 "ProfileInfrastructure",
                 "ProfileDomain",
                 "ReferenceDataWebAPI",
-                "ReferenceDataGraphQL",
                 "ReferenceDataApplication",
                 "ReferenceDataInfrastructure",
                 "ReferenceDataDomain",
@@ -88,25 +84,6 @@ let package = Package(
                 "ProfileApplication",
                 "APITesting",
                 .product(name: "VaporTesting", package: "vapor")
-            ]
-        ),
-
-        .target(
-            name: "ProfileGraphQL",
-            dependencies: [
-                "ProfileApplication",
-                "AuthKit",
-                .product(name: "Vapor", package: "vapor"),
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "GraphQLKit", package: "graphql-kit"),
-                .product(name: "GraphiQLVapor", package: "graphiql-vapor")
-            ]
-        ),
-        .testTarget(
-            name: "ProfileGraphQLTests",
-            dependencies: [
-                "ProfileGraphQL"
             ]
         ),
 
@@ -228,24 +205,6 @@ let package = Package(
                 "APITesting",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
-            ]
-        ),
-
-        .target(
-            name: "ReferenceDataGraphQL",
-            dependencies: [
-                "ReferenceDataApplication",
-                .product(name: "Vapor", package: "vapor"),
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "GraphQLKit", package: "graphql-kit"),
-                .product(name: "GraphiQLVapor", package: "graphiql-vapor")
-            ]
-        ),
-        .testTarget(
-            name: "ReferenceDataGraphQLTests",
-            dependencies: [
-                "ReferenceDataGraphQL"
             ]
         ),
 

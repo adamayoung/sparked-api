@@ -13,7 +13,10 @@ struct ProfileResponseModelMapper {
     private init() {}
 
     static func map(from dto: ProfileDTO) -> ProfileResponseModel {
-        ProfileResponseModel(
+        let photos = dto.photos.map(ProfilePhotoResponseModelMapper.map)
+        let interests = dto.interests.map(InterestResponseModelMapper.map)
+
+        return ProfileResponseModel(
             id: dto.id,
             displayName: dto.displayName,
             age: dto.age,
@@ -21,7 +24,9 @@ struct ProfileResponseModelMapper {
             countryID: dto.countryID,
             location: dto.location,
             homeTown: dto.homeTown,
-            workplace: dto.workplace
+            workplace: dto.workplace,
+            photos: photos,
+            interests: interests
         )
     }
 

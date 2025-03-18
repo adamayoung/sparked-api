@@ -10,7 +10,4 @@ import Vapor
 func routes(_ routes: RoutesBuilder, environment: Environment) throws {
     let apiRouter = routes.grouped("api")
     try webAPIRoutes(apiRouter)
-
-    let graphQLRouter = routes.grouped("graphql")
-    try graphQLRoutes(graphQLRouter, environment: environment)
 }

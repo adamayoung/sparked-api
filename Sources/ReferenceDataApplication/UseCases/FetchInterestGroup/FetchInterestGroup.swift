@@ -37,7 +37,7 @@ final class FetchInterestGroup: FetchInterestGroupUseCase {
         let interests: [Interest]
         do {
             interests = try await interestRepository.fetchAll(forInterestGroupID: id)
-                .sorted(by: { $0.name < $1.name })
+                .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         } catch .notFound {
             throw .notFound(interestGroupID: id)
         } catch let error {

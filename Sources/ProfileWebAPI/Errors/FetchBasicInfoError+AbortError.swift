@@ -14,7 +14,7 @@ extension FetchBasicInfoError: AbortError {
         switch self {
         case .notFound: .notFound
         case .notFoundForUser: .notFound
-        case .notFoundForProfile: .notFound
+        case .profileNotFound: .notFound
         case .unknown: .internalServerError
         }
     }

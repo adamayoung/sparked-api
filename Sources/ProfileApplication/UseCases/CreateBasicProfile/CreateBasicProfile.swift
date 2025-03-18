@@ -11,14 +11,14 @@ import ProfileDomain
 final class CreateBasicProfile: CreateBasicProfileUseCase {
 
     private let repository: any BasicProfileRepository
-    private let userService: any UserService
+    private let userRepository: any UserRepository
 
     init(
         repository: some BasicProfileRepository,
-        userService: some UserService
+        userRepository: some UserRepository
     ) {
         self.repository = repository
-        self.userService = userService
+        self.userRepository = userRepository
     }
 
     func execute(
@@ -49,15 +49,12 @@ extension CreateBasicProfile {
     }
 
     private func validate(userID: UUID) async throws(CreateBasicProfileError) {
-        let userExists: Bool
         do {
-            userExists = try await userService.doesUserExist(withID: userID)
+            _ = try await userRepository.fetch(byID: userID)
+        } catch UserRepositoryError.notFound {
+            throw .userNotFound(userID: userID)
         } catch let error {
             throw .unknown(error)
-        }
-
-        guard userExists else {
-            throw .userNotFound(userID: userID)
         }
     }
 

@@ -26,7 +26,7 @@ final class FetchProfilePhotos: FetchProfilePhotosUseCase {
         do {
             profilePhotos = try await repository.fetchAll(forProfileID: profileID)
         } catch ProfilePhotoRepositoryError.notFound {
-            throw .notFoundForProfile(profileID: profileID)
+            throw .profileNotFound(profileID: profileID)
         } catch let error {
             throw .unknown(error)
         }

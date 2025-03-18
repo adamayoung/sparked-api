@@ -21,19 +21,21 @@ final class BasicInfoDefaultRepository: BasicInfoRepository {
         try await remoteDataSource.create(basicInfo)
     }
 
-    func fetch(byID id: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
+    func fetch(byID id: BasicInfo.ID) async throws(BasicInfoRepositoryError) -> BasicInfo {
         let basicInfo = try await remoteDataSource.fetch(byID: id)
 
         return basicInfo
     }
 
-    func fetch(byUserID userID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
+    func fetch(byUserID userID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo {
         let basicInfo = try await remoteDataSource.fetch(byUserID: userID)
 
         return basicInfo
     }
 
-    func fetch(byProfileID profileID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
+    func fetch(
+        byProfileID profileID: BasicProfile.ID
+    ) async throws(BasicInfoRepositoryError) -> BasicInfo {
         let basicInfo = try await remoteDataSource.fetch(byProfileID: profileID)
 
         return basicInfo

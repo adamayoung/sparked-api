@@ -25,7 +25,7 @@ final class FetchCountries: FetchCountriesUseCase {
         }
 
         let countryDTOs = countries.map(CountryDTOMapper.map)
-            .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
 
         return countryDTOs
     }

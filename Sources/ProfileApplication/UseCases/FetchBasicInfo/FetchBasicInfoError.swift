@@ -11,7 +11,7 @@ package enum FetchBasicInfoError: LocalizedError, Equatable, Sendable {
 
     case notFound(id: UUID)
     case notFoundForUser(userID: UUID)
-    case notFoundForProfile(profileID: UUID)
+    case profileNotFound(profileID: UUID)
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -22,7 +22,7 @@ package enum FetchBasicInfoError: LocalizedError, Equatable, Sendable {
         case .notFoundForUser(let userID):
             "Basic Profile Info for user \(userID) not found"
 
-        case .notFoundForProfile(let profileID):
+        case .profileNotFound(let profileID):
             "Basic Profile Info for profile \(profileID) not found"
 
         case .unknown(let error):
@@ -38,7 +38,7 @@ package enum FetchBasicInfoError: LocalizedError, Equatable, Sendable {
         case (.notFoundForUser(let lhsUserID), .notFoundForUser(let rhsUserID)):
             lhsUserID == rhsUserID
 
-        case (.notFoundForProfile(let lhsProfileID), .notFoundForProfile(let rhsProfileID)):
+        case (.profileNotFound(let lhsProfileID), .profileNotFound(let rhsProfileID)):
             lhsProfileID == rhsProfileID
 
         case (.unknown(let lhsError), .unknown(let rhsError)):

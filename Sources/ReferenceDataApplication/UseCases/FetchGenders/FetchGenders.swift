@@ -25,7 +25,7 @@ final class FetchGenders: FetchGendersUseCase {
         }
 
         let genderDTOS = genders.map(GenderDTOMapper.map)
-            .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
 
         return genderDTOS
     }

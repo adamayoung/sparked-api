@@ -10,5 +10,4 @@ import Vapor
 
 func configureProfileModule(on app: Application) {
     app.profileWebAPIUseCases.use(.default)
-    app.profileGraphQLUseCases.use(.default)
 }

@@ -41,13 +41,50 @@ package final class ProfileInfrastructureFactory: Sendable {
         fileStorageService: some FileStorageService
     ) -> some ImageRepository {
         let remoteDataSource = Self.makeImageRemoteDataSource(
-            fileStorageService: fileStorageService)
+            fileStorageService: fileStorageService
+        )
 
         return ImageDefaultRepository(remoteDataSource: remoteDataSource)
     }
 
+    package static func makeProfileInterestRepository(
+        database: some Database
+    ) -> some ProfileInterestRepository {
+        let remoteDataSource = Self.makeProfileInterestRemoteDataSource(database: database)
+
+        return ProfileInterestDefaultRepository(remoteDataSource: remoteDataSource)
+    }
+
     package static func makeMigrations() -> [Migration] {
         ProfileMigrations.all()
+    }
+
+}
+
+extension ProfileInfrastructureFactory {
+
+    package static func makeCountryRepository(
+        countryService: some CountryService
+    ) -> some CountryRepository {
+        CountryDefaultRepository(countryService: countryService)
+    }
+
+    package static func makeGenderRepository(
+        genderService: some GenderService
+    ) -> some GenderRepository {
+        GenderDefaultRepository(genderService: genderService)
+    }
+
+    package static func makeUserRepository(
+        userService: some UserService
+    ) -> some UserRepository {
+        UserDefaultRepository(userService: userService)
+    }
+
+    package static func makeInterestRepository(
+        interestService: some InterestService
+    ) -> some InterestRepository {
+        InterestDefaultRepository(interestService: interestService)
     }
 
 }
@@ -76,6 +113,12 @@ extension ProfileInfrastructureFactory {
         fileStorageService: some FileStorageService
     ) -> some ImageRemoteDataSource {
         ImageRemoteStorageDataSource(fileStorageService: fileStorageService)
+    }
+
+    private static func makeProfileInterestRemoteDataSource(
+        database: some Database
+    ) -> some ProfileInterestRemoteDataSource {
+        ProfileInterestRemoteFluentDataSource(database: database)
     }
 
 }

@@ -23,7 +23,7 @@ final class FetchInterestGroups: FetchInterestGroupsUseCase {
 
     func execute() async throws(FetchInterestGroupsError) -> [InterestGroupDTO] {
         let interestGroups = try await self.interestGroups()
-            .sorted { $0.name < $1.name }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         let interestGroupDTOs = interestGroups.map(InterestGroupDTOMapper.map)
 
         return interestGroupDTOs
@@ -34,13 +34,15 @@ final class FetchInterestGroups: FetchInterestGroupsUseCase {
     {
         let interestGroups = try await self.interestGroups()
         let interestsByInterestGroup = try await self.interests(for: interestGroups)
-        let interestGroupAggregateDTOs = interestsByInterestGroup.map {
-            (interestGroup, interests) in
-            InterestGroupAggregateDTOMapper.map(
-                from: interestGroup,
-                interests: interests
-            )
-        }.sorted { $0.name < $1.name }
+        let interestGroupAggregateDTOs =
+            interestsByInterestGroup
+            .map { (interestGroup, interests) in
+                InterestGroupAggregateDTOMapper.map(
+                    from: interestGroup,
+                    interests: interests
+                )
+            }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
 
         return interestGroupAggregateDTOs
     }
@@ -85,7 +87,7 @@ extension FetchInterestGroups {
                 var interestsByInterestGroup: [InterestGroup: [Interest]] = [:]
                 for try await (interestGroup, interests) in taskGroup {
                     interestsByInterestGroup[interestGroup] = interests.sorted(
-                        by: { $0.name < $1.name }
+                        by: { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
                     )
                 }
 

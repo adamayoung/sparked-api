@@ -15,6 +15,6 @@ protocol BasicProfileRemoteDataSource {
 
     func fetch(byID id: BasicProfile.ID) async throws(BasicProfileRepositoryError) -> BasicProfile
 
-    func fetch(byUserID userID: UUID) async throws(BasicProfileRepositoryError) -> BasicProfile
+    func fetch(byUserID userID: User.ID) async throws(BasicProfileRepositoryError) -> BasicProfile
 
 }

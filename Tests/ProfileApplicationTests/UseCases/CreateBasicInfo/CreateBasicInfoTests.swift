@@ -16,27 +16,45 @@ struct CreateBasicInfoTests {
 
     let useCase: CreateBasicInfo
     let repository: BasicInfoStubRepository
-    let userService: UserStubService
-    let countryService: CountryStubService
-    let genderService: GenderStubService
+    let userRepository: UserStubRepository
+    let countryRepository: CountryStubRepository
+    let genderRepository: GenderStubRepository
 
     init() {
         self.repository = BasicInfoStubRepository()
-        self.userService = UserStubService()
-        self.countryService = CountryStubService()
-        self.genderService = GenderStubService()
+        self.userRepository = UserStubRepository()
+        self.countryRepository = CountryStubRepository()
+        self.genderRepository = GenderStubRepository()
         self.useCase = CreateBasicInfo(
             repository: repository,
-            userService: userService,
-            countryService: countryService,
-            genderService: genderService
+            userRepository: userRepository,
+            countryRepository: countryRepository,
+            genderRepository: genderRepository
         )
     }
 
     @Test("execute create basic info")
     func executeCreatesBasicInfo() async throws {
         let input = try Self.makeInput()
+        let user = try User(
+            id: #require(UUID(uuidString: "EACE74E3-F428-457A-B9C7-B3276F36A355")),
+            email: "some@email.com"
+        )
+        let country = try Country(
+            id: #require(UUID(uuidString: "698DD1A8-B827-4511-930A-C6854C6A4948")),
+            code: "GB",
+            name: "United Kingdom"
+        )
+        let gender = try Gender(
+            id: #require(UUID(uuidString: "D4906FA3-CDA1-4F0B-9631-809314451110")),
+            code: "M",
+            name: "Male"
+        )
+
         repository.createResult = .success(Void())
+        userRepository.fetchByIDResult = .success(user)
+        countryRepository.fetchByIDResult = .success(country)
+        genderRepository.fetchByIDResult = .success(gender)
 
         let basicInfoDTO = try await useCase.execute(input: input)
 
@@ -48,7 +66,25 @@ struct CreateBasicInfoTests {
     @Test("execute when create fails throws error")
     func executeWhenCreateFailsThrowsError() async throws {
         let input = try Self.makeInput()
+        let user = try User(
+            id: #require(UUID(uuidString: "EACE74E3-F428-457A-B9C7-B3276F36A355")),
+            email: "some@email.com"
+        )
+        let country = try Country(
+            id: #require(UUID(uuidString: "698DD1A8-B827-4511-930A-C6854C6A4948")),
+            code: "GB",
+            name: "United Kingdom"
+        )
+        let gender = try Gender(
+            id: #require(UUID(uuidString: "D4906FA3-CDA1-4F0B-9631-809314451110")),
+            code: "M",
+            name: "Male"
+        )
+
         repository.createResult = .failure(.unknown())
+        userRepository.fetchByIDResult = .success(user)
+        countryRepository.fetchByIDResult = .success(country)
+        genderRepository.fetchByIDResult = .success(gender)
 
         await #expect(throws: CreateBasicInfoError.unknown(BasicInfoRepositoryError.unknown())) {
             _ = try await useCase.execute(input: input)

@@ -19,14 +19,18 @@ extension Application.ProfileWebAPIUseCases.Provider {
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeFetchProfileUseCase(
                     basicProfileRepository: app.basicProfileRepository,
-                    basicInfoRepository: app.basicInfoRepository
+                    basicInfoRepository: app.basicInfoRepository,
+                    profilePhotoRepository: app.profilePhotoRepository,
+                    imageRepository: app.imageRepository,
+                    profileInterestRepository: app.profileInterestRepository,
+                    interestRepository: app.profileModuleInterestRepository
                 )
             }
 
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeCreateBasicProfileUseCase(
                     repository: app.basicProfileRepository,
-                    userService: app.profileUserService
+                    userRepository: app.profileUserRepository
                 )
             }
 
@@ -39,9 +43,9 @@ extension Application.ProfileWebAPIUseCases.Provider {
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeCreateBasicInfoUseCase(
                     repository: app.basicInfoRepository,
-                    userService: app.profileUserService,
-                    countryService: app.profileCountryService,
-                    genderService: app.profileGenderService
+                    userRepository: app.profileUserRepository,
+                    countryRepository: app.profileCountryRepository,
+                    genderRepository: app.profileGenderRepository
                 )
             }
 
@@ -86,6 +90,29 @@ extension Application.ProfileWebAPIUseCases.Provider {
                     repository: app.profilePhotoRepository,
                     basicProfileRepository: app.basicProfileRepository,
                     imageRepository: app.imageRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeAddProfileInterestUseCase(
+                    repository: app.profileInterestRepository,
+                    interestRepository: app.profileModuleInterestRepository,
+                    basicProfileRepository: app.basicProfileRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeFetchProfileInterestsUseCase(
+                    repository: app.profileInterestRepository,
+                    interestRepository: app.profileModuleInterestRepository,
+                    basicProfileRepository: app.basicProfileRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeRemoveProfileInterestUseCase(
+                    repository: app.profileInterestRepository,
+                    basicProfileRepository: app.basicProfileRepository
                 )
             }
         }

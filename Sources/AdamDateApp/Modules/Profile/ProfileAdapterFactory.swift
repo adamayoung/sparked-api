@@ -28,6 +28,12 @@ final class ProfileAdapterFactory {
         ProfileGenderServiceAdapter(fetchGenderUseCase: fetchGenderUseCase)
     }
 
+    static func makeInterestService(
+        fetchInterestUseCase: some FetchInterestUseCase
+    ) -> some InterestService {
+        ProfileInterestServiceAdapter(fetchInterestUseCase: fetchInterestUseCase)
+    }
+
     static func makeUserService(fetchUserUseCase: some FetchUserUseCase) -> some UserService {
         ProfileUserServiceAdapter(fetchUserUseCase: fetchUserUseCase)
     }

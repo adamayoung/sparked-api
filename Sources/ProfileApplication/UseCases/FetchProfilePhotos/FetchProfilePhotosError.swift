@@ -9,12 +9,12 @@ import Foundation
 
 package enum FetchProfilePhotosError: LocalizedError, Equatable, Sendable {
 
-    case notFoundForProfile(profileID: UUID)
+    case profileNotFound(profileID: UUID)
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
         switch self {
-        case .notFoundForProfile(let profileID):
+        case .profileNotFound(let profileID):
             "Profile \(profileID) not found"
 
         case .unknown(let error):
@@ -24,7 +24,7 @@ package enum FetchProfilePhotosError: LocalizedError, Equatable, Sendable {
 
     package static func == (lhs: FetchProfilePhotosError, rhs: FetchProfilePhotosError) -> Bool {
         switch (lhs, rhs) {
-        case (.notFoundForProfile(let lhsProfileID), .notFoundForProfile(let rhsProfileID)):
+        case (.profileNotFound(let lhsProfileID), .profileNotFound(let rhsProfileID)):
             lhsProfileID == rhsProfileID
 
         case (.unknown(let lhsError), .unknown(let rhsError)):

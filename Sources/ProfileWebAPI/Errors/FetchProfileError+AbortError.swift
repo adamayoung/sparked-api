@@ -13,7 +13,7 @@ extension FetchProfileError: AbortError {
     package var status: HTTPResponseStatus {
         switch self {
         case .notFound: .notFound
-        case .notFoundForUser: .notFound
+        case .userNotFound: .notFound
         case .unknown: .internalServerError
         }
     }

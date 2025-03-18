@@ -39,6 +39,10 @@ extension Application {
                 )?
             var makeDeleteProfilePhotoUseCase: ((Application) -> DeleteProfilePhotoUseCase)?
 
+            var makeFetchProfileInterestsUseCase: ((Application) -> FetchProfileInterestsUseCase)?
+            var makeAddProfileInterestUseCase: ((Application) -> AddProfileInterestUseCase)?
+            var makeRemoveProfileInterestUseCase: ((Application) -> RemoveProfileInterestUseCase)?
+
             init() {}
 
         }
@@ -139,6 +143,33 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var addProfileInterestUseCase: AddProfileInterestUseCase {
+            guard let makeUseCase = self.storage.makeAddProfileInterestUseCase else {
+                fatalError(
+                    "No AddProfileInterestUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchProfileInterestsUseCase: FetchProfileInterestsUseCase {
+            guard let makeUseCase = self.storage.makeFetchProfileInterestsUseCase else {
+                fatalError(
+                    "No FetchProfileInterestsUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var removeProfileInterestUseCase: RemoveProfileInterestUseCase {
+            guard let makeUseCase = self.storage.makeRemoveProfileInterestUseCase else {
+                fatalError(
+                    "No RemoveProfileInterestUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
@@ -181,6 +212,18 @@ extension Application {
 
         package func use(_ makeUseCase: @escaping (Application) -> DeleteProfilePhotoUseCase) {
             self.storage.makeDeleteProfilePhotoUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> AddProfileInterestUseCase) {
+            self.storage.makeAddProfileInterestUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchProfileInterestsUseCase) {
+            self.storage.makeFetchProfileInterestsUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> RemoveProfileInterestUseCase) {
+            self.storage.makeRemoveProfileInterestUseCase = makeUseCase
         }
 
         func initialize() {
@@ -246,6 +289,18 @@ extension Request {
 
     var deleteProfilePhotoUseCase: DeleteProfilePhotoUseCase {
         application.profileWebAPIUseCases.deleteProfilePhotoUseCase
+    }
+
+    var addProfileInterestUseCase: AddProfileInterestUseCase {
+        application.profileWebAPIUseCases.addProfileInterestUseCase
+    }
+
+    var fetchProfileInterestsUseCase: FetchProfileInterestsUseCase {
+        application.profileWebAPIUseCases.fetchProfileInterestsUseCase
+    }
+
+    var removeProfileInterestUseCase: RemoveProfileInterestUseCase {
+        application.profileWebAPIUseCases.removeProfileInterestUseCase
     }
 
 }
