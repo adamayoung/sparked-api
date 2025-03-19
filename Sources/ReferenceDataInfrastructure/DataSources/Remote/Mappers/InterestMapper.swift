@@ -17,6 +17,7 @@ struct InterestMapper {
             id: model.requireID(),
             interestGroupID: model.interestGroup.requireID(),
             name: model.name,
+            nameKey: model.nameKey,
             glyph: model.glyph
         )
     }

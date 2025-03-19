@@ -11,12 +11,13 @@ import Vapor
 struct GenderController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        let genders = routes.grouped("genders")
-        genders.get(use: index)
-            .description("Get all genders")
+        routes.group("genders") { genders in
+            genders.get(use: index)
+                .description("Get all genders")
 
-        genders.get(":genderID", use: show)
-            .description("Get a gender by ID")
+            genders.get(":genderID", use: show)
+                .description("Get a gender by ID")
+        }
     }
 
     @Sendable

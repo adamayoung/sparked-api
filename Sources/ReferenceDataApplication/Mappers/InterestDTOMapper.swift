@@ -16,6 +16,7 @@ struct InterestDTOMapper {
         InterestDTO(
             id: interest.id,
             name: interest.name,
+            nameKey: interest.nameKey,
             glyph: interest.glyph
         )
     }

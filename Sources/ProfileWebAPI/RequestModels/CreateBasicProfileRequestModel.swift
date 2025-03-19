@@ -11,5 +11,6 @@ struct CreateBasicProfileRequestModel: Content {
 
     let displayName: String
     let birthDate: Date
+    let bio: String
 
 }

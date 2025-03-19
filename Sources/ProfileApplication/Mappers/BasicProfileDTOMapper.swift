@@ -18,7 +18,8 @@ struct BasicProfileDTOMapper {
             userID: basicProfile.userID,
             displayName: basicProfile.displayName,
             birthDate: basicProfile.birthDate,
-            age: basicProfile.age
+            age: basicProfile.age,
+            bio: basicProfile.bio
         )
     }
 

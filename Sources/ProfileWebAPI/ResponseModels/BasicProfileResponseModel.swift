@@ -12,5 +12,6 @@ struct BasicProfileResponseModel: Content, Equatable {
     let id: UUID
     let displayName: String
     let age: Int
+    let bio: String
 
 }

@@ -35,12 +35,14 @@ struct GenderDefaultRepositoryTests {
             Gender(
                 id: #require(UUID(uuidString: "76A6BA42-A862-40C5-B917-38F41CE13486")),
                 code: "M",
-                name: "Male"
+                name: "Male",
+                nameKey: "MALE"
             ),
             Gender(
                 id: #require(UUID(uuidString: "A964D9DD-5FCA-4B87-9383-4033A26D0900")),
                 code: "F",
-                name: "Female"
+                name: "Female",
+                nameKey: "FEMALE"
             )
         ]
         remoteDataSource.fetchAllResult = .success(expectedCountries)

@@ -63,6 +63,30 @@ extension Application.ReferenceDataWebAPIUseCases.Provider {
                     interestRepository: app.interestRepository
                 )
             }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchStarSignsUseCase(
+                    starSignRepository: app.starSignRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchStarSignUseCase(
+                    starSignRepository: app.starSignRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchEducationLevelsUseCase(
+                    educationLevelRepository: app.educationLevelRepository
+                )
+            }
+
+            app.referenceDataWebAPIUseCases.use { app in
+                ReferenceDataApplicationFactory.makeFetchEducationLevelUseCase(
+                    educationLevelRepository: app.educationLevelRepository
+                )
+            }
         }
     }
 

@@ -6,36 +6,40 @@
 //
 
 import Foundation
+import Logging
 
-package actor InMemoryCacheStore: CacheStore {
+actor InMemoryCacheStore: CacheStore {
 
-    package static let shared = InMemoryCacheStore()
+    @CacheActor private static let cache = NSCache<NSString, Box>()
+    private let logger: Logger
 
-    private let cache = NSCache<NSString, Box>()
+    init(logger: Logger) {
+        self.logger = logger
+    }
 
-    private init() {}
-
-    package func get<CacheItem: Codable & Sendable>(forKey key: String) async throws -> CacheItem? {
+    @CacheActor
+    func get<CacheItem: Codable & Sendable>(forKey key: String) async throws -> CacheItem? {
         let nsKey = key as NSString
-        guard let cacheItem = cache.object(forKey: nsKey)?.value as? CacheItem else {
-            print("Cache MISS: \(key)")
+        guard let cacheItem = Self.cache.object(forKey: nsKey)?.value as? CacheItem else {
+            logger.info("Cache MISS: \(key)")
             return nil
         }
 
-        print("Cache HIT: \(key)")
+        logger.info("Cache HIT: \(key)")
         return cacheItem
     }
 
-    package func set(_ cacheItem: (some Codable & Sendable)?, forKey key: String) async throws {
+    @CacheActor
+    func set(_ cacheItem: (some Codable & Sendable)?, forKey key: String) async throws {
         let nsKey = key as NSString
-        print("Cache SET: \(key)")
+        logger.info("Cache SET: \(key)")
 
         guard let cacheItem else {
-            cache.removeObject(forKey: nsKey)
+            Self.cache.removeObject(forKey: nsKey)
             return
         }
 
-        cache.setObject(Box(cacheItem), forKey: nsKey)
+        Self.cache.setObject(Box(cacheItem), forKey: nsKey)
     }
 
 }

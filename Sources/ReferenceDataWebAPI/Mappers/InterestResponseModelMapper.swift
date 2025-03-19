@@ -16,6 +16,7 @@ struct InterestResponseModelMapper {
         InterestResponseModel(
             id: dto.id,
             name: dto.name,
+            nameKey: dto.nameKey,
             glyph: dto.glyph
         )
     }

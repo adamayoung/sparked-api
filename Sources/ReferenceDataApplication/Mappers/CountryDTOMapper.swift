@@ -16,7 +16,8 @@ struct CountryDTOMapper {
         CountryDTO(
             id: country.id,
             code: country.code,
-            name: country.name
+            name: country.name,
+            nameKey: country.nameKey
         )
     }
 

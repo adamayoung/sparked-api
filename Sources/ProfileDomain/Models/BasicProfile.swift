@@ -13,6 +13,7 @@ package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codabl
     package let userID: User.ID
     package let displayName: String
     package let birthDate: Date
+    package let bio: String
 
     package var age: Int {
         let now = Date()
@@ -27,12 +28,14 @@ package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codabl
         id: UUID = UUID(),
         userID: User.ID,
         displayName: String,
-        birthDate: Date
+        birthDate: Date,
+        bio: String
     ) {
         self.id = id
         self.userID = userID
         self.displayName = displayName
         self.birthDate = birthDate
+        self.bio = bio
     }
 
 }

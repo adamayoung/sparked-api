@@ -31,24 +31,28 @@ struct CountryControllerTests {
             CountryDTO(
                 id: #require(UUID(uuidString: "C7DDD5D2-E7B4-424E-9460-D0CD7F0057F4")),
                 code: "GB",
-                name: "United Kingdom"
+                name: "United Kingdom",
+                nameKey: "UNITED_KINGDOM"
             ),
             CountryDTO(
                 id: #require(UUID(uuidString: "81B1F44D-A552-48A4-9AE9-22B83C5292EA")),
                 code: "US",
-                name: "United States"
+                name: "United States",
+                nameKey: "UNITED_STATES"
             )
         ]
         let expectedResponseModels = try [
             CountryResponseModel(
                 id: #require(UUID(uuidString: "C7DDD5D2-E7B4-424E-9460-D0CD7F0057F4")),
                 code: "GB",
-                name: "United Kingdom"
+                name: "United Kingdom",
+                nameKey: "UNITED_KINGDOM"
             ),
             CountryResponseModel(
                 id: #require(UUID(uuidString: "81B1F44D-A552-48A4-9AE9-22B83C5292EA")),
                 code: "US",
-                name: "United States"
+                name: "United States",
+                nameKey: "UNITED_STATES"
             )
         ]
         fetchCountriesUseCase.executeResult = .success(countriesDTOs)

@@ -27,4 +27,12 @@ package final class ReferenceDataWebAPIFactory: Sendable {
         InterestController()
     }
 
+    package static func makeStarSignController() -> some RouteCollection {
+        StarSignController()
+    }
+
+    package static func makeEducationLevelController() -> some RouteCollection {
+        EducationLevelController()
+    }
+
 }

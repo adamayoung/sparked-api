@@ -29,24 +29,28 @@ struct FetchGendersTests {
             Gender(
                 id: #require(UUID(uuidString: "DF2E5A61-3038-4473-8698-C7AFB2E7BBBB")),
                 code: "M",
-                name: "Male"
+                name: "Male",
+                nameKey: "MALE"
             ),
             Gender(
                 id: #require(UUID(uuidString: "05A0397F-EC54-45AA-AEA9-9EC91D2E3509")),
                 code: "F",
-                name: "Female"
+                name: "Female",
+                nameKey: "FEMALE"
             )
         ]
         let expectedGenderDTOs = try [
             GenderDTO(
                 id: #require(UUID(uuidString: "05A0397F-EC54-45AA-AEA9-9EC91D2E3509")),
                 code: "F",
-                name: "Female"
+                name: "Female",
+                nameKey: "FEMALE"
             ),
             GenderDTO(
                 id: #require(UUID(uuidString: "DF2E5A61-3038-4473-8698-C7AFB2E7BBBB")),
                 code: "M",
-                name: "Male"
+                name: "Male",
+                nameKey: "MALE"
             )
         ]
         repository.fetchAllResult = .success(genders)

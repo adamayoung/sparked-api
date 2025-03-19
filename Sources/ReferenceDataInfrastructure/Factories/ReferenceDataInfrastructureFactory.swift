@@ -40,20 +40,60 @@ package final class ReferenceDataInfrastructureFactory: Sendable {
     }
 
     package static func makeInterestGroupRepository(
-        database: some Database
+        database: some Database,
+        cacheProvider: some CacheProvider
     ) -> some InterestGroupRepository {
         let remoteDataSource = Self.makeInterestGroupRemoteDataSource(database: database)
+        let cacheDataSource = Self.makeInterestGroupCacheDataSource(cacheProvider: cacheProvider)
 
-        return InterestGroupDefaultRepository(remoteDataSource: remoteDataSource)
+        return InterestGroupDefaultRepository(
+            remoteDataSource: remoteDataSource,
+            cacheDataSource: cacheDataSource
+        )
     }
 
     package static func makeInterestRepository(
-        database: some Database
+        database: some Database,
+        cacheProvider: some CacheProvider
     ) -> some InterestRepository {
         let remoteDataSource = Self.makeInterestRemoteDataSource(database: database)
+        let cacheDataSource = Self.makeInterestCacheDataSource(cacheProvider: cacheProvider)
 
-        return InterestDefaultRepository(remoteDataSource: remoteDataSource)
+        return InterestDefaultRepository(
+            remoteDataSource: remoteDataSource,
+            cacheDataSource: cacheDataSource
+        )
     }
+
+    package static func makeStarSignRepository(
+        database: some Database,
+        cacheProvider: some CacheProvider
+    ) -> some StarSignRepository {
+        let remoteDataSource = Self.makeStarSignRemoteDataSource(database: database)
+        let cacheDataSource = Self.makeStarSignCacheDataSource(cacheProvider: cacheProvider)
+
+        return StarSignDefaultRepository(
+            remoteDataSource: remoteDataSource,
+            cacheDataSource: cacheDataSource
+        )
+    }
+
+    package static func makeEducationLevelRepository(
+        database: some Database,
+        cacheProvider: some CacheProvider
+    ) -> some EducationLevelRepository {
+        let remoteDataSource = Self.makeEducationLevelRemoteDataSource(database: database)
+        let cacheDataSource = Self.makeEducationLevelCacheDataSource(cacheProvider: cacheProvider)
+
+        return EducationLevelDefaultRepository(
+            remoteDataSource: remoteDataSource,
+            cacheDataSource: cacheDataSource
+        )
+    }
+
+}
+
+extension ReferenceDataInfrastructureFactory {
 
     package static func makeMigrations() -> [Migration] {
         ReferenceDataMigrations.all()
@@ -87,6 +127,18 @@ extension ReferenceDataInfrastructureFactory {
         InterestRemoteFluentDataSource(database: database)
     }
 
+    private static func makeStarSignRemoteDataSource(
+        database: some Database
+    ) -> some StarSignRemoteDataSource {
+        StarSignRemoteFluentDataSource(database: database)
+    }
+
+    private static func makeEducationLevelRemoteDataSource(
+        database: some Database
+    ) -> some EducationLevelRemoteDataSource {
+        EducationLevelRemoteFluentDataSource(database: database)
+    }
+
 }
 
 extension ReferenceDataInfrastructureFactory {
@@ -101,6 +153,30 @@ extension ReferenceDataInfrastructureFactory {
         cacheProvider: some CacheProvider
     ) -> some GenderCacheDataSource {
         GenderCacheDefaultDataSource(cacheProvider: cacheProvider)
+    }
+
+    private static func makeEducationLevelCacheDataSource(
+        cacheProvider: some CacheProvider
+    ) -> some EducationLevelCacheDataSource {
+        EducationLevelCacheDefaultDataSource(cacheProvider: cacheProvider)
+    }
+
+    private static func makeStarSignCacheDataSource(
+        cacheProvider: some CacheProvider
+    ) -> some StarSignCacheDataSource {
+        StarSignCacheDefaultDataSource(cacheProvider: cacheProvider)
+    }
+
+    private static func makeInterestGroupCacheDataSource(
+        cacheProvider: some CacheProvider
+    ) -> some InterestGroupCacheDataSource {
+        InterestGroupCacheDefaultDataSource(cacheProvider: cacheProvider)
+    }
+
+    private static func makeInterestCacheDataSource(
+        cacheProvider: some CacheProvider
+    ) -> some InterestCacheDataSource {
+        InterestCacheDefaultDataSource(cacheProvider: cacheProvider)
     }
 
 }

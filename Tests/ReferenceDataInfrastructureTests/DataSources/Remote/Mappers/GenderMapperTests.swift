@@ -51,12 +51,14 @@ extension GenderMapperTests {
     private static func buildGenderModel(
         id: UUID? = UUID(uuidString: "1526A301-B8D8-48EE-872F-93C310ABD689"),
         code: String = "M",
-        name: String = "Male"
+        name: String = "Male",
+        nameKey: String = "MALE"
     ) throws -> GenderModel {
         try GenderModel(
             id: #require(id),
             code: code,
-            name: name
+            name: name,
+            nameKey: nameKey
         )
     }
 

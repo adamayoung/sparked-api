@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import Logging
 
 package final class CacheFactory {
 
     private init() {}
 
-    package static func makeInMemoryCacheStore() -> some CacheStore {
-        InMemoryCacheStore.shared
+    package static func makeInMemoryCacheStore(logger: Logger) -> some CacheStore {
+        InMemoryCacheStore(logger: logger)
     }
 
 }

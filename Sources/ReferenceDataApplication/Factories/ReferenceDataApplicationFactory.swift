@@ -67,4 +67,28 @@ package final class ReferenceDataApplicationFactory {
         FetchInterest(repository: interestRepository)
     }
 
+    package static func makeFetchStarSignsUseCase(
+        starSignRepository: some StarSignRepository
+    ) -> some FetchStarSignsUseCase {
+        FetchStarSigns(repository: starSignRepository)
+    }
+
+    package static func makeFetchStarSignUseCase(
+        starSignRepository: some StarSignRepository
+    ) -> some FetchStarSignUseCase {
+        FetchStarSign(repository: starSignRepository)
+    }
+
+    package static func makeFetchEducationLevelsUseCase(
+        educationLevelRepository: some EducationLevelRepository
+    ) -> some FetchEducationLevelsUseCase {
+        FetchEducationLevels(repository: educationLevelRepository)
+    }
+
+    package static func makeFetchEducationLevelUseCase(
+        educationLevelRepository: some EducationLevelRepository
+    ) -> some FetchEducationLevelUseCase {
+        FetchEducationLevel(repository: educationLevelRepository)
+    }
+
 }

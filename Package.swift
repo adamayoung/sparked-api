@@ -18,7 +18,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
         .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0")
+        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
     ],
 
     targets: [
@@ -274,7 +275,10 @@ let package = Package(
             dependencies: ["AuthKit"]
         ),
 
-        .target(name: "CacheKit"),
+        .target(
+            name: "CacheKit",
+            dependencies: [.product(name: "Logging", package: "swift-log")]
+        ),
         .testTarget(
             name: "CacheKitTests",
             dependencies: ["CacheKit"]

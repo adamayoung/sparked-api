@@ -52,11 +52,13 @@ extension CreateBasicProfileInputMapperTests {
 
     private static func buildRequestModel(
         displayName: String = "",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        bio: String = ""
     ) -> CreateBasicProfileRequestModel {
         CreateBasicProfileRequestModel(
             displayName: displayName,
-            birthDate: birthDate
+            birthDate: birthDate,
+            bio: bio
         )
     }
 

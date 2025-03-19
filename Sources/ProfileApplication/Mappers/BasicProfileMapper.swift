@@ -16,7 +16,8 @@ struct BasicProfileMapper {
         BasicProfile(
             userID: input.userID,
             displayName: input.displayName,
-            birthDate: input.birthDate
+            birthDate: input.birthDate,
+            bio: input.bio
         )
     }
 
