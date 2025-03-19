@@ -8,16 +8,17 @@
 import Foundation
 import Logging
 
-package actor InMemoryCacheStore: CacheStore {
+actor InMemoryCacheStore: CacheStore {
 
-    private static let cache = NSCache<NSString, Box>()
+    @CacheActor private static let cache = NSCache<NSString, Box>()
     private let logger: Logger
 
-    package init(logger: Logger) {
+    init(logger: Logger) {
         self.logger = logger
     }
 
-    package func get<CacheItem: Codable & Sendable>(forKey key: String) async throws -> CacheItem? {
+    @CacheActor
+    func get<CacheItem: Codable & Sendable>(forKey key: String) async throws -> CacheItem? {
         let nsKey = key as NSString
         guard let cacheItem = Self.cache.object(forKey: nsKey)?.value as? CacheItem else {
             logger.info("Cache MISS: \(key)")
@@ -28,7 +29,8 @@ package actor InMemoryCacheStore: CacheStore {
         return cacheItem
     }
 
-    package func set(_ cacheItem: (some Codable & Sendable)?, forKey key: String) async throws {
+    @CacheActor
+    func set(_ cacheItem: (some Codable & Sendable)?, forKey key: String) async throws {
         let nsKey = key as NSString
         logger.info("Cache SET: \(key)")
 
