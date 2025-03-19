@@ -15,7 +15,8 @@ struct InterestGroupResponseModelMapper {
     static func map(from dto: InterestGroupDTO) -> InterestGroupResponseModel {
         InterestGroupResponseModel(
             id: dto.id,
-            name: dto.name
+            name: dto.name,
+            nameKey: dto.nameKey
         )
     }
 
@@ -25,6 +26,7 @@ struct InterestGroupResponseModelMapper {
         return InterestGroupResponseModel(
             id: dto.id,
             name: dto.name,
+            nameKey: dto.nameKey,
             interests: interests
         )
     }

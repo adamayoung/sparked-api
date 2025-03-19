@@ -20,6 +20,9 @@ final class CountryModel: Model, @unchecked Sendable {
     @Field(key: "name")
     var name: String
 
+    @Field(key: "name_key")
+    var nameKey: String
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -34,11 +37,13 @@ final class CountryModel: Model, @unchecked Sendable {
     init(
         id: UUID? = nil,
         code: String,
-        name: String
+        name: String,
+        nameKey: String
     ) {
         self.id = id
         self.code = code
         self.name = name
+        self.nameKey = nameKey
     }
 
 }

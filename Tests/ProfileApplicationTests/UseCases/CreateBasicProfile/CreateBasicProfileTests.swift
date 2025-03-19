@@ -69,12 +69,14 @@ extension CreateBasicProfileTests {
     private static func createCreateBasicProfileInput(
         userID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
         displayName: String = "Dave Smith",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        bio: String = ""
     ) throws -> CreateBasicProfileInput {
         try CreateBasicProfileInput(
             userID: #require(userID),
             displayName: displayName,
-            birthDate: birthDate
+            birthDate: birthDate,
+            bio: bio
         )
     }
 
@@ -82,13 +84,15 @@ extension CreateBasicProfileTests {
         id: UUID? = UUID(uuidString: "51045953-FA7E-47FF-A336-D608742031DF"),
         userID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
         displayName: String = "Dave",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        bio: String = ""
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
             userID: #require(userID),
             displayName: displayName,
-            birthDate: birthDate
+            birthDate: birthDate,
+            bio: bio
         )
     }
 

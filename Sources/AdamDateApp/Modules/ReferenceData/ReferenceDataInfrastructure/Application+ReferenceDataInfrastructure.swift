@@ -30,13 +30,29 @@ extension Application {
 
     var interestGroupRepository: any InterestGroupRepository {
         ReferenceDataInfrastructureFactory.makeInterestGroupRepository(
-            database: self.db(DatabaseID.adamDate)
+            database: self.db(DatabaseID.adamDate),
+            cacheProvider: self.referenceDataCacheProvider
         )
     }
 
     var interestRepository: any InterestRepository {
         ReferenceDataInfrastructureFactory.makeInterestRepository(
-            database: self.db(DatabaseID.adamDate)
+            database: self.db(DatabaseID.adamDate),
+            cacheProvider: self.referenceDataCacheProvider
+        )
+    }
+
+    var starSignRepository: any StarSignRepository {
+        ReferenceDataInfrastructureFactory.makeStarSignRepository(
+            database: self.db(DatabaseID.adamDate),
+            cacheProvider: self.referenceDataCacheProvider
+        )
+    }
+
+    var educationLevelRepository: any EducationLevelRepository {
+        ReferenceDataInfrastructureFactory.makeEducationLevelRepository(
+            database: self.db(DatabaseID.adamDate),
+            cacheProvider: self.referenceDataCacheProvider
         )
     }
 

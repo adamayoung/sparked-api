@@ -15,6 +15,7 @@ struct CountryMigrationV1: AsyncMigration {
             .id()
             .field("code", .string, .required)
             .field("name", .string, .required)
+            .field("name_key", .string, .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .field("deleted_at", .datetime)

@@ -14,19 +14,22 @@ package struct BasicProfileDTO: Identifiable, Equatable, Sendable {
     package let displayName: String
     package let birthDate: Date
     package let age: Int
+    package let bio: String
 
     package init(
         id: UUID,
         userID: UUID,
         displayName: String,
         birthDate: Date,
-        age: Int
+        age: Int,
+        bio: String
     ) {
         self.id = id
         self.userID = userID
         self.displayName = displayName
         self.birthDate = birthDate
         self.age = age
+        self.bio = bio
     }
 
 }

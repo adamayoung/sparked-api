@@ -16,6 +16,7 @@ struct BasicProfileMigrationV1: AsyncMigration {
             .field("user_id", .uuid, .required)
             .field("display_name", .string, .required)
             .field("birth_date", .date, .required)
+            .field("bio", .string, .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .field("deleted_at", .datetime)

@@ -102,13 +102,15 @@ extension BasicProfileDefaultRepositoryTests {
         id: UUID? = UUID(uuidString: "B552E889-6409-40F1-BFA2-7CD40A26CF41"),
         userID: UUID? = UUID(uuidString: "BC925225-56C9-4BD1-AC64-BB890279F489"),
         displayName: String = "Display Name",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        bio: String = ""
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
             userID: #require(userID),
             displayName: displayName,
-            birthDate: birthDate
+            birthDate: birthDate,
+            bio: bio
         )
     }
 

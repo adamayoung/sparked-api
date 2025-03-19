@@ -15,7 +15,8 @@ struct InterestGroupMapper {
     static func map(from model: InterestGroupModel) throws -> InterestGroup {
         try InterestGroup(
             id: model.requireID(),
-            name: model.name
+            name: model.name,
+            nameKey: model.nameKey
         )
     }
 

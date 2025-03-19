@@ -16,7 +16,8 @@ struct GenderDTOMapper {
         GenderDTO(
             id: gender.id,
             code: gender.code,
-            name: gender.name
+            name: gender.name,
+            nameKey: gender.nameKey
         )
     }
 

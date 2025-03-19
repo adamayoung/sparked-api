@@ -33,7 +33,8 @@ struct BasicProfileRemoteFluentDataSourceTests {
             id: id,
             userID: userID,
             displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000)
+            birthDate: Date(timeIntervalSince1970: 10000),
+            bio: "Bio"
         )
         database.append([])
         database.append([TestOutput()])
@@ -50,13 +51,15 @@ struct BasicProfileRemoteFluentDataSourceTests {
             id: UUID(uuidString: "E00F5F37-00B8-4EEE-95F5-ADEC2BA9A9A4"),
             userID: userID,
             displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000)
+            birthDate: Date(timeIntervalSince1970: 10000),
+            bio: "Bio"
         )
         let basicProfile = BasicProfile(
             id: try #require(UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA")),
             userID: userID,
             displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000)
+            birthDate: Date(timeIntervalSince1970: 10000),
+            bio: "Bio"
         )
         database.append([existingBasicProfile])
         database.append([TestOutput()])
@@ -73,7 +76,8 @@ struct BasicProfileRemoteFluentDataSourceTests {
             id: id,
             userID: #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5")),
             displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000)
+            birthDate: Date(timeIntervalSince1970: 10000),
+            bio: "Bio"
         )
         database.append([existingBasicProfile])
 
@@ -99,7 +103,8 @@ struct BasicProfileRemoteFluentDataSourceTests {
             id: #require(UUID(uuidString: "42E8A178-B848-4558-946E-BBE007527110")),
             userID: userID,
             displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000)
+            birthDate: Date(timeIntervalSince1970: 10000),
+            bio: "Bio"
         )
         database.append([existingBasicProfile])
 

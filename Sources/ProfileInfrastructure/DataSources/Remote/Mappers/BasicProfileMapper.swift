@@ -17,7 +17,8 @@ struct BasicProfileMapper {
             id: model.requireID(),
             userID: model.userID,
             displayName: model.displayName,
-            birthDate: model.birthDate
+            birthDate: model.birthDate,
+            bio: model.bio
         )
     }
 

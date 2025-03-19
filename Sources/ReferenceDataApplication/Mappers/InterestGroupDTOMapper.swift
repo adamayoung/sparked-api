@@ -15,7 +15,8 @@ struct InterestGroupDTOMapper {
     static func map(from interestGroup: InterestGroup) -> InterestGroupDTO {
         InterestGroupDTO(
             id: interestGroup.id,
-            name: interestGroup.name
+            name: interestGroup.name,
+            nameKey: interestGroup.nameKey
         )
     }
 

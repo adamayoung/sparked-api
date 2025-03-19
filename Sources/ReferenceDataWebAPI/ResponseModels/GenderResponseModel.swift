@@ -12,5 +12,6 @@ struct GenderResponseModel: Equatable, Content {
     let id: UUID
     let code: String
     let name: String
+    let nameKey: String
 
 }

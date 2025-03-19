@@ -18,6 +18,8 @@ struct ReferenceDataMigrations {
         migrations.append(contentsOf: country())
         migrations.append(contentsOf: interestGroup())
         migrations.append(contentsOf: interest())
+        migrations.append(contentsOf: starSign())
+        migrations.append(contentsOf: educationLevel())
         return migrations
     }
 
@@ -50,6 +52,20 @@ extension ReferenceDataMigrations {
         [
             InterestMigrationV1(),
             InterestMigrationV2()
+        ]
+    }
+
+    package static func starSign() -> [Migration] {
+        [
+            StarSignMigrationV1(),
+            StarSignMigrationV2()
+        ]
+    }
+
+    package static func educationLevel() -> [Migration] {
+        [
+            EducationLevelMigrationV1(),
+            EducationLevelMigrationV2()
         ]
     }
 

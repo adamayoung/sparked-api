@@ -23,6 +23,9 @@ final class BasicProfileModel: Model, @unchecked Sendable {
     @Field(key: "birth_date")
     var birthDate: Date
 
+    @Field(key: "bio")
+    var bio: String
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -38,12 +41,14 @@ final class BasicProfileModel: Model, @unchecked Sendable {
         id: UUID? = nil,
         userID: UUID,
         displayName: String,
-        birthDate: Date
+        birthDate: Date,
+        bio: String
     ) {
         self.id = id
         self.userID = userID
         self.displayName = displayName
         self.birthDate = birthDate
+        self.bio = bio
     }
 
 }

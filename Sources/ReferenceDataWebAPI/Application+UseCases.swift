@@ -34,6 +34,12 @@ extension Application {
             var makeFetchInterestsUseCase: ((Application) -> FetchInterestsUseCase)?
             var makeFetchInterestUseCase: ((Application) -> FetchInterestUseCase)?
 
+            var makeFetchStarSignsUseCase: ((Application) -> FetchStarSignsUseCase)?
+            var makeFetchStarSignUseCase: ((Application) -> FetchStarSignUseCase)?
+
+            var makeFetchEducationLevelsUseCase: ((Application) -> FetchEducationLevelsUseCase)?
+            var makeFetchEducationLevelUseCase: ((Application) -> FetchEducationLevelUseCase)?
+
             init() {}
         }
 
@@ -115,6 +121,42 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var fetchStarSignsUseCase: any FetchStarSignsUseCase {
+            guard let makeUseCase = self.storage.makeFetchStarSignsUseCase else {
+                fatalError(
+                    "No FetchStarSignsUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchStarSignUseCase: any FetchStarSignUseCase {
+            guard let makeUseCase = self.storage.makeFetchStarSignUseCase else {
+                fatalError(
+                    "No FetchStarSignUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchEducationLevelsUseCase: any FetchEducationLevelsUseCase {
+            guard let makeUseCase = self.storage.makeFetchEducationLevelsUseCase else {
+                fatalError(
+                    "No FetchEducationLevelsUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchEducationLevelUseCase: any FetchEducationLevelUseCase {
+            guard let makeUseCase = self.storage.makeFetchEducationLevelUseCase else {
+                fatalError(
+                    "No FetchEducationLevelUseCase configured. Configure with app.referenceDataWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
@@ -149,6 +191,22 @@ extension Application {
 
         package func use(_ makeUseCase: @escaping (Application) -> FetchInterestUseCase) {
             self.storage.makeFetchInterestUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchStarSignsUseCase) {
+            self.storage.makeFetchStarSignsUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchStarSignUseCase) {
+            self.storage.makeFetchStarSignUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchEducationLevelsUseCase) {
+            self.storage.makeFetchEducationLevelsUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchEducationLevelUseCase) {
+            self.storage.makeFetchEducationLevelUseCase = makeUseCase
         }
 
         func initialize() {
@@ -206,6 +264,22 @@ extension Request {
 
     var fetchInterestUseCase: FetchInterestUseCase {
         application.referenceDataWebAPIUseCases.fetchInterestUseCase
+    }
+
+    var fetchStarSignsUseCase: FetchStarSignsUseCase {
+        application.referenceDataWebAPIUseCases.fetchStarSignsUseCase
+    }
+
+    var fetchStarSignUseCase: FetchStarSignUseCase {
+        application.referenceDataWebAPIUseCases.fetchStarSignUseCase
+    }
+
+    var fetchEducationLevelsUseCase: FetchEducationLevelsUseCase {
+        application.referenceDataWebAPIUseCases.fetchEducationLevelsUseCase
+    }
+
+    var fetchEducationLevelUseCase: FetchEducationLevelUseCase {
+        application.referenceDataWebAPIUseCases.fetchEducationLevelUseCase
     }
 
 }

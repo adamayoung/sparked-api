@@ -16,7 +16,8 @@ struct GenderMapper {
         try Gender(
             id: model.requireID(),
             code: model.code,
-            name: model.name
+            name: model.name,
+            nameKey: model.nameKey
         )
     }
 

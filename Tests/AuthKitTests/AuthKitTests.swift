@@ -13,8 +13,6 @@ import Testing
 struct AuthKitTests {
 
     @Test
-    func example() async throws {
-        #expect(true)
-    }
+    func example() async throws {}
 
 }
