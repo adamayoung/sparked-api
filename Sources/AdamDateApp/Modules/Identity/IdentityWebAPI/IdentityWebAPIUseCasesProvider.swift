@@ -19,13 +19,15 @@ extension Application.IdentityUseCases.Provider {
         Self { app in
             app.identityUseCases.use { app in
                 IdentityApplicationFactory.makeFetchUserUseCase(
-                    repository: app.userRepository
+                    repository: app.userRepository,
+                    roleRepository: app.roleRepository
                 )
             }
 
             app.identityUseCases.use { app in
                 IdentityApplicationFactory.makeRegisterUserUseCase(
                     repository: app.userRepository,
+                    roleRepository: app.roleRepository,
                     hasher: app.passwordHasherService
                 )
             }
@@ -33,6 +35,7 @@ extension Application.IdentityUseCases.Provider {
             app.identityUseCases.use { app in
                 IdentityApplicationFactory.makeAuthenticateUserUseCase(
                     repository: app.userRepository,
+                    roleRepository: app.roleRepository,
                     hasher: app.passwordHasherService
                 )
             }

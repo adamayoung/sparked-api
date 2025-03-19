@@ -12,6 +12,7 @@ package enum RegisterUserError: LocalizedError, Equatable, Sendable {
 
     case validation(ValidationError)
     case emailAlreadyExists(email: String)
+    case roleNotFound(roleCode: String)
     case unknown(Error? = nil)
 
     init(error: UserValidationError) {
@@ -32,6 +33,9 @@ package enum RegisterUserError: LocalizedError, Equatable, Sendable {
         case .emailAlreadyExists(let email):
             "Email \(email) already exists"
 
+        case .roleNotFound(let roleCode):
+            "Role with code \(roleCode) not found"
+
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
         }
@@ -39,8 +43,14 @@ package enum RegisterUserError: LocalizedError, Equatable, Sendable {
 
     package static func == (lhs: RegisterUserError, rhs: RegisterUserError) -> Bool {
         switch (lhs, rhs) {
+        case (.validation(let lhsError), .validation(let rhsError)):
+            lhsError.localizedDescription == rhsError.localizedDescription
+
         case (.emailAlreadyExists(let lhsEmail), .emailAlreadyExists(let rhsEmail)):
             lhsEmail == rhsEmail
+
+        case (.roleNotFound(let lhsRoleCode), .roleNotFound(let rhsRoleCode)):
+            lhsRoleCode == rhsRoleCode
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

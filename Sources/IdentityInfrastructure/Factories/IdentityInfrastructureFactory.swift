@@ -19,6 +19,12 @@ package final class IdentityInfrastructureFactory: Sendable {
         return UserDefaultRepository(remoteDataSource: remoteDataSource)
     }
 
+    package static func makeRoleRepository(database: some Database) -> some RoleRepository {
+        let remoteDataSource = Self.makeRoleDataSource(database: database)
+
+        return RoleDefaultRepository(remoteDataSource: remoteDataSource)
+    }
+
     package static func makeMigrations() -> [Migration] {
         IdentityMigrations.all()
     }
@@ -29,6 +35,10 @@ extension IdentityInfrastructureFactory {
 
     private static func makeUserDataSource(database: some Database) -> some UserRemoteDataSource {
         UserFluentRemoteDataSource(database: database)
+    }
+
+    private static func makeRoleDataSource(database: some Database) -> some RoleRemoteDataSource {
+        RoleFluentRemoteDataSource(database: database)
     }
 
 }

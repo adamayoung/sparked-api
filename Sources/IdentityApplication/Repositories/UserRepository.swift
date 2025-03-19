@@ -10,7 +10,7 @@ import IdentityDomain
 
 package protocol UserRepository {
 
-    func create(_ user: User) async throws(UserRepositoryError)
+    func create(_ user: User, withRoles roles: [Role]) async throws(UserRepositoryError)
 
     func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User
 
@@ -23,6 +23,7 @@ package enum UserRepositoryError: Error, Equatable {
     case notFound
     case duplicateUserID
     case duplicateEmail
+    case roleNotFound
     case unknown(Error? = nil)
 
     package static func == (lhs: UserRepositoryError, rhs: UserRepositoryError) -> Bool {
@@ -32,6 +33,8 @@ package enum UserRepositoryError: Error, Equatable {
         case (.duplicateUserID, .duplicateUserID):
             return true
         case (.duplicateEmail, .duplicateEmail):
+            return true
+        case (.roleNotFound, .roleNotFound):
             return true
         case (.unknown(let lhsError), .unknown(let rhsError)):
             return lhsError?.localizedDescription == rhsError?.localizedDescription

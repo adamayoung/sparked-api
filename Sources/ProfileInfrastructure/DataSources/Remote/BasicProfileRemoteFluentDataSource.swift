@@ -67,7 +67,8 @@ final class BasicProfileRemoteFluentDataSource: BasicProfileRemoteDataSource {
         let basicProfileModel: BasicProfileModel?
         do {
             basicProfileModel = try await BasicProfileModel.query(on: database)
-                .filter(\.$userID == userID).first()
+                .filter(\.$userID == userID)
+                .first()
         } catch let error {
             throw .unknown(error)
         }

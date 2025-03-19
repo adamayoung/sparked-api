@@ -14,7 +14,7 @@ package struct RegisterUserInput: Equatable, Sendable {
     package let email: String
     package let password: String
     package let isVerified: Bool
-    package let isAdmin: Bool
+    package let roles: [String]
 
     package init(
         firstName: String,
@@ -22,14 +22,14 @@ package struct RegisterUserInput: Equatable, Sendable {
         email: String,
         password: String,
         isVerified: Bool = false,
-        isAdmin: Bool = false
+        roles: [String] = []
     ) {
         self.firstName = firstName
         self.familyName = familyName
         self.email = email
         self.password = password
         self.isVerified = isVerified
-        self.isAdmin = isAdmin
+        self.roles = roles
     }
 
     func passwordHash(using hasher: some PasswordHasherService) throws -> String {

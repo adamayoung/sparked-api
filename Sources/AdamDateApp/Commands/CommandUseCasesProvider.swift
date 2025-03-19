@@ -15,7 +15,14 @@ extension Application.CommandUseCases.Provider {
             app.commandUseCases.use { app in
                 IdentityApplicationFactory.makeRegisterUserUseCase(
                     repository: app.userRepository,
+                    roleRepository: app.roleRepository,
                     hasher: app.passwordHasherService
+                )
+            }
+
+            app.commandUseCases.use { app in
+                IdentityApplicationFactory.makeFetchRoleUseCase(
+                    repository: app.roleRepository
                 )
             }
         }

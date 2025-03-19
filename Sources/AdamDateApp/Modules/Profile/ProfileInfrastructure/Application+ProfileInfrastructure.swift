@@ -83,7 +83,8 @@ extension Application {
         ProfileInfrastructureFactory.makeUserRepository(
             userService: ProfileAdapterFactory.makeUserService(
                 fetchUserUseCase: IdentityApplicationFactory.makeFetchUserUseCase(
-                    repository: self.userRepository
+                    repository: self.userRepository,
+                    roleRepository: self.roleRepository
                 )
             )
         )

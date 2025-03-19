@@ -58,8 +58,8 @@ let package = Package(
         .target(
             name: "AdamDateCommands",
             dependencies: [
-                "ProfileDomain",
-                "IdentityDomain",
+                "ProfileApplication",
+                "IdentityApplication",
                 .product(name: "Vapor", package: "vapor")
             ]
         ),

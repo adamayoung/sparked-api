@@ -11,9 +11,14 @@ import IdentityDomain
 final class FetchUser: FetchUserUseCase {
 
     private let repository: any UserRepository
+    private let roleRepository: any RoleRepository
 
-    init(repository: some UserRepository) {
+    init(
+        repository: some UserRepository,
+        roleRepository: some RoleRepository
+    ) {
         self.repository = repository
+        self.roleRepository = roleRepository
     }
 
     func execute(id: User.ID) async throws(FetchUserError) -> UserDTO {
@@ -26,7 +31,16 @@ final class FetchUser: FetchUserUseCase {
             throw .unknown(error)
         }
 
-        let userDTO = UserDTOMapper.map(from: user)
+        let roles: [Role]
+        do {
+            roles = try await roleRepository.fetchAll(forUserID: user.id)
+        } catch RoleRepositoryError.userNotFound {
+            throw .notFoundByID(userID: id)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        let userDTO = UserDTOMapper.map(from: user, roles: roles)
 
         return userDTO
     }
