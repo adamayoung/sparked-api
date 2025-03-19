@@ -21,6 +21,7 @@ struct InterestGroupAggregateDTOMapper {
         return InterestGroupAggregateDTO(
             id: interestGroup.id,
             name: interestGroup.name,
+            nameKey: interestGroup.nameKey,
             interests: interestDTOs
         )
     }

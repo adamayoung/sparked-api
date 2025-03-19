@@ -31,24 +31,28 @@ struct GenderRemoteFluentDataSourceTests {
             GenderModel(
                 id: #require(UUID(uuidString: "0D2ADFC7-7224-4154-9387-1C15EEB4D80F")),
                 code: "M",
-                name: "Male"
+                name: "Male",
+                nameKey: "MALE"
             ),
             GenderModel(
                 id: #require(UUID(uuidString: "1B4A387B-23FC-42ED-9B7C-F32CD96A3F96")),
                 code: "F",
-                name: "Female"
+                name: "Female",
+                nameKey: "FEMALE"
             )
         ]
         let expectedGenders = try [
             Gender(
                 id: #require(UUID(uuidString: "0D2ADFC7-7224-4154-9387-1C15EEB4D80F")),
                 code: "M",
-                name: "Male"
+                name: "Male",
+                nameKey: "MALE"
             ),
             Gender(
                 id: #require(UUID(uuidString: "1B4A387B-23FC-42ED-9B7C-F32CD96A3F96")),
                 code: "F",
-                name: "Female"
+                name: "Female",
+                nameKey: "FEMALE"
             )
         ]
         database.append(countryModels)

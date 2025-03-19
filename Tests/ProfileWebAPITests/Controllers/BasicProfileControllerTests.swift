@@ -76,14 +76,17 @@ extension BasicProfileControllerTests {
         id: UUID? = UUID(uuidString: "DE663275-F75E-4D6C-984F-8F3B0D637021"),
         userID: UUID? = UUID(uuidString: "94BBA546-05F6-4691-AB40-B39EA7B3E0F0"),
         displayName: String = "John",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        age: Int = 40,
+        bio: String = ""
     ) throws -> BasicProfileDTO {
         try BasicProfileDTO(
             id: #require(id),
             userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            age: 40
+            age: age,
+            bio: bio
         )
     }
 

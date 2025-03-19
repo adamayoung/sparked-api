@@ -11,13 +11,16 @@ package struct InterestGroupDTO: Identifiable, Equatable, Sendable {
 
     package let id: UUID
     package let name: String
+    package let nameKey: String
 
     package init(
         id: UUID,
-        name: String
+        name: String,
+        nameKey: String
     ) {
         self.id = id
         self.name = name
+        self.nameKey = nameKey
     }
 
 }

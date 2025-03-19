@@ -70,13 +70,15 @@ extension BasicProfileMapperTests {
         id: UUID? = UUID(uuidString: "373E4735-409C-4E9A-95A0-BE22DB4FA06B"),
         userID: UUID? = UUID(uuidString: "834C128C-614F-406C-883C-15521C8281BF"),
         displayName: String = "",
-        birthDate: Date = Date(timeIntervalSince1970: 0)
+        birthDate: Date = Date(timeIntervalSince1970: 0),
+        bio: String = ""
     ) throws -> BasicProfileModel {
         try BasicProfileModel(
             id: id,
             userID: #require(userID),
             displayName: displayName,
-            birthDate: birthDate
+            birthDate: birthDate,
+            bio: bio
         )
     }
 

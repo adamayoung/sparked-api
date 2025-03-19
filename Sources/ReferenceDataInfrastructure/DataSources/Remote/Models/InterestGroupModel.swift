@@ -17,6 +17,9 @@ final class InterestGroupModel: Model, @unchecked Sendable {
     @Field(key: "name")
     var name: String
 
+    @Field(key: "name_key")
+    var nameKey: String
+
     @Children(for: \.$interestGroup)
     var interests: [InterestModel]
 
@@ -31,9 +34,14 @@ final class InterestGroupModel: Model, @unchecked Sendable {
 
     init() {}
 
-    init(id: UUID? = nil, name: String) {
+    init(
+        id: UUID? = nil,
+        name: String,
+        nameKey: String
+    ) {
         self.id = id
         self.name = name
+        self.nameKey = nameKey
     }
 
 }

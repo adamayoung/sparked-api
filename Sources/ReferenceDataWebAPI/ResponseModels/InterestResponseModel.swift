@@ -11,5 +11,7 @@ struct InterestResponseModel: Equatable, Content {
 
     let id: UUID
     let name: String
+    let nameKey: String
     let glyph: String
+
 }

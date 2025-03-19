@@ -16,7 +16,8 @@ struct CountryResponseModelMapper {
         CountryResponseModel(
             id: dto.id,
             code: dto.code,
-            name: dto.name
+            name: dto.name,
+            nameKey: dto.nameKey
         )
     }
 

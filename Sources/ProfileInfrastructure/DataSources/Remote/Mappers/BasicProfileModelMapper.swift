@@ -17,7 +17,8 @@ struct BasicProfileModelMapper {
             id: basicProfile.id,
             userID: basicProfile.userID,
             displayName: basicProfile.displayName,
-            birthDate: basicProfile.birthDate
+            birthDate: basicProfile.birthDate,
+            bio: basicProfile.bio
         )
     }
 

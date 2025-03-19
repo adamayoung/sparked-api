@@ -12,15 +12,18 @@ package struct CreateBasicProfileInput: Equatable, Sendable {
     package let userID: UUID
     package let displayName: String
     package let birthDate: Date
+    package let bio: String
 
     package init(
         userID: UUID,
         displayName: String,
-        birthDate: Date
+        birthDate: Date,
+        bio: String
     ) {
         self.userID = userID
         self.displayName = displayName
         self.birthDate = birthDate
+        self.bio = bio
     }
 
 }

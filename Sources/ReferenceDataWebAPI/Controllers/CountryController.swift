@@ -11,12 +11,13 @@ import Vapor
 struct CountryController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        let countries = routes.grouped("countries")
-        countries.get(use: index)
-            .description("Get all countries")
+        routes.group("countries") { countries in
+            countries.get(use: index)
+                .description("Get all countries")
 
-        countries.get(":countryID", use: show)
-            .description("Get a country by ID")
+            countries.get(":countryID", use: show)
+                .description("Get a country by ID")
+        }
     }
 
     @Sendable

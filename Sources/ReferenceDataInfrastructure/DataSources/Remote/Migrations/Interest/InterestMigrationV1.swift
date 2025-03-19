@@ -14,6 +14,7 @@ struct InterestMigrationV1: AsyncMigration {
         try await database.schema("interest")
             .id()
             .field("name", .string, .required)
+            .field("name_key", .string, .required)
             .field("glyph", .string, .required)
             .field(
                 "interest_group_id",

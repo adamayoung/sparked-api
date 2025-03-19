@@ -16,7 +16,8 @@ struct BasicProfileResponseModelMapper {
         BasicProfileResponseModel(
             id: dto.id,
             displayName: dto.displayName,
-            age: dto.age
+            age: dto.age,
+            bio: dto.bio
         )
     }
 

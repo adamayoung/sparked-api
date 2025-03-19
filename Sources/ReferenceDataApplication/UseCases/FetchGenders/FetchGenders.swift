@@ -24,10 +24,10 @@ final class FetchGenders: FetchGendersUseCase {
             throw .unknown(error)
         }
 
-        let genderDTOS = genders.map(GenderDTOMapper.map)
+        let genderDTOs = genders.map(GenderDTOMapper.map)
             .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
 
-        return genderDTOS
+        return genderDTOs
     }
 
 }

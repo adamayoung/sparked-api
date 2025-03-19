@@ -12,13 +12,23 @@ import ReferenceDataDomain
 final class InterestGroupDefaultRepository: InterestGroupRepository {
 
     private let remoteDataSource: any InterestGroupRemoteDataSource
+    private let cacheDataSource: any InterestGroupCacheDataSource
 
-    init(remoteDataSource: some InterestGroupRemoteDataSource) {
+    init(
+        remoteDataSource: some InterestGroupRemoteDataSource,
+        cacheDataSource: some InterestGroupCacheDataSource
+    ) {
         self.remoteDataSource = remoteDataSource
+        self.cacheDataSource = cacheDataSource
     }
 
     func fetchAll() async throws(InterestGroupRepositoryError) -> [InterestGroup] {
+        if let cachedInterestGroups = try? await cacheDataSource.fetchAll() {
+            return cachedInterestGroups
+        }
+
         let interestGroups = try await remoteDataSource.fetchAll()
+        try? await cacheDataSource.setInterestGroups(interestGroups)
 
         return interestGroups
     }
@@ -26,7 +36,12 @@ final class InterestGroupDefaultRepository: InterestGroupRepository {
     func fetch(
         byID id: InterestGroup.ID
     ) async throws(InterestGroupRepositoryError) -> InterestGroup {
+        if let cachedInterestGroup = try? await cacheDataSource.fetch(byID: id) {
+            return cachedInterestGroup
+        }
+
         let interestGroup = try await remoteDataSource.fetch(byID: id)
+        try? await cacheDataSource.setInterestGroup(interestGroup)
 
         return interestGroup
     }

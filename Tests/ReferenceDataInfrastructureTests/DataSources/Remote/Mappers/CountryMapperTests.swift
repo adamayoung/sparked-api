@@ -51,12 +51,14 @@ extension CountryMapperTests {
     private static func buildCountryModel(
         id: UUID? = UUID(uuidString: "0673FF7F-A477-4273-8155-49C9E990558A"),
         code: String = "GB",
-        name: String = "United Kingdom"
+        name: String = "United Kingdom",
+        nameKey: String = "UNITED_KINGDOM"
     ) throws -> CountryModel {
         try CountryModel(
             id: #require(id),
             code: code,
-            name: name
+            name: name,
+            nameKey: nameKey
         )
     }
 

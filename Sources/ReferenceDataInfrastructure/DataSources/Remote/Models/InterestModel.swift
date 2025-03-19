@@ -17,6 +17,9 @@ final class InterestModel: Model, @unchecked Sendable {
     @Field(key: "name")
     var name: String
 
+    @Field(key: "name_key")
+    var nameKey: String
+
     @Field(key: "glyph")
     var glyph: String
 
@@ -37,10 +40,12 @@ final class InterestModel: Model, @unchecked Sendable {
     init(
         id: UUID? = nil,
         name: String,
+        nameKey: String,
         glyph: String
     ) {
         self.id = id
         self.name = name
+        self.nameKey = nameKey
         self.glyph = glyph
     }
 

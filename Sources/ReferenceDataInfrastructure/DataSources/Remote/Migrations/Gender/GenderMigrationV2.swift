@@ -36,17 +36,20 @@ extension GenderMigrationV2 {
         GenderModel(
             id: UUID(uuidString: "D4906FA3-CDA1-4F0B-9631-809314451110"),
             code: "M",
-            name: "Male"
+            name: "Male",
+            nameKey: "REFERENCE_DATA.GENDER.MALE"
         ),
         GenderModel(
             id: UUID(uuidString: "9FE92837-AADC-4D54-8A98-479C4EE57FA8"),
             code: "F",
-            name: "Female"
+            name: "Female",
+            nameKey: "REFERENCE_DATA.GENDER.FEMALE"
         ),
         GenderModel(
             id: UUID(uuidString: "FD322FBC-48E3-461F-852A-B899D5F50691"),
             code: "O",
-            name: "Other"
+            name: "Other",
+            nameKey: "REFERENCE_DATA.GENDER.OTHER"
         )
     ]
 

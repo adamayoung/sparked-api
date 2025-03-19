@@ -11,8 +11,7 @@ import Vapor
 struct InterestController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        let interestGroups = routes.grouped("interest-groups")
-        interestGroups.group(":interestGroupID", "interests") { interests in
+        routes.group("interest-groups", ":interestGroupID", "interests") { interests in
             interests.get(use: index)
                 .description("Get all interests for a given interest group")
 

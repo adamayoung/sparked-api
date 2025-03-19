@@ -22,4 +22,12 @@ func referenceDataWebAPIRoutes(_ routes: RoutesBuilder) throws {
     try referenceDataRouter.register(
         collection: ReferenceDataWebAPIFactory.makeInterestController()
     )
+
+    try referenceDataRouter.register(
+        collection: ReferenceDataWebAPIFactory.makeStarSignController()
+    )
+
+    try referenceDataRouter.register(
+        collection: ReferenceDataWebAPIFactory.makeEducationLevelController()
+    )
 }

@@ -18,7 +18,9 @@ final class UserDefaultRepository: UserRepository {
     }
 
     func create(_ user: User) async throws(UserRepositoryError) {
-        guard (try? await self.fetch(byEmail: user.email)) == nil else {
+        let existingUser = try? await self.fetch(byEmail: user.email)
+
+        guard existingUser == nil else {
             throw .duplicateEmail
         }
 

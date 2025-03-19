@@ -19,7 +19,8 @@ struct CreateBasicProfileInputMapper {
         CreateBasicProfileInput(
             userID: userID,
             displayName: requestModel.displayName,
-            birthDate: requestModel.birthDate
+            birthDate: requestModel.birthDate,
+            bio: requestModel.bio
         )
     }
 

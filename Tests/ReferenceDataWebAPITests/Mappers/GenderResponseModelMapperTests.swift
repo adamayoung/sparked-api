@@ -51,12 +51,14 @@ extension GenderResponseModelMapperTests {
     private static func buildGenderDTO(
         id: UUID? = UUID(uuidString: "FCA157C1-65E8-43A5-840A-39CBC9BFACDB"),
         code: String = "M",
-        name: String = "Male"
+        name: String = "Male",
+        nameKey: String = "MALE"
     ) throws -> GenderDTO {
         try GenderDTO(
             id: #require(id),
             code: code,
-            name: name
+            name: name,
+            nameKey: nameKey
         )
     }
 

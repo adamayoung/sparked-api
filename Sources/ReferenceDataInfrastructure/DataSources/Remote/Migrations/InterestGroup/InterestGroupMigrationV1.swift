@@ -14,6 +14,7 @@ struct InterestGroupMigrationV1: AsyncMigration {
         try await database.schema("interest_group")
             .id()
             .field("name", .string, .required)
+            .field("name_key", .string, .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .field("deleted_at", .datetime)
