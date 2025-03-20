@@ -1,6 +1,6 @@
 //
 //  RegisterUserError.swift
-//  AdamDateDomain
+//  SparkedDomain
 //
 //  Created by Adam Young on 09/01/2025.
 //

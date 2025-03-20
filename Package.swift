@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "AdamDateApp",
+    name: "Sparked",
 
     platforms: [
         .macOS(.v14)
@@ -24,9 +24,9 @@ let package = Package(
 
     targets: [
         .executableTarget(
-            name: "AdamDateApp",
+            name: "SparkedAPI",
             dependencies: [
-                "AdamDateCommands",
+                "SparkedCommands",
                 "HealthWebAPI",
                 "ProfileWebAPI",
                 "ProfileApplication",
@@ -52,12 +52,12 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "AdamDateAppTests",
-            dependencies: ["AdamDateApp"]
+            name: "SparkedAPITests",
+            dependencies: ["SparkedAPI"]
         ),
 
         .target(
-            name: "AdamDateCommands",
+            name: "SparkedCommands",
             dependencies: [
                 "ProfileApplication",
                 "IdentityApplication",

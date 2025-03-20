@@ -1,6 +1,6 @@
 //
 //  FetchInterestGroupError.swift
-//  AdamDateApp
+//  SparkedAPI
 //
 //  Created by Adam Young on 12/03/2025.
 //

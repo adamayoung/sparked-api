@@ -1,4 +1,4 @@
-TARGET = AdamDateApp
+TARGET = SparkedAPI
 
 .PHONY: clean
 clean:
@@ -18,11 +18,11 @@ build:
 
 .PHONY: docker-build
 docker-build:
-	docker buildx build --platform linux/amd64 -t adam-date-app -t adamayoung/adam-date-app -t adamayoung/adam-date-app:latest .
+	docker buildx build --platform linux/amd64 -t sparked-api -t adamayoung/sparked-api -t adamayoung/sparked-api:latest .
 
 .PHONY: docker-push
 docker-push:
-	docker push adamayoung/adam-date-app:latest
+	docker push adamayoung/sparked-api:latest
 
 .PHONY: build-tests
 build-tests:
@@ -51,8 +51,8 @@ run:
 
 .PHONY: deploy-prod
 deploy-prod:
-	az group create --name AdamDateProdRG --location uksouth
-	az deployment group create --name LocalDeployment --resource-group AdamDateProdRG --template-file main.bicep --parameters prod.bicepparam
+	az group create --name SparkedProdRG --location uksouth
+	az deployment group create --name LocalDeployment --resource-group SparkedProdRG --template-file main.bicep --parameters prod.bicepparam
 
 .PHONY: migrate
 migrate:

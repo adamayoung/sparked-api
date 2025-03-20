@@ -4,19 +4,19 @@
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:adam-date-app}",
-            "name": "Debug AdamDateApp",
-            "program": "${workspaceFolder:adam-date-app}/.build/debug/AdamDateApp",
-            "preLaunchTask": "swift: Build Debug AdamDateApp"
+            "cwd": "${workspaceFolder:sparked-api}",
+            "name": "Debug SparkedAPI",
+            "program": "${workspaceFolder:sparked-api}/.build/debug/SparkedAPI",
+            "preLaunchTask": "swift: Build Debug SparkedAPI"
         },
         {
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:adam-date-app}",
-            "name": "Release AdamDateApp",
-            "program": "${workspaceFolder:adam-date-app}/.build/release/AdamDateApp",
-            "preLaunchTask": "swift: Build Release AdamDateApp"
+            "cwd": "${workspaceFolder:sparked-api}",
+            "name": "Release SparkedAPI",
+            "program": "${workspaceFolder:sparked-api}/.build/release/SparkedAPI",
+            "preLaunchTask": "swift: Build Release SparkedAPI"
         }
     ]
 }
