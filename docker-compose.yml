@@ -18,9 +18,7 @@ x-shared_environment: &shared_environment
   
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sparked-api:latest
     restart: always
     ports:
       - 8080:8080
@@ -51,3 +49,16 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+
+  prometheus:
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./prometheus-dev.yml:/etc/prometheus/prometheus.yml"
+    image: prom/prometheus
+  grafana:
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-dev.yml:/etc/grafana/provisioning/datasources/grafana.yml
+    image: grafana/grafana
