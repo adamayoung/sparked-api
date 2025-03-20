@@ -27,35 +27,9 @@ struct GenderRemoteFluentDataSourceTests {
 
     @Test("fetchAll returns genders")
     func fetchAllReturnsGenders() async throws {
-        let countryModels = try [
-            GenderModel(
-                id: #require(UUID(uuidString: "0D2ADFC7-7224-4154-9387-1C15EEB4D80F")),
-                code: "M",
-                name: "Male",
-                nameKey: "MALE"
-            ),
-            GenderModel(
-                id: #require(UUID(uuidString: "1B4A387B-23FC-42ED-9B7C-F32CD96A3F96")),
-                code: "F",
-                name: "Female",
-                nameKey: "FEMALE"
-            )
-        ]
-        let expectedGenders = try [
-            Gender(
-                id: #require(UUID(uuidString: "0D2ADFC7-7224-4154-9387-1C15EEB4D80F")),
-                code: "M",
-                name: "Male",
-                nameKey: "MALE"
-            ),
-            Gender(
-                id: #require(UUID(uuidString: "1B4A387B-23FC-42ED-9B7C-F32CD96A3F96")),
-                code: "F",
-                name: "Female",
-                nameKey: "FEMALE"
-            )
-        ]
-        database.append(countryModels)
+        let genderModels: [GenderModel] = [.maleMock(), .femaleMock()]
+        let expectedGenders: [Gender] = try [.maleMock(), .femaleMock()]
+        database.append(genderModels)
 
         let genders = try await dataSource.fetchAll()
 

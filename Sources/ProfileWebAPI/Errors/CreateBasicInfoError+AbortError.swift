@@ -12,10 +12,11 @@ extension CreateBasicInfoError: AbortError {
 
     package var status: HTTPResponseStatus {
         switch self {
-        case .userNotFound: .badRequest
+        case .profileNotFound: .notFound
         case .countryNotFound: .badRequest
         case .genderNotFound: .badRequest
         case .basicInfoAlreadyExistsForProfile: .badRequest
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

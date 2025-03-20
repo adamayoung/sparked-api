@@ -19,6 +19,12 @@ extension Application {
         )
     }
 
+    var roleRepository: any RoleRepository {
+        IdentityInfrastructureFactory.makeRoleRepository(
+            database: self.db(DatabaseID.adamDate)
+        )
+    }
+
     var passwordHasherService: any PasswordHasherService {
         IdentityAdapterFactory.makePasswordHasherService(
             hasher: self.passwordHasher

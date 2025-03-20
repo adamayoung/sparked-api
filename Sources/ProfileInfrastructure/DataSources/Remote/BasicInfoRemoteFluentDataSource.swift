@@ -63,11 +63,11 @@ final class BasicInfoRemoteFluentDataSource: BasicInfoRemoteDataSource {
         return basicInfo
     }
 
-    func fetch(byUserID userID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
+    func fetch(byOwnerID ownerID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
         let basicInfoModel: BasicInfoModel?
         do {
             basicInfoModel = try await BasicInfoModel.query(on: database)
-                .filter(\.$userID == userID)
+                .filter(\.$ownerID == ownerID)
                 .first()
         } catch let error {
             throw .unknown(error)

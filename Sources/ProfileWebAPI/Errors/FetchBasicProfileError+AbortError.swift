@@ -15,6 +15,7 @@ extension FetchBasicProfileError: AbortError {
         case .notFound: .notFound
         case .notFoundForUser: .notFound
         case .userNotFound: .notFound
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

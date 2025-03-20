@@ -10,12 +10,9 @@ import Foundation
 
 final class BasicInfoModel: Model, @unchecked Sendable {
 
-    static let schema = "basic_info"
+    static let schema = "profile_basic_info"
 
     @ID var id: UUID?
-
-    @Field(key: "user_id")
-    var userID: UUID
 
     @Field(key: "profile_id")
     var profileID: UUID
@@ -35,6 +32,9 @@ final class BasicInfoModel: Model, @unchecked Sendable {
     @Field(key: "workplace")
     var workplace: String?
 
+    @Field(key: "owner_id")
+    var ownerID: UUID
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -48,22 +48,22 @@ final class BasicInfoModel: Model, @unchecked Sendable {
 
     init(
         id: UUID? = nil,
-        userID: UUID,
         profileID: UUID,
         genderID: UUID,
         countryID: UUID,
         location: String,
         homeTown: String? = nil,
-        workplace: String? = nil
+        workplace: String? = nil,
+        ownerID: UUID
     ) {
         self.id = id
-        self.userID = userID
         self.profileID = profileID
         self.genderID = genderID
         self.countryID = countryID
         self.location = location
         self.homeTown = homeTown
         self.workplace = workplace
+        self.ownerID = ownerID
     }
 
 }

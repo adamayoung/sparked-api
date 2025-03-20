@@ -11,14 +11,21 @@ import ProfileApplication
 final class CreateBasicProfileStubUseCase: CreateBasicProfileUseCase, @unchecked Sendable {
 
     var executeResult: Result<BasicProfileDTO, CreateBasicProfileError> = .failure(.unknown())
-    private(set) var lastExecuteInput: CreateBasicProfileInput?
+    private(set) var executeWasCalled = false
+    private(set) var lastExecuteParameters:
+        (
+            input: CreateBasicProfileInput,
+            userContext: any UserContext
+        )?
 
     init() {}
 
     func execute(
-        input: CreateBasicProfileInput
+        input: CreateBasicProfileInput,
+        userContext: some UserContext
     ) async throws(CreateBasicProfileError) -> BasicProfileDTO {
-        lastExecuteInput = input
+        executeWasCalled = true
+        lastExecuteParameters = (input: input, userContext: userContext)
 
         return try executeResult.get()
     }

@@ -16,31 +16,30 @@ struct FetchUserTests {
 
     let useCase: FetchUser
     let repository: UserStubRepository
+    let roleRepository: RoleStubRepository
 
     init() {
         self.repository = UserStubRepository()
-        self.useCase = FetchUser(repository: repository)
+        self.roleRepository = RoleStubRepository()
+        self.useCase = FetchUser(
+            repository: repository,
+            roleRepository: roleRepository
+        )
     }
 
     @Test("execute when user found returns user")
     func executeWhenUserFoundReturnsUser() async throws {
         let id = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let user = User(
-            id: id,
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            passwordHash: "Password123",
-            isVerified: true,
-            isActive: true
-        )
+        let user = try User.mock(id: id)
+        let roles = try [Role.userMock()]
         repository.fetchByIDResult = .success(user)
+        roleRepository.fetchAllForUserIDResult = .success(roles)
 
         let userDTO = try await useCase.execute(id: id)
 
         #expect(userDTO.id == user.id)
         #expect(repository.fetchByIDWasCalled)
-        #expect(repository.lastFetchByIDID == id)
+        #expect(repository.lastFetchByIDParameter == id)
     }
 
     @Test("execute when user fetch fails throws error")

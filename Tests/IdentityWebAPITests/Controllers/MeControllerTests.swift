@@ -28,12 +28,20 @@ struct MeControllerTests {
     @Test("me when valid JWT token with matching user returns user")
     func meWhenValidJWTTokenWithMatchingUserReturnsUser() async throws {
         let userID = try #require(UUID(uuidString: "B8130004-7694-46E0-8D36-AB46FDCCB7AB"))
-        let userDTO = UserDTO(
+        let userDTO = try UserDTO(
             id: userID,
             firstName: "Dave",
             familyName: "Smith",
             fullName: "Dave Smith",
             email: "email@example.com",
+            roles: [
+                RoleDTO(
+                    id: #require(UUID(uuidString: "76A066CA-ED8F-46B9-B2D2-1901019755A9")),
+                    code: "USER",
+                    name: "User",
+                    description: "User role"
+                )
+            ],
             isVerified: true,
             isActive: true
         )
@@ -41,6 +49,7 @@ struct MeControllerTests {
             subject: userID.uuidString,
             email: "email@example.com",
             fullName: "Dave Smith",
+            roles: ["USER"],
             configuration: JWTConfiguration(
                 issuer: "test",
                 audience: "test",
@@ -85,6 +94,7 @@ struct MeControllerTests {
             subject: "invalid-uuid",
             email: "email@example.com",
             fullName: "Dave Smith",
+            roles: ["USER"],
             configuration: JWTConfiguration(
                 issuer: "test",
                 audience: "test",

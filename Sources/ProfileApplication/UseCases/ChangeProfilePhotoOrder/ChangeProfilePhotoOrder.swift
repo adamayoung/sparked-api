@@ -25,9 +25,14 @@ final class ChangeProfilePhotoOrder: ChangeProfilePhotoOrderUseCase {
     }
 
     func execute(
-        input: ChangeProfilePhotoOrderInput
+        input: ChangeProfilePhotoOrderInput,
+        userContext: some UserContext
     ) async throws(ChangeProfilePhotoOrderError) -> ProfilePhotoDTO {
         let basicProfile = try await basicProfile(withID: input.profileID)
+        guard userContext.canWrite(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         let profilePhotos = try await profilePhotos(forProfileID: basicProfile.id)
             .sorted { $0.index < $1.index }
 
@@ -77,9 +82,9 @@ final class ChangeProfilePhotoOrder: ChangeProfilePhotoOrderUseCase {
 
 extension ChangeProfilePhotoOrder {
 
-    private func basicProfile(withID id: UUID) async throws(ChangeProfilePhotoOrderError)
-        -> BasicProfile
-    {
+    private func basicProfile(
+        withID id: UUID
+    ) async throws(ChangeProfilePhotoOrderError) -> BasicProfile {
         let basicProfile: BasicProfile
         do {
             basicProfile = try await basicProfileRepository.fetch(byID: id)

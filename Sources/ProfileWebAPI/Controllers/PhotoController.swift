@@ -41,7 +41,7 @@ struct PhotoController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [ProfilePhotoResponseModel] {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString)
@@ -49,36 +49,48 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(id: profileID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            id: profileID,
+            userContext: userContext
+        )
         let profilePhotoDTOs = try await req.fetchProfilePhotosUseCase.execute(
-            profileID: basicProfileDTO.id
+            profileID: basicProfileDTO.id,
+            userContext: userContext
         )
 
-        let profilePhotoResponseModels = profilePhotoDTOs.map(ProfilePhotoResponseModelMapper.map)
+        let profilePhotoResponseModels = profilePhotoDTOs.map {
+            ProfilePhotoResponseModelMapper.map(from: $0, profileID: basicProfileDTO.id)
+        }
 
         return profilePhotoResponseModels
     }
 
     @Sendable
     func meIndex(req: Request) async throws -> [ProfilePhotoResponseModel] {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         let profilePhotoDTOs = try await req.fetchProfilePhotosUseCase.execute(
-            profileID: basicProfileDTO.id
+            profileID: basicProfileDTO.id,
+            userContext: userContext
         )
 
-        let profilePhotoResponseModels = profilePhotoDTOs.map(ProfilePhotoResponseModelMapper.map)
+        let profilePhotoResponseModels = profilePhotoDTOs.map {
+            ProfilePhotoResponseModelMapper.map(from: $0, profileID: basicProfileDTO.id)
+        }
 
         return profilePhotoResponseModels
     }
 
     @Sendable
     func show(req: Request) async throws -> ProfilePhotoResponseModel {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString),
@@ -88,17 +100,27 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        _ = try await req.fetchBasicProfileUseCase.execute(id: profileID)
-        let profilePhotoDTO = try await req.fetchProfilePhotoUseCase.execute(id: photoID)
+        _ = try await req.fetchBasicProfileUseCase.execute(
+            id: profileID,
+            userContext: userContext
+        )
 
-        let profilePhotoResponseModel = ProfilePhotoResponseModelMapper.map(from: profilePhotoDTO)
+        let profilePhotoDTO = try await req.fetchProfilePhotoUseCase.execute(
+            id: photoID,
+            userContext: userContext
+        )
+
+        let profilePhotoResponseModel = ProfilePhotoResponseModelMapper.map(
+            from: profilePhotoDTO,
+            profileID: profileID
+        )
 
         return profilePhotoResponseModel
     }
 
     @Sendable
     func showImage(req: Request) async throws -> Response {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString),
@@ -108,8 +130,14 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        _ = try await req.fetchBasicProfileUseCase.execute(id: profileID)
-        let profilePhotoDTO = try await req.fetchProfilePhotoUseCase.execute(id: photoID)
+        _ = try await req.fetchBasicProfileUseCase.execute(
+            id: profileID,
+            userContext: userContext
+        )
+        let profilePhotoDTO = try await req.fetchProfilePhotoUseCase.execute(
+            id: photoID,
+            userContext: userContext
+        )
 
         guard profilePhotoDTO.isLocalFile else {
             throw Abort(.notFound)
@@ -120,8 +148,8 @@ struct PhotoController: RouteCollection, Sendable {
 
     @Sendable
     func patch(req: Request) async throws -> ProfilePhotoResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
@@ -134,7 +162,10 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         guard basicProfileDTO.id == profileID else {
             throw Abort(.forbidden)
         }
@@ -153,16 +184,22 @@ struct PhotoController: RouteCollection, Sendable {
             newIndex: patchProfilePhotoIndexRequestModel.index
         )
 
-        let profilePhotoDTO = try await req.changeProfilePhotoOrderUseCase.execute(input: input)
-        let profilePhotoResponseModel = ProfilePhotoResponseModelMapper.map(from: profilePhotoDTO)
+        let profilePhotoDTO = try await req.changeProfilePhotoOrderUseCase.execute(
+            input: input,
+            userContext: userContext
+        )
+        let profilePhotoResponseModel = ProfilePhotoResponseModelMapper.map(
+            from: profilePhotoDTO,
+            profileID: basicProfileDTO.id
+        )
 
         return profilePhotoResponseModel
     }
 
     @Sendable
     func delete(req: Request) async throws -> HTTPResponseStatus {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
@@ -175,25 +212,31 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         guard basicProfileDTO.id == profileID else {
             throw Abort(.forbidden)
         }
 
         let input = DeleteProfilePhotoInput(profileID: basicProfileDTO.id, photoID: photoID)
-        try await req.deleteProfilePhotoUseCase.execute(input: input)
+        try await req.deleteProfilePhotoUseCase.execute(input: input, userContext: userContext)
 
         return .accepted
     }
 
     @Sendable
     func addPhoto(req: Request) async throws -> HTTPResponseStatus {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
 
         guard let byteBuffer = req.body.data else {
             throw Abort(.badRequest)
@@ -206,7 +249,7 @@ struct PhotoController: RouteCollection, Sendable {
             photoType: "jpg"
         )
 
-        _ = try await req.addProfilePhotoUseCase.execute(input: input)
+        _ = try await req.addProfilePhotoUseCase.execute(input: input, userContext: userContext)
 
         return .created
     }

@@ -14,6 +14,7 @@ extension AddProfilePhotoError: AbortError {
         switch self {
         case .profileNotFound: .notFound
         case .tooManyPhotos: .badRequest
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

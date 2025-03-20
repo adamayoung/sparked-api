@@ -11,7 +11,7 @@ import Foundation
 struct CountryMigrationV1: AsyncMigration {
 
     func prepare(on database: Database) async throws {
-        try await database.schema("country")
+        try await database.schema("reference_data_country")
             .id()
             .field("code", .string, .required)
             .field("name", .string, .required)
@@ -25,7 +25,7 @@ struct CountryMigrationV1: AsyncMigration {
     }
 
     func revert(on database: Database) async throws {
-        try await database.schema("country").delete()
+        try await database.schema("reference_data_country").delete()
     }
 
 }

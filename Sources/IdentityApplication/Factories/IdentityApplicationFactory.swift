@@ -13,22 +13,42 @@ package final class IdentityApplicationFactory: Sendable {
 
     package static func makeAuthenticateUserUseCase(
         repository: some UserRepository,
+        roleRepository: some RoleRepository,
         hasher: some PasswordHasherService
     ) -> some AuthenticateUserUseCase {
-        AuthenticateUser(repository: repository, hasher: hasher)
+        AuthenticateUser(
+            repository: repository,
+            roleRepository: roleRepository,
+            hasher: hasher
+        )
     }
 
     package static func makeFetchUserUseCase(
-        repository: some UserRepository
+        repository: some UserRepository,
+        roleRepository: some RoleRepository
     ) -> some FetchUserUseCase {
-        FetchUser(repository: repository)
+        FetchUser(
+            repository: repository,
+            roleRepository: roleRepository
+        )
     }
 
     package static func makeRegisterUserUseCase(
         repository: some UserRepository,
+        roleRepository: some RoleRepository,
         hasher: some PasswordHasherService
     ) -> some RegisterUserUseCase {
-        RegisterUser(repository: repository, hasher: hasher)
+        RegisterUser(
+            repository: repository,
+            roleRepository: roleRepository,
+            hasher: hasher
+        )
+    }
+
+    package static func makeFetchRoleUseCase(
+        repository: some RoleRepository
+    ) -> some FetchRolesUseCase {
+        FetchRoles(repository: repository)
     }
 
 }

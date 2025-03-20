@@ -10,8 +10,9 @@ import Testing
 
 @testable import FileStorageKit
 
-@MainActor
-final class AzureBlobStorageSignatureStubSigner: AzureBlobStorageSignatureSigning {
+final class AzureBlobStorageSignatureStubSigner:
+    AzureBlobStorageSignatureSigning, @unchecked Sendable
+{
 
     var signResult: Result<String, FileStorageError> = .failure(.unknown())
     private(set) var signWasCalled = false

@@ -18,6 +18,7 @@ struct UserResponseModelMapper {
             firstName: dto.firstName,
             familyName: dto.familyName,
             email: dto.email,
+            roles: dto.roles.map(\.code),
             isVerified: dto.isVerified
         )
     }

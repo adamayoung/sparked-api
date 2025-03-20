@@ -10,7 +10,6 @@ import Vapor
 struct BasicInfoResponseModel: Content, Equatable {
 
     let id: UUID
-    let profileID: UUID
     let genderID: UUID
     let countryID: UUID
     let location: String

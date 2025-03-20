@@ -9,6 +9,9 @@ import Foundation
 
 package protocol FetchProfilePhotoUseCase {
 
-    func execute(id: UUID) async throws(FetchProfilePhotoError) -> ProfilePhotoDTO
+    func execute(
+        id: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfilePhotoError) -> ProfilePhotoDTO
 
 }

@@ -10,6 +10,9 @@ import ProfileDomain
 
 package protocol AddProfilePhotoUseCase {
 
-    func execute(input: AddProfilePhotoInput) async throws(AddProfilePhotoError) -> ProfilePhotoDTO
+    func execute(
+        input: AddProfilePhotoInput,
+        userContext: some UserContext
+    ) async throws(AddProfilePhotoError) -> ProfilePhotoDTO
 
 }

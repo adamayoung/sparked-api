@@ -10,8 +10,6 @@ import Foundation
 package struct BasicInfoDTO: Identifiable, Equatable, Sendable {
 
     package let id: UUID
-    package let userID: UUID
-    package let profileID: UUID
     package let genderID: UUID
     package let countryID: UUID
     package let location: String
@@ -20,8 +18,6 @@ package struct BasicInfoDTO: Identifiable, Equatable, Sendable {
 
     package init(
         id: UUID,
-        userID: UUID,
-        profileID: BasicProfileDTO.ID,
         genderID: UUID,
         countryID: UUID,
         location: String,
@@ -29,8 +25,6 @@ package struct BasicInfoDTO: Identifiable, Equatable, Sendable {
         workplace: String? = nil
     ) {
         self.id = id
-        self.userID = userID
-        self.profileID = profileID
         self.genderID = genderID
         self.countryID = countryID
         self.location = location

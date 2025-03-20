@@ -32,7 +32,7 @@ struct BasicProfileControllerTests {
     func showMeWhenValidJWTTokenReturnsBasicProfile() async throws {
         let userID = try #require(UUID(uuidString: "84D74D2A-4368-4262-AEF8-067A6F1FE746"))
         let tokenPayload = try TokenPayload.stub(subject: userID)
-        let basicProfileDTO = try Self.buildBasicProfileDTO(userID: userID)
+        let basicProfileDTO = try Self.buildBasicProfileDTO()
         fetchBasicProfileUseCase.executeUserIDResult = .success(basicProfileDTO)
         let expectedResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
@@ -50,7 +50,7 @@ struct BasicProfileControllerTests {
                     #expect(res.status == .ok)
                     let responseModel = try res.content.decode(BasicProfileResponseModel.self)
                     #expect(responseModel == expectedResponseModel)
-                    #expect(fetchBasicProfileUseCase.lastExecuteUserIDUserID == userID)
+                    #expect(fetchBasicProfileUseCase.lastExecuteUserIDParameters?.userID == userID)
                 }
             )
         }
@@ -74,7 +74,6 @@ extension BasicProfileControllerTests {
 
     private static func buildBasicProfileDTO(
         id: UUID? = UUID(uuidString: "DE663275-F75E-4D6C-984F-8F3B0D637021"),
-        userID: UUID? = UUID(uuidString: "94BBA546-05F6-4691-AB40-B39EA7B3E0F0"),
         displayName: String = "John",
         birthDate: Date = Date(timeIntervalSince1970: 0),
         age: Int = 40,
@@ -82,7 +81,6 @@ extension BasicProfileControllerTests {
     ) throws -> BasicProfileDTO {
         try BasicProfileDTO(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
             age: age,

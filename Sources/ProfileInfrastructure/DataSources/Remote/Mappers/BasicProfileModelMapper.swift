@@ -15,10 +15,10 @@ struct BasicProfileModelMapper {
     static func map(from basicProfile: BasicProfile) -> BasicProfileModel {
         BasicProfileModel(
             id: basicProfile.id,
-            userID: basicProfile.userID,
             displayName: basicProfile.displayName,
             birthDate: basicProfile.birthDate,
-            bio: basicProfile.bio
+            bio: basicProfile.bio,
+            ownerID: basicProfile.ownerID
         )
     }
 

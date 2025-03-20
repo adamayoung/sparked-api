@@ -11,7 +11,7 @@ import Foundation
 struct EducationLevelMigrationV1: AsyncMigration {
 
     func prepare(on database: Database) async throws {
-        try await database.schema("education_level")
+        try await database.schema("reference_data_education_level")
             .id()
             .field("name", .string, .required)
             .field("name_key", .string, .required)
@@ -25,7 +25,7 @@ struct EducationLevelMigrationV1: AsyncMigration {
     }
 
     func revert(on database: Database) async throws {
-        try await database.schema("education_level").delete()
+        try await database.schema("reference_data_education_level").delete()
     }
 
 }

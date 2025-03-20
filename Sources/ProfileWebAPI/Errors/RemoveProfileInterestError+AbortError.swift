@@ -14,6 +14,7 @@ extension RemoveProfileInterestError: AbortError {
         switch self {
         case .profileNotFound: .notFound
         case .interestNotFound: .notFound
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

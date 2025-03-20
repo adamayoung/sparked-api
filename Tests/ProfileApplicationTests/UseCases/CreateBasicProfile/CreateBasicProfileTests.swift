@@ -29,25 +29,25 @@ struct CreateBasicProfileTests {
 
     @Test("execute when user exists and basic profile created returns basic profile")
     func executeWhenUserExistsAndBasicProfileCreatedReturnsBasicProfile() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let input = try Self.createCreateBasicProfileInput(userID: userID)
-        let basicProfile = try Self.createBasicProfile(userID: userID)
-        let user = User(id: userID, email: "some@email.com")
+        let userContext = UserMockContext.withUserRoleMock()
+        let userID = try #require(userContext.userID)
+        let input = try CreateBasicProfileInput.mock(userID: userID)
+        let user = try User.mock(id: userID)
 
         repository.createResult = .success(Void())
         userRepository.fetchByIDResult = .success(user)
 
-        let basicProfileDTO = try await useCase.execute(input: input)
+        _ = try await useCase.execute(input: input, userContext: userContext)
 
-        #expect(basicProfileDTO.userID == basicProfile.userID)
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateBasicProfile?.userID == userID)
+        #expect(repository.lastCreateBasicProfile?.ownerID == userID)
     }
 
     @Test("execute when create basic profile fails throws error")
     func executeWhenCreatingBasicProfileFailsThrowsError() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let input = try Self.createCreateBasicProfileInput(userID: userID)
+        let userContext = UserMockContext.withUserRoleMock()
+        let userID = try #require(userContext.userID)
+        let input = try CreateBasicProfileInput.mock(userID: userID)
         let user = User(id: userID, email: "some@email.com")
 
         repository.createResult = .failure(.unknown())
@@ -56,44 +56,10 @@ struct CreateBasicProfileTests {
         await #expect(
             throws: CreateBasicProfileError.unknown(BasicProfileRepositoryError.unknown())
         ) {
-            _ = try await useCase.execute(input: input)
+            _ = try await useCase.execute(input: input, userContext: userContext)
         }
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateBasicProfile?.userID == input.userID)
-    }
-
-}
-
-extension CreateBasicProfileTests {
-
-    private static func createCreateBasicProfileInput(
-        userID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
-        displayName: String = "Dave Smith",
-        birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
-    ) throws -> CreateBasicProfileInput {
-        try CreateBasicProfileInput(
-            userID: #require(userID),
-            displayName: displayName,
-            birthDate: birthDate,
-            bio: bio
-        )
-    }
-
-    private static func createBasicProfile(
-        id: UUID? = UUID(uuidString: "51045953-FA7E-47FF-A336-D608742031DF"),
-        userID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
-        displayName: String = "Dave",
-        birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
-    ) throws -> BasicProfile {
-        try BasicProfile(
-            id: #require(id),
-            userID: #require(userID),
-            displayName: displayName,
-            birthDate: birthDate,
-            bio: bio
-        )
+        #expect(repository.lastCreateBasicProfile?.ownerID == input.ownerID)
     }
 
 }

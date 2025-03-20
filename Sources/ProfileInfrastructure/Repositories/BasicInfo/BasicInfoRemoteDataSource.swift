@@ -15,7 +15,7 @@ protocol BasicInfoRemoteDataSource {
 
     func fetch(byID id: BasicInfo.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
-    func fetch(byUserID userID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
+    func fetch(byOwnerID ownerID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
     func fetch(
         byProfileID profileID: BasicProfile.ID

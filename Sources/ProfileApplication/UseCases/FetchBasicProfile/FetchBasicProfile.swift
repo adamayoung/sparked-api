@@ -16,7 +16,10 @@ final class FetchBasicProfile: FetchBasicProfileUseCase {
         self.repository = repository
     }
 
-    func execute(id: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO {
+    func execute(
+        id: UUID,
+        userContext: some UserContext
+    ) async throws(FetchBasicProfileError) -> BasicProfileDTO {
         let basicProfile: BasicProfile
         do {
             basicProfile = try await repository.fetch(byID: id)
@@ -26,12 +29,19 @@ final class FetchBasicProfile: FetchBasicProfileUseCase {
             throw .unknown(error)
         }
 
+        guard userContext.canRead(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
         return basicProfileDTO
     }
 
-    func execute(userID: UUID) async throws(FetchBasicProfileError) -> BasicProfileDTO {
+    func execute(
+        userID: UUID,
+        userContext: some UserContext
+    ) async throws(FetchBasicProfileError) -> BasicProfileDTO {
         let basicProfile: BasicProfile
         do {
             basicProfile = try await repository.fetch(byUserID: userID)
@@ -39,6 +49,17 @@ final class FetchBasicProfile: FetchBasicProfileUseCase {
             throw .notFoundForUser(userID: userID)
         } catch let error {
             throw .unknown(error)
+        }
+
+        guard userContext.canRead(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
+        guard
+            userContext.isOwner(basicProfile.ownerID)
+                || (userContext.isAdmin && userContext.isSystem)
+        else {
+            throw .unauthorized
         }
 
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)

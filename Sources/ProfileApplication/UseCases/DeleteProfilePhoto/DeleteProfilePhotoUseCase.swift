@@ -9,6 +9,9 @@ import ProfileDomain
 
 package protocol DeleteProfilePhotoUseCase {
 
-    func execute(input: DeleteProfilePhotoInput) async throws(DeleteProfilePhotoError)
+    func execute(
+        input: DeleteProfilePhotoInput,
+        userContext: some UserContext
+    ) async throws(DeleteProfilePhotoError)
 
 }

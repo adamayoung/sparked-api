@@ -10,7 +10,7 @@ import Foundation
 
 final class EducationLevelModel: Model, @unchecked Sendable {
 
-    static let schema = "education_level"
+    static let schema = "reference_data_education_level"
 
     @ID var id: UUID?
 

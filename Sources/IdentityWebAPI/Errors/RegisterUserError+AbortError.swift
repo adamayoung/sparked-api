@@ -14,6 +14,7 @@ extension RegisterUserError: AbortError {
         switch self {
         case .validation: .badRequest
         case .emailAlreadyExists: .badRequest
+        case .roleNotFound: .notFound
         case .unknown: .internalServerError
         }
     }

@@ -15,13 +15,13 @@ struct BasicInfoMapper {
     static func map(from model: BasicInfoModel) throws -> BasicInfo {
         BasicInfo(
             id: try model.requireID(),
-            userID: model.userID,
             profileID: model.profileID,
             genderID: model.genderID,
             countryID: model.countryID,
             location: model.location,
             homeTown: model.homeTown,
-            workplace: model.workplace
+            workplace: model.workplace,
+            ownerID: model.ownerID
         )
     }
 

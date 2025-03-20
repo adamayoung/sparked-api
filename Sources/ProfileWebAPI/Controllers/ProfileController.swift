@@ -22,12 +22,15 @@ struct ProfileController: RouteCollection, Sendable {
 
     @Sendable
     func showMe(req: Request) async throws -> ProfileResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let profileDTO = try await req.fetchProfileUseCase.execute(userID: userID)
+        let profileDTO = try await req.fetchProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         let profileResponseModel = ProfileResponseModelMapper.map(from: profileDTO)
 
         return profileResponseModel
@@ -35,7 +38,7 @@ struct ProfileController: RouteCollection, Sendable {
 
     @Sendable
     func show(req: Request) async throws -> ProfileResponseModel {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString)
@@ -43,7 +46,10 @@ struct ProfileController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let profileDTO = try await req.fetchProfileUseCase.execute(id: profileID)
+        let profileDTO = try await req.fetchProfileUseCase.execute(
+            id: profileID,
+            userContext: userContext
+        )
         let profileResponseModel = ProfileResponseModelMapper.map(from: profileDTO)
 
         return profileResponseModel

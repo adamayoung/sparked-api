@@ -13,7 +13,6 @@ import Testing
 @testable import ReferenceDataInfrastructure
 
 @Suite("CountryDefaultRepository")
-@MainActor
 struct CountryDefaultRepositoryTests {
 
     let repository: CountryDefaultRepository
@@ -31,20 +30,7 @@ struct CountryDefaultRepositoryTests {
 
     @Test("countries returns countries")
     func countriesReturnsCountries() async throws {
-        let expectedCountries = try [
-            Country(
-                id: #require(UUID(uuidString: "76A6BA42-A862-40C5-B917-38F41CE13486")),
-                code: "US",
-                name: "United States",
-                nameKey: "UNITED_STATES"
-            ),
-            Country(
-                id: #require(UUID(uuidString: "A964D9DD-5FCA-4B87-9383-4033A26D0900")),
-                code: "GB",
-                name: "United Kingdom",
-                nameKey: "UNITED_KINGDOM"
-            )
-        ]
+        let expectedCountries: [Country] = try [.unitedStatesMock(), .unitedKingdomMock()]
         remoteDataSource.fetchAllResult = .success(expectedCountries)
 
         let countries = try await repository.fetchAll()

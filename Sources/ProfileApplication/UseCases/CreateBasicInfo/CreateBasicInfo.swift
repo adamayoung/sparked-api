@@ -11,33 +11,35 @@ import ProfileDomain
 final class CreateBasicInfo: CreateBasicInfoUseCase {
 
     private let repository: any BasicInfoRepository
-    private let userRepository: any UserRepository
+    private let basicProfileRepository: any BasicProfileRepository
     private let countryRepository: any CountryRepository
     private let genderRepository: any GenderRepository
 
     init(
         repository: some BasicInfoRepository,
-        userRepository: some UserRepository,
+        basicProfileRepository: some BasicProfileRepository,
         countryRepository: some CountryRepository,
         genderRepository: some GenderRepository
     ) {
         self.repository = repository
-        self.userRepository = userRepository
+        self.basicProfileRepository = basicProfileRepository
         self.countryRepository = countryRepository
         self.genderRepository = genderRepository
     }
 
-    func execute(input: CreateBasicInfoInput) async throws(CreateBasicInfoError) -> BasicInfoDTO {
+    func execute(
+        input: CreateBasicInfoInput,
+        userContext: some UserContext
+    ) async throws(CreateBasicInfoError) -> BasicInfoDTO {
+        let basicProfile = try await basicProfile(withID: input.profileID)
+        guard userContext.canWrite(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         try await validate(input: input)
 
-        let basicInfo = BasicInfoMapper.map(from: input)
-        do {
-            try await repository.create(basicInfo)
-        } catch BasicInfoRepositoryError.duplicate {
-            throw .basicInfoAlreadyExistsForProfile(profileID: input.profileID)
-        } catch let error {
-            throw .unknown(error)
-        }
+        let basicInfo = BasicInfoMapper.map(from: input, ownerID: basicProfile.ownerID)
+        try await create(basicInfo)
 
         let basicInfoDTO = BasicInfoDTOMapper.map(from: basicInfo)
 
@@ -48,20 +50,38 @@ final class CreateBasicInfo: CreateBasicInfoUseCase {
 
 extension CreateBasicInfo {
 
-    private func validate(input: CreateBasicInfoInput) async throws(CreateBasicInfoError) {
-        try await self.validate(userID: input.userID)
-        try await self.validate(countryID: input.countryID)
-        try await self.validate(genderID: input.genderID)
-    }
-
-    private func validate(userID: UUID) async throws(CreateBasicInfoError) {
+    private func basicProfile(
+        withID id: UUID
+    ) async throws(CreateBasicInfoError) -> BasicProfile {
+        let basicProfile: BasicProfile
         do {
-            _ = try await userRepository.fetch(byID: userID)
-        } catch UserRepositoryError.notFound {
-            throw .userNotFound(userID: userID)
+            basicProfile = try await basicProfileRepository.fetch(byID: id)
+        } catch BasicProfileRepositoryError.notFound {
+            throw .profileNotFound(profileID: id)
         } catch let error {
             throw .unknown(error)
         }
+
+        return basicProfile
+    }
+
+    private func create(_ basicInfo: BasicInfo) async throws(CreateBasicInfoError) {
+        do {
+            try await repository.create(basicInfo)
+        } catch BasicInfoRepositoryError.duplicate {
+            throw .basicInfoAlreadyExistsForProfile(profileID: basicInfo.profileID)
+        } catch let error {
+            throw .unknown(error)
+        }
+    }
+
+}
+
+extension CreateBasicInfo {
+
+    private func validate(input: CreateBasicInfoInput) async throws(CreateBasicInfoError) {
+        try await self.validate(countryID: input.countryID)
+        try await self.validate(genderID: input.genderID)
     }
 
     private func validate(countryID: UUID) async throws(CreateBasicInfoError) {

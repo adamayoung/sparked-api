@@ -10,8 +10,6 @@ import Foundation
 package struct ProfilePhotoDTO: Identifiable, Equatable, Sendable {
 
     package let id: UUID
-    package let userID: UUID
-    package let profileID: UUID
     package let index: Int
     package let url: URL
 

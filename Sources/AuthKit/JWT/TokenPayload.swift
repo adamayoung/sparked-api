@@ -15,6 +15,7 @@ package struct TokenPayload: JWT.JWTPayload, Equatable {
     package let subject: SubjectClaim
     package let email: String
     package let name: String
+    package let roles: RolesClaim
     package let expiration: ExpirationClaim
 
     package func verify(using algorithm: some JWTAlgorithm) async throws {
@@ -37,6 +38,7 @@ extension TokenPayload {
         subject: String,
         email: String,
         fullName: String,
+        roles: [String],
         configuration: JWTConfiguration,
         dateProvider: () -> Date = { Date.now }
     ) {
@@ -48,6 +50,7 @@ extension TokenPayload {
             subject: SubjectClaim(value: subject),
             email: email,
             name: fullName,
+            roles: RolesClaim(value: roles),
             expiration: ExpirationClaim(value: expirationDate)
         )
     }
@@ -62,7 +65,18 @@ extension TokenPayload {
         case subject = "sub"
         case email
         case name
+        case roles
         case expiration = "exp"
+    }
+
+}
+
+package struct RolesClaim: JWTMultiValueClaim, Equatable {
+
+    package var value: [String]
+
+    package init(value: [String]) {
+        self.value = value
     }
 
 }

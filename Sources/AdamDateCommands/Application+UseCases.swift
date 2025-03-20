@@ -23,6 +23,7 @@ extension Application {
         final class Storage: @unchecked Sendable {
 
             var makeRegisterUserUseCase: ((Application) -> RegisterUserUseCase)?
+            var makeFetchRolesUseCase: ((Application) -> FetchRolesUseCase)?
 
             init() {}
 
@@ -43,12 +44,25 @@ extension Application {
             return makeUseCase(self.application)
         }
 
+        var fetchRolesUseCase: FetchRolesUseCase {
+            guard let makeUseCase = self.storage.makeFetchRolesUseCase else {
+                fatalError(
+                    "No FetchRolesUseCase configured. Configure with app.commandUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
         package func use(_ provider: Provider) {
             provider.run(self.application)
         }
 
         package func use(_ makeUseCase: @escaping (Application) -> RegisterUserUseCase) {
             self.storage.makeRegisterUserUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchRolesUseCase) {
+            self.storage.makeFetchRolesUseCase = makeUseCase
         }
 
         func initialize() {

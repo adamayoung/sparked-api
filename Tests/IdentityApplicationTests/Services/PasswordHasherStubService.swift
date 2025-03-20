@@ -12,26 +12,24 @@ final class PasswordHasherStubService: PasswordHasherService, @unchecked Sendabl
 
     var hashResult: Result<String, Error> = .success("")
     private(set) var hashWasCalled = false
-    private(set) var hashLastPassword: String?
+    private(set) var lastHashParameter: String?
 
     var verifyResult: Result<Bool, Error> = .success(true)
     private(set) var verifyWasCalled = false
-    private(set) var verifyLastPassword: String?
-    private(set) var verifyLastCreated: String?
+    private(set) var lastVerifyParameters: (password: String, created: String)?
 
     init() {}
 
     func hash(_ password: String) throws -> String {
         hashWasCalled = true
-        hashLastPassword = password
+        lastHashParameter = password
 
         return try hashResult.get()
     }
 
     func verify(_ password: String, created digest: String) throws -> Bool {
         verifyWasCalled = true
-        verifyLastPassword = password
-        verifyLastCreated = digest
+        lastVerifyParameters = (password: password, created: digest)
 
         return try verifyResult.get()
     }

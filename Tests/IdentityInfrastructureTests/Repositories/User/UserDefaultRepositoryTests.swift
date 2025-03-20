@@ -28,12 +28,14 @@ struct UserDefaultRepositoryTests {
     @Test("create when user with email does not exist creates user")
     func createWhenUserWithEmailDoesNotExistCreatesUser() async throws {
         let user = try Self.buildUser()
+        let roles = try [Self.buildRole()]
         remoteDataSource.createResult = .success(Void())
 
-        try await repository.create(user)
+        try await repository.create(user, withRoles: roles)
 
         #expect(remoteDataSource.createWasCalled)
-        #expect(remoteDataSource.lastCreateUser == user)
+        #expect(remoteDataSource.lastCreateParameters?.user == user)
+        #expect(remoteDataSource.lastCreateParameters?.roles == roles)
         #expect(remoteDataSource.fetchByEmailWasCalled)
         #expect(remoteDataSource.lastFetchByEmailEmail == user.email)
     }
@@ -42,14 +44,16 @@ struct UserDefaultRepositoryTests {
     func createWhenUserWithEmailDoesExistThrowsEmailAlreadyExistsError() async throws {
         let email = "email@example.com"
         let user = try Self.buildUser(email: email)
+        let roles = try [Self.buildRole()]
         let alreadyExistsUser = try Self.buildUser(email: email)
         remoteDataSource.fetchByEmailResult = .success(alreadyExistsUser)
 
         await #expect(throws: UserRepositoryError.duplicateEmail) {
-            try await repository.create(user)
+            try await repository.create(user, withRoles: roles)
         }
         #expect(!remoteDataSource.createWasCalled)
-        #expect(remoteDataSource.lastCreateUser == nil)
+        #expect(remoteDataSource.lastCreateParameters?.user == nil)
+        #expect(remoteDataSource.lastCreateParameters?.roles == nil)
         #expect(remoteDataSource.fetchByEmailWasCalled)
         #expect(remoteDataSource.lastFetchByEmailEmail == email)
     }
@@ -125,6 +129,20 @@ extension UserDefaultRepositoryTests {
             passwordHash: passwordHash,
             isVerified: isVerified,
             isActive: isActive
+        )
+    }
+
+    private static func buildRole(
+        id: UUID? = UUID(uuidString: "BB736BCD-67AA-4D79-A10A-44C93800B528"),
+        code: String = "USER",
+        name: String = "User",
+        description: String = "User role"
+    ) throws -> Role {
+        try Role(
+            id: #require(id),
+            code: code,
+            name: name,
+            description: description
         )
     }
 

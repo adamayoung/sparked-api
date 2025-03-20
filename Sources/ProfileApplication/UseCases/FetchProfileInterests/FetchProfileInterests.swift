@@ -24,22 +24,16 @@ final class FetchProfileInterests: FetchProfileInterestsUseCase {
         self.basicProfileRepository = basicProfileRepository
     }
 
-    func execute(profileID: UUID) async throws(FetchProfileInterestsError) -> [ProfileInterestDTO] {
-        do {
-            _ = try await basicProfileRepository.fetch(byID: profileID)
-        } catch BasicProfileRepositoryError.notFound {
-            throw .profileNotFound(profileID: profileID)
-        } catch let error {
-            throw .unknown(error)
+    func execute(
+        profileID: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfileInterestsError) -> [ProfileInterestDTO] {
+        let basicProfile = try await basicProfile(byID: profileID)
+        guard userContext.canRead(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
         }
 
-        let profileInterests: [ProfileInterest]
-        do {
-            profileInterests = try await repository.fetchAll(forProfileID: profileID)
-        } catch let error {
-            throw .unknown(error)
-        }
-
+        let profileInterests = try await profileInterests(forProfileID: profileID)
         let interestIDs = profileInterests.map(\.interestID)
         let interestMap = try await interests(withIDs: interestIDs)
 
@@ -60,6 +54,34 @@ final class FetchProfileInterests: FetchProfileInterestsUseCase {
 }
 
 extension FetchProfileInterests {
+
+    private func basicProfile(
+        byID profileID: BasicProfile.ID
+    ) async throws(FetchProfileInterestsError) -> BasicProfile {
+        let basicProfile: BasicProfile
+        do {
+            basicProfile = try await basicProfileRepository.fetch(byID: profileID)
+        } catch BasicProfileRepositoryError.notFound {
+            throw .profileNotFound(profileID: profileID)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return basicProfile
+    }
+
+    private func profileInterests(
+        forProfileID profileID: BasicProfile.ID
+    ) async throws(FetchProfileInterestsError) -> [ProfileInterest] {
+        let profileInterests: [ProfileInterest]
+        do {
+            profileInterests = try await repository.fetchAll(forProfileID: profileID)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return profileInterests
+    }
 
     private func interests(
         withIDs ids: [Interest.ID]

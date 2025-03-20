@@ -11,6 +11,7 @@ package enum CreateBasicProfileError: LocalizedError, Equatable, Sendable {
 
     case userNotFound(userID: UUID)
     case profileAlreadyExistsForUser(userID: UUID)
+    case unauthorized
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -20,6 +21,9 @@ package enum CreateBasicProfileError: LocalizedError, Equatable, Sendable {
 
         case .profileAlreadyExistsForUser(let userID):
             "Profile already exists for user \(userID)"
+
+        case .unauthorized:
+            "Unauthorized"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -35,6 +39,9 @@ package enum CreateBasicProfileError: LocalizedError, Equatable, Sendable {
             .profileAlreadyExistsForUser(let lhsUserID), .profileAlreadyExistsForUser(let rhsUserID)
         ):
             lhsUserID == rhsUserID
+
+        case (.unauthorized, .unauthorized):
+            true
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

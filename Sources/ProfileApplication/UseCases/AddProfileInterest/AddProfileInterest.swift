@@ -25,33 +25,31 @@ final class AddProfileInterest: AddProfileInterestUseCase {
     }
 
     func execute(
-        input: AddProfileInterestInput
+        input: AddProfileInterestInput,
+        userContext: some UserContext
     ) async throws(AddProfileInterestError) -> ProfileInterestDTO {
+        let basicProfile = try await basicProfile(withID: input.profileID)
+        guard userContext.canWrite(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         if try await hasAlreadyAddedInterest(input.interestID, toProfileWithID: input.profileID) {
             throw .duplicateInterest(interestID: input.interestID)
         }
 
-        let basicProfile = try await basicProfile(withID: input.profileID)
         let currentInterestGroupCount = try await interestGroupCount(forProfileID: basicProfile.id)
         guard currentInterestGroupCount < InterestConfiguration.maxCount else {
             throw .tooManyInterests(maxCount: InterestConfiguration.maxCount)
         }
 
         let interest = try await interest(withID: input.interestID)
-
-        let profileInterestID = UUID()
         let profileInterest = ProfileInterest(
-            id: profileInterestID,
-            userID: basicProfile.userID,
             profileID: basicProfile.id,
-            interestID: interest.id
+            interestID: interest.id,
+            ownerID: basicProfile.ownerID
         )
 
-        do {
-            try await repository.create(profileInterest)
-        } catch let error {
-            throw .unknown(error)
-        }
+        try await create(profileInterest)
 
         let profileInterestDTO = ProfileInterestDTOMapper.map(
             from: profileInterest,
@@ -121,6 +119,14 @@ extension AddProfileInterest {
         }
 
         return true
+    }
+
+    private func create(_ profileInterest: ProfileInterest) async throws(AddProfileInterestError) {
+        do {
+            try await repository.create(profileInterest)
+        } catch let error {
+            throw .unknown(error)
+        }
     }
 
 }

@@ -14,10 +14,10 @@ struct BasicProfileMapper {
 
     static func map(from input: CreateBasicProfileInput) -> BasicProfile {
         BasicProfile(
-            userID: input.userID,
             displayName: input.displayName,
             birthDate: input.birthDate,
-            bio: input.bio
+            bio: input.bio,
+            ownerID: input.ownerID
         )
     }
 

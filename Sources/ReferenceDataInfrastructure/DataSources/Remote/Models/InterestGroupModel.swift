@@ -10,7 +10,7 @@ import Foundation
 
 final class InterestGroupModel: Model, @unchecked Sendable {
 
-    static let schema = "interest_group"
+    static let schema = "reference_data_interest_group"
 
     @ID var id: UUID?
 

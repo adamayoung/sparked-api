@@ -24,9 +24,18 @@ final class DeleteProfilePhoto: DeleteProfilePhotoUseCase {
         self.imageRepository = imageRepository
     }
 
-    func execute(input: DeleteProfilePhotoInput) async throws(DeleteProfilePhotoError) {
-        try await verifyBasicProfile(withID: input.profileID)
+    func execute(
+        input: DeleteProfilePhotoInput,
+        userContext: some UserContext
+    ) async throws(DeleteProfilePhotoError) {
         let profilePhoto = try await profilePhoto(withID: input.photoID)
+        guard userContext.canWrite(ownerID: profilePhoto.ownerID) else {
+            throw .unauthorized
+        }
+
+        guard profilePhoto.profileID == input.profileID else {
+            throw .profileNotFound(profileID: input.profileID)
+        }
 
         try await deleteProfilePhotoAndImage(profilePhoto: profilePhoto)
         try await updateProfilePhotosOrder(forProfileID: input.profileID)
@@ -34,18 +43,6 @@ final class DeleteProfilePhoto: DeleteProfilePhotoUseCase {
 }
 
 extension DeleteProfilePhoto {
-
-    private func verifyBasicProfile(
-        withID id: UUID
-    ) async throws(DeleteProfilePhotoError) {
-        do {
-            _ = try await basicProfileRepository.fetch(byID: id)
-        } catch BasicProfileRepositoryError.notFound {
-            throw .profileNotFound(profileID: id)
-        } catch let error {
-            throw .unknown(error)
-        }
-    }
 
     private func profilePhoto(
         withID id: UUID

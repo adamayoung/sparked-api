@@ -21,7 +21,7 @@ struct CreateBasicProfileInputMapperTests {
 
         let input = CreateBasicProfileInputMapper.map(from: requestModel, userID: userID)
 
-        #expect(input.userID == userID)
+        #expect(input.ownerID == userID)
     }
 
     @Test("map from dto with display name")

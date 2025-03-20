@@ -32,12 +32,15 @@ struct BasicInfoController: RouteCollection, Sendable {
 
     @Sendable
     func showMe(req: Request) async throws -> BasicInfoResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(userID: userID)
+        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
 
         return basicInfoResponseModel
@@ -45,7 +48,7 @@ struct BasicInfoController: RouteCollection, Sendable {
 
     @Sendable
     func show(req: Request) async throws -> BasicInfoResponseModel {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString)
@@ -53,7 +56,10 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(profileID: profileID)
+        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(
+            profileID: profileID,
+            userContext: userContext
+        )
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
 
         return basicInfoResponseModel
@@ -61,12 +67,15 @@ struct BasicInfoController: RouteCollection, Sendable {
 
     @Sendable
     func createMe(req: Request) async throws -> BasicInfoResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
 
         let createBasicInfoRequestModel: CreateBasicInfoRequestModel
         do {
@@ -78,10 +87,12 @@ struct BasicInfoController: RouteCollection, Sendable {
 
         let input = CreateBasicInfoInputMapper.map(
             from: createBasicInfoRequestModel,
-            userID: userID,
             profileID: basicProfileDTO.id
         )
-        let basicInfo = try await req.createBasicInfoUseCase.execute(input: input)
+        let basicInfo = try await req.createBasicInfoUseCase.execute(
+            input: input,
+            userContext: userContext
+        )
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
 
         return basicInfoResponseModel
@@ -89,8 +100,8 @@ struct BasicInfoController: RouteCollection, Sendable {
 
     @Sendable
     func create(req: Request) async throws -> BasicInfoResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
@@ -101,7 +112,10 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         guard basicProfileDTO.id == profileID else {
             throw Abort(.forbidden)
         }
@@ -116,10 +130,12 @@ struct BasicInfoController: RouteCollection, Sendable {
 
         let input = CreateBasicInfoInputMapper.map(
             from: createBasicInfoRequestModel,
-            userID: userID,
             profileID: basicProfileDTO.id
         )
-        let basicInfo = try await req.createBasicInfoUseCase.execute(input: input)
+        let basicInfo = try await req.createBasicInfoUseCase.execute(
+            input: input,
+            userContext: userContext
+        )
         let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
 
         return basicInfoResponseModel

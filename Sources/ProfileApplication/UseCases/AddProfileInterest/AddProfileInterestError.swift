@@ -13,6 +13,7 @@ package enum AddProfileInterestError: LocalizedError, Equatable, Sendable {
     case interestNotFound(interestID: UUID)
     case tooManyInterests(maxCount: Int)
     case duplicateInterest(interestID: UUID)
+    case unauthorized
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -29,6 +30,9 @@ package enum AddProfileInterestError: LocalizedError, Equatable, Sendable {
         case .duplicateInterest(let interestID):
             "Interest \(interestID) already added"
 
+        case .unauthorized:
+            "Unauthorized"
+
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
         }
@@ -44,6 +48,9 @@ package enum AddProfileInterestError: LocalizedError, Equatable, Sendable {
 
         case (.duplicateInterest(let lhsInterestID), .duplicateInterest(let rhsInterestID)):
             lhsInterestID == rhsInterestID
+
+        case (.unauthorized, .unauthorized):
+            true
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

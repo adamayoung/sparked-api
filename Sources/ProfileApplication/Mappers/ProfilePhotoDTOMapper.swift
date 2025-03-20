@@ -15,8 +15,6 @@ struct ProfilePhotoDTOMapper {
     static func map(from profilePhoto: ProfilePhoto, photoURL: URL) -> ProfilePhotoDTO {
         ProfilePhotoDTO(
             id: profilePhoto.id,
-            userID: profilePhoto.userID,
-            profileID: profilePhoto.profileID,
             index: profilePhoto.index,
             url: photoURL
         )

@@ -59,8 +59,8 @@ let package = Package(
         .target(
             name: "AdamDateCommands",
             dependencies: [
-                "ProfileDomain",
-                "IdentityDomain",
+                "ProfileApplication",
+                "IdentityApplication",
                 .product(name: "Vapor", package: "vapor")
             ]
         ),
@@ -268,7 +268,10 @@ let package = Package(
 
         .target(
             name: "AuthKit",
-            dependencies: [.product(name: "JWT", package: "jwt")]
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "JWT", package: "jwt")
+            ]
         ),
         .testTarget(
             name: "AuthKitTests",

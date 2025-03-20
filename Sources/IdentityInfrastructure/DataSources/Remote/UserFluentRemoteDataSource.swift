@@ -18,15 +18,25 @@ package final class UserFluentRemoteDataSource: UserRemoteDataSource {
         self.database = database
     }
 
-    package func create(_ user: User) async throws(UserRepositoryError) {
+    func create(_ user: User, withRoles roles: [Role]) async throws(UserRepositoryError) {
         guard (try? await self.fetch(byEmail: user.email)) == nil else {
             throw .duplicateEmail
         }
 
-        let userModel = UserModelMapper.map(from: user)
-
         do {
-            try await userModel.save(on: database)
+            try await database.transaction { database in
+                let userModel = UserModelMapper.map(from: user)
+                try await userModel.save(on: database)
+
+                for role in roles {
+                    guard let roleModel = try await RoleModel.find(role.id, on: database) else {
+                        throw UserRepositoryError.roleNotFound
+                    }
+                    try await userModel.$roles.attach(roleModel, on: database)
+                }
+            }
+        } catch let error as UserRepositoryError {
+            throw error
         } catch let error {
             throw .unknown(error)
         }

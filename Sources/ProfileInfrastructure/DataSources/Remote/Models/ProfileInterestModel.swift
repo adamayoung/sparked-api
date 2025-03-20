@@ -10,18 +10,18 @@ import Foundation
 
 final class ProfileInterestModel: Model, @unchecked Sendable {
 
-    static let schema = "profile_interest"
+    static let schema = "profile_profile_interest"
 
     @ID var id: UUID?
-
-    @Field(key: "user_id")
-    var userID: UUID
 
     @Field(key: "profile_id")
     var profileID: UUID
 
     @Field(key: "interest_id")
     var interestID: UUID
+
+    @Field(key: "owner_id")
+    var ownerID: UUID
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -36,14 +36,14 @@ final class ProfileInterestModel: Model, @unchecked Sendable {
 
     init(
         id: UUID? = nil,
-        userID: UUID,
         profileID: UUID,
-        interestID: UUID
+        interestID: UUID,
+        ownerID: UUID
     ) {
         self.id = id
-        self.userID = userID
         self.profileID = profileID
         self.interestID = interestID
+        self.ownerID = ownerID
     }
 
 }

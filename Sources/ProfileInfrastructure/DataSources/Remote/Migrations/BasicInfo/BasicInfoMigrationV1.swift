@@ -11,25 +11,25 @@ import Foundation
 struct BasicInfoMigrationV1: AsyncMigration {
 
     func prepare(on database: Database) async throws {
-        try await database.schema("basic_info")
+        try await database.schema("profile_basic_info")
             .id()
-            .field("user_id", .uuid, .required)
             .field("profile_id", .uuid, .required)
             .field("gender_id", .uuid, .required)
             .field("country_id", .uuid, .required)
             .field("location", .string, .required)
             .field("home_town", .string)
             .field("workplace", .string)
+            .field("owner_id", .uuid, .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .field("deleted_at", .datetime)
-            .unique(on: "user_id")
             .unique(on: "profile_id")
+            .unique(on: "owner_id")
             .create()
     }
 
     func revert(on database: Database) async throws {
-        try await database.schema("basic_info").delete()
+        try await database.schema("profile_basic_info").delete()
     }
 
 }

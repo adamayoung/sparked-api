@@ -12,6 +12,7 @@ package enum ChangeProfilePhotoOrderError: LocalizedError, Equatable, Sendable {
     case profileNotFound(profileID: UUID)
     case profilePhotoNotFound(profilePhotoID: UUID)
     case invalidIndex(index: Int, maxIndex: Int)
+    case unauthorized
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -24,6 +25,9 @@ package enum ChangeProfilePhotoOrderError: LocalizedError, Equatable, Sendable {
 
         case .invalidIndex(let index, let maxIndex):
             "Invalid index \(index) - must be between 0 and \(maxIndex)"
+
+        case .unauthorized:
+            "Unauthorized"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -49,6 +53,9 @@ package enum ChangeProfilePhotoOrderError: LocalizedError, Equatable, Sendable {
             .invalidIndex(let rhsIndex, let rhsMaxIndex)
         ):
             lhsIndex == rhsIndex && lhsMaxIndex == rhsMaxIndex
+
+        case (.unauthorized, .unauthorized):
+            true
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

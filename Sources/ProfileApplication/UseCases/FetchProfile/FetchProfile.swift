@@ -33,7 +33,10 @@ final class FetchProfile: FetchProfileUseCase {
         self.interestRepository = interestRepository
     }
 
-    func execute(id: UUID) async throws(FetchProfileError) -> ProfileDTO {
+    func execute(
+        id: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfileError) -> ProfileDTO {
         let basicProfile: BasicProfile
         let basicInfo: BasicInfo
         do {
@@ -45,6 +48,13 @@ final class FetchProfile: FetchProfileUseCase {
             throw .notFound(profileID: id)
         } catch let error {
             throw .unknown(error)
+        }
+
+        guard
+            userContext.canRead(ownerID: basicProfile.ownerID),
+            userContext.canRead(ownerID: basicInfo.ownerID)
+        else {
+            throw .unauthorized
         }
 
         let profilePhotosWithURLs = try await profilePhotosWithURLs(forProfileID: basicProfile.id)
@@ -61,7 +71,10 @@ final class FetchProfile: FetchProfileUseCase {
         return profileDTO
     }
 
-    func execute(userID: UUID) async throws(FetchProfileError) -> ProfileDTO {
+    func execute(
+        userID: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfileError) -> ProfileDTO {
         let basicProfile: BasicProfile
         do {
             basicProfile = try await basicProfileRepository.fetch(byUserID: userID)
@@ -71,6 +84,10 @@ final class FetchProfile: FetchProfileUseCase {
             throw .unknown(error)
         }
 
+        guard userContext.canRead(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         let basicInfo: BasicInfo
         do {
             basicInfo = try await basicInfoRepository.fetch(byProfileID: basicProfile.id)
@@ -78,6 +95,20 @@ final class FetchProfile: FetchProfileUseCase {
             throw .notFound(profileID: basicProfile.id)
         } catch let error {
             throw .unknown(error)
+        }
+
+        guard
+            userContext.canRead(ownerID: basicProfile.ownerID),
+            userContext.canRead(ownerID: basicInfo.ownerID)
+        else {
+            throw .unauthorized
+        }
+
+        guard
+            userContext.isOwner(basicInfo.ownerID)
+                || (userContext.isAdmin && userContext.isSystem)
+        else {
+            throw .unauthorized
         }
 
         let profilePhotosWithURLs = try await profilePhotosWithURLs(forProfileID: basicProfile.id)

@@ -21,7 +21,29 @@ final class FetchProfilePhoto: FetchProfilePhotoUseCase {
         self.imageRepository = imageRepository
     }
 
-    func execute(id: UUID) async throws(FetchProfilePhotoError) -> ProfilePhotoDTO {
+    func execute(
+        id: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfilePhotoError) -> ProfilePhotoDTO {
+        let profilePhoto = try await profilePhoto(byID: id)
+        guard userContext.canRead(ownerID: profilePhoto.ownerID) else {
+            throw .unauthorized
+        }
+
+        let url = try await url(for: profilePhoto)
+
+        let profilePhotoDTO = ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: url)
+
+        return profilePhotoDTO
+    }
+
+}
+
+extension FetchProfilePhoto {
+
+    private func profilePhoto(
+        byID id: ProfilePhoto.ID
+    ) async throws(FetchProfilePhotoError) -> ProfilePhoto {
         let profilePhoto: ProfilePhoto
         do {
             profilePhoto = try await repository.fetch(byID: id)
@@ -31,6 +53,10 @@ final class FetchProfilePhoto: FetchProfilePhotoUseCase {
             throw .unknown(error)
         }
 
+        return profilePhoto
+    }
+
+    private func url(for profilePhoto: ProfilePhoto) async throws(FetchProfilePhotoError) -> URL {
         let url: URL
         do {
             url = try await imageRepository.url(for: profilePhoto.filename)
@@ -38,9 +64,7 @@ final class FetchProfilePhoto: FetchProfilePhotoUseCase {
             throw .unknown(error)
         }
 
-        let profilePhotoDTO = ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: url)
-
-        return profilePhotoDTO
+        return url
     }
 
 }

@@ -10,7 +10,7 @@ import Foundation
 
 final class UserModel: Model, @unchecked Sendable {
 
-    static let schema = "user"
+    static let schema = "identity_user"
 
     @ID var id: UUID?
 
@@ -28,6 +28,9 @@ final class UserModel: Model, @unchecked Sendable {
 
     @Field(key: "is_verified")
     var isVerified: Bool
+
+    @Siblings(through: UserRoleModel.self, from: \.$user, to: \.$role)
+    var roles: [RoleModel]
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?

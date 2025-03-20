@@ -10,12 +10,9 @@ import Foundation
 
 final class ProfilePhotoModel: Model, @unchecked Sendable {
 
-    static let schema = "profile_photo"
+    static let schema = "profile_profile_photo"
 
     @ID var id: UUID?
-
-    @Field(key: "user_id")
-    var userID: UUID
 
     @Field(key: "profile_id")
     var profileID: UUID
@@ -25,6 +22,9 @@ final class ProfilePhotoModel: Model, @unchecked Sendable {
 
     @Field(key: "filename")
     var filename: String
+
+    @Field(key: "owner_id")
+    var ownerID: UUID
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -39,16 +39,16 @@ final class ProfilePhotoModel: Model, @unchecked Sendable {
 
     init(
         id: UUID? = nil,
-        userID: UUID,
         profileID: UUID,
         index: Int,
-        filename: String
+        filename: String,
+        ownerID: UUID
     ) {
         self.id = id
-        self.userID = userID
         self.profileID = profileID
         self.index = index
         self.filename = filename
+        self.ownerID = ownerID
     }
 
 }

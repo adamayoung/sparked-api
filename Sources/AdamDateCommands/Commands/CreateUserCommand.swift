@@ -6,7 +6,6 @@
 //
 
 import IdentityApplication
-import IdentityDomain
 import Vapor
 
 struct CreateUserCommand: AsyncCommand {
@@ -23,6 +22,9 @@ struct CreateUserCommand: AsyncCommand {
 
         @Option(name: "password", short: "p")
         var password: String?
+
+        @Option(name: "admin")
+        var isAdmin: String?
 
         init() {}
     }
@@ -56,18 +58,44 @@ struct CreateUserCommand: AsyncCommand {
             return
         }
 
+        let isAdmin = signature.isAdmin == "true" ? true : false
+
+        let fetchRolesUseCase = context.application.commandUseCases.fetchRolesUseCase
+        let roles: [RoleDTO] = try await fetchRolesUseCase.execute()
+        let rolesForUser = roles.filter { role in
+            if role.code == "ADMIN", isAdmin {
+                return true
+            }
+
+            if role.code == "USER" {
+                return true
+            }
+
+            return false
+        }
+
         let registerUserInput = RegisterUserInput(
             firstName: firstName,
             familyName: familyName,
             email: email,
             password: password,
-            isVerified: true
+            isVerified: true,
+            roles: rolesForUser.map(\.code)
         )
 
-        let useCase = context.application.commandUseCases.registerUserUseCase
-        let user = try await useCase.execute(input: registerUserInput)
+        let registerUserUseCase = context.application.commandUseCases.registerUserUseCase
+        let user = try await registerUserUseCase.execute(input: registerUserInput)
 
-        context.console.info("User created successfully: \(user)")
+        context.console.info(
+            """
+                User created successfully
+                -------------------------
+                id: \(user.id)
+                firstName: \(user.firstName)
+                familyName: \(user.familyName)
+                email: \(user.email)
+                roles: \(user.roles.map(\.code).joined(separator: ", "))
+            """)
     }
 
 }

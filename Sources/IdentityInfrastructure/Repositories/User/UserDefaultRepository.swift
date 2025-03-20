@@ -17,14 +17,12 @@ final class UserDefaultRepository: UserRepository {
         self.remoteDataSource = remoteDataSource
     }
 
-    func create(_ user: User) async throws(UserRepositoryError) {
-        let existingUser = try? await self.fetch(byEmail: user.email)
-
-        guard existingUser == nil else {
+    func create(_ user: User, withRoles roles: [Role]) async throws(UserRepositoryError) {
+        guard (try? await self.fetch(byEmail: user.email)) == nil else {
             throw .duplicateEmail
         }
 
-        try await remoteDataSource.create(user)
+        try await remoteDataSource.create(user, withRoles: roles)
     }
 
     func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User {
