@@ -20,6 +20,7 @@ extension Application.ProfileWebAPIUseCases.Provider {
                 ProfileApplicationFactory.makeFetchProfileUseCase(
                     basicProfileRepository: app.basicProfileRepository,
                     basicInfoRepository: app.basicInfoRepository,
+                    extendedInfoRepository: app.extendedInfoRepository,
                     profilePhotoRepository: app.profilePhotoRepository,
                     imageRepository: app.imageRepository,
                     profileInterestRepository: app.profileInterestRepository,
@@ -52,6 +53,21 @@ extension Application.ProfileWebAPIUseCases.Provider {
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeFetchBasicInfoUseCase(
                     repository: app.basicInfoRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeCreateExtendedInfoUseCase(
+                    repository: app.extendedInfoRepository,
+                    basicProfileRepository: app.basicProfileRepository,
+                    educationLevelRepository: app.profileEducationLevelRepository,
+                    starSignRepository: app.profileStarSignRepository
+                )
+            }
+
+            app.profileWebAPIUseCases.use { app in
+                ProfileApplicationFactory.makeFetchExtendedInfoUseCase(
+                    repository: app.extendedInfoRepository
                 )
             }
 

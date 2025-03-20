@@ -1,8 +1,8 @@
 //
-//  BasicInfoController.swift
+//  ExtendedInfoController.swift
 //  SparkedAPI
 //
-//  Created by Adam Young on 11/02/2025.
+//  Created by Adam Young on 20/03/2025.
 //
 
 import AuthKit
@@ -10,20 +10,20 @@ import JWT
 import ProfileApplication
 import Vapor
 
-struct BasicInfoController: RouteCollection, Sendable {
+struct ExtendedInfoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.group("me", "basic-info") { meInfo in
+        routes.group("me", "extended-info") { meInfo in
             meInfo.get(use: showMe)
-                .description("Get basic information about the authenticated user")
+                .description("Get extended information about the authenticated user")
 
             meInfo.post(use: createMe)
                 .description("Create basic information about the authenticated user")
         }
 
-        routes.group(":profileID", "basic-info") { info in
+        routes.group(":profileID", "extended-info") { info in
             info.get(use: show)
-                .description("Get basic information about a user")
+                .description("Get extended information about a user")
 
             info.post(use: create)
                 .description("Create basic information about a user")
@@ -31,23 +31,23 @@ struct BasicInfoController: RouteCollection, Sendable {
     }
 
     @Sendable
-    func showMe(req: Request) async throws -> BasicInfoResponseModel {
+    func showMe(req: Request) async throws -> ExtendedInfoResponseModel {
         let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(
+        let extendedInfoDTO = try await req.fetchExtendedInfoUseCase.execute(
             userID: userID,
             userContext: userContext
         )
-        let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
+        let extendedInfoResponseModel = ExtendedInfoResponseModelMapper.map(from: extendedInfoDTO)
 
-        return basicInfoResponseModel
+        return extendedInfoResponseModel
     }
 
     @Sendable
-    func show(req: Request) async throws -> BasicInfoResponseModel {
+    func show(req: Request) async throws -> ExtendedInfoResponseModel {
         let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
@@ -56,17 +56,17 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicInfoDTO = try await req.fetchBasicInfoUseCase.execute(
+        let extendedInfoDTO = try await req.fetchExtendedInfoUseCase.execute(
             profileID: profileID,
             userContext: userContext
         )
-        let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfoDTO)
+        let extendedInfoResponseModel = ExtendedInfoResponseModelMapper.map(from: extendedInfoDTO)
 
-        return basicInfoResponseModel
+        return extendedInfoResponseModel
     }
 
     @Sendable
-    func createMe(req: Request) async throws -> BasicInfoResponseModel {
+    func createMe(req: Request) async throws -> ExtendedInfoResponseModel {
         let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = userContext.userID else {
             throw Abort(.forbidden)
@@ -77,29 +77,29 @@ struct BasicInfoController: RouteCollection, Sendable {
             userContext: userContext
         )
 
-        let createBasicInfoRequestModel: CreateBasicInfoRequestModel
+        let createExtendedInfoRequestModel: CreateExtendedInfoRequestModel
         do {
-            createBasicInfoRequestModel = try req.content
-                .decode(CreateBasicInfoRequestModel.self)
+            createExtendedInfoRequestModel = try req.content
+                .decode(CreateExtendedInfoRequestModel.self)
         } catch {
             throw Abort(.badRequest, reason: "Request body is invalid")
         }
 
-        let input = CreateBasicInfoInputMapper.map(
-            from: createBasicInfoRequestModel,
+        let input = CreateExtendedInfoInputMapper.map(
+            from: createExtendedInfoRequestModel,
             profileID: basicProfileDTO.id
         )
-        let basicInfo = try await req.createBasicInfoUseCase.execute(
+        let extendedInfo = try await req.createExtendedInfoUseCase.execute(
             input: input,
             userContext: userContext
         )
-        let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
+        let extendedInfoResponseModel = ExtendedInfoResponseModelMapper.map(from: extendedInfo)
 
-        return basicInfoResponseModel
+        return extendedInfoResponseModel
     }
 
     @Sendable
-    func create(req: Request) async throws -> BasicInfoResponseModel {
+    func create(req: Request) async throws -> ExtendedInfoResponseModel {
         let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard let userID = userContext.userID else {
             throw Abort(.forbidden)
@@ -120,25 +120,25 @@ struct BasicInfoController: RouteCollection, Sendable {
             throw Abort(.forbidden)
         }
 
-        let createBasicInfoRequestModel: CreateBasicInfoRequestModel
+        let createExtendedInfoRequestModel: CreateExtendedInfoRequestModel
         do {
-            createBasicInfoRequestModel = try req.content
-                .decode(CreateBasicInfoRequestModel.self)
+            createExtendedInfoRequestModel = try req.content
+                .decode(CreateExtendedInfoRequestModel.self)
         } catch {
             throw Abort(.badRequest, reason: "Request body is invalid")
         }
 
-        let input = CreateBasicInfoInputMapper.map(
-            from: createBasicInfoRequestModel,
+        let input = CreateExtendedInfoInputMapper.map(
+            from: createExtendedInfoRequestModel,
             profileID: basicProfileDTO.id
         )
-        let basicInfo = try await req.createBasicInfoUseCase.execute(
+        let extendedInfo = try await req.createExtendedInfoUseCase.execute(
             input: input,
             userContext: userContext
         )
-        let basicInfoResponseModel = BasicInfoResponseModelMapper.map(from: basicInfo)
+        let extendedInfoResponseModel = ExtendedInfoResponseModelMapper.map(from: extendedInfo)
 
-        return basicInfoResponseModel
+        return extendedInfoResponseModel
     }
 
 }

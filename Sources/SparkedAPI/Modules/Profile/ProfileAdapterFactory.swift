@@ -34,6 +34,18 @@ final class ProfileAdapterFactory {
         ProfileInterestServiceAdapter(fetchInterestUseCase: fetchInterestUseCase)
     }
 
+    static func makeEducationLevelService(
+        fetchEducationLevelUseCase: some FetchEducationLevelUseCase
+    ) -> some EducationLevelService {
+        ProfileEducationLevelServiceAdapter(fetchEducationLevelUseCase: fetchEducationLevelUseCase)
+    }
+
+    static func makeStarSignService(
+        fetchStarSignUseCase: some FetchStarSignUseCase
+    ) -> some StarSignService {
+        ProfileStarSignServiceAdapter(fetchStarSignUseCase: fetchStarSignUseCase)
+    }
+
     static func makeUserService(fetchUserUseCase: some FetchUserUseCase) -> some UserService {
         ProfileUserServiceAdapter(fetchUserUseCase: fetchUserUseCase)
     }

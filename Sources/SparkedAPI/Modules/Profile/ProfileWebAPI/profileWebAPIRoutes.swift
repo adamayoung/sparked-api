@@ -16,6 +16,7 @@ func profileWebAPIRoutes(_ routes: RoutesBuilder) throws {
     try profilesRouter.register(collection: ProfileWebAPIFactory.makeBasicProfileController())
 
     try profilesRouter.register(collection: ProfileWebAPIFactory.makeBasicInfoController())
+    try profilesRouter.register(collection: ProfileWebAPIFactory.makeExtendedInfoController())
 
     try profilesRouter.register(collection: ProfileWebAPIFactory.makePhotoController())
 

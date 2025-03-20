@@ -12,6 +12,7 @@ final class FetchProfile: FetchProfileUseCase {
 
     private let basicProfileRepository: any BasicProfileRepository
     private let basicInfoRepository: any BasicInfoRepository
+    private let extendedInfoRepository: any ExtendedInfoRepository
     private let profilePhotoRepository: any ProfilePhotoRepository
     private let imageRepository: any ImageRepository
     private let profileInterestRepository: any ProfileInterestRepository
@@ -20,6 +21,7 @@ final class FetchProfile: FetchProfileUseCase {
     init(
         basicProfileRepository: some BasicProfileRepository,
         basicInfoRepository: some BasicInfoRepository,
+        extendedInfoRepository: some ExtendedInfoRepository,
         profilePhotoRepository: some ProfilePhotoRepository,
         imageRepository: some ImageRepository,
         profileInterestRepository: some ProfileInterestRepository,
@@ -27,6 +29,7 @@ final class FetchProfile: FetchProfileUseCase {
     ) {
         self.basicProfileRepository = basicProfileRepository
         self.basicInfoRepository = basicInfoRepository
+        self.extendedInfoRepository = extendedInfoRepository
         self.profilePhotoRepository = profilePhotoRepository
         self.imageRepository = imageRepository
         self.profileInterestRepository = profileInterestRepository
@@ -38,17 +41,16 @@ final class FetchProfile: FetchProfileUseCase {
         userContext: some UserContext
     ) async throws(FetchProfileError) -> ProfileDTO {
         let basicProfile: BasicProfile
-        let basicInfo: BasicInfo
         do {
             basicProfile = try await basicProfileRepository.fetch(byID: id)
-            basicInfo = try await basicInfoRepository.fetch(byProfileID: basicProfile.id)
         } catch BasicProfileRepositoryError.notFound {
-            throw .notFound(profileID: id)
-        } catch BasicInfoRepositoryError.notFound {
             throw .notFound(profileID: id)
         } catch let error {
             throw .unknown(error)
         }
+
+        let basicInfo = try await basicInfo(forProfileID: basicProfile.id)
+        let extendedInfo = try await extendedInfo(forProfileID: basicProfile.id)
 
         guard
             userContext.canRead(ownerID: basicProfile.ownerID),
@@ -57,15 +59,18 @@ final class FetchProfile: FetchProfileUseCase {
             throw .unauthorized
         }
 
+        if let extendedInfo, !userContext.canRead(ownerID: extendedInfo.ownerID) {
+            throw .unauthorized
+        }
+
         let profilePhotosWithURLs = try await profilePhotosWithURLs(forProfileID: basicProfile.id)
-        let profileInterestsWithInterests = try await profileInterestsWithInterests(
-            forProfileID: basicProfile.id
-        )
+        let interestIDs = try await interestIDs(forProfileID: basicProfile.id)
         let profileDTO = ProfileDTOMapper.map(
             from: basicProfile,
             basicInfo: basicInfo,
+            extendedInfo: extendedInfo,
             profilePhotos: profilePhotosWithURLs,
-            interests: profileInterestsWithInterests
+            interestIDs: interestIDs
         )
 
         return profileDTO
@@ -88,19 +93,17 @@ final class FetchProfile: FetchProfileUseCase {
             throw .unauthorized
         }
 
-        let basicInfo: BasicInfo
-        do {
-            basicInfo = try await basicInfoRepository.fetch(byProfileID: basicProfile.id)
-        } catch BasicInfoRepositoryError.notFound {
-            throw .notFound(profileID: basicProfile.id)
-        } catch let error {
-            throw .unknown(error)
-        }
+        let basicInfo = try await basicInfo(forProfileID: basicProfile.id)
+        let extendedInfo = try await extendedInfo(forProfileID: basicProfile.id)
 
         guard
             userContext.canRead(ownerID: basicProfile.ownerID),
             userContext.canRead(ownerID: basicInfo.ownerID)
         else {
+            throw .unauthorized
+        }
+
+        if let extendedInfo, !userContext.canRead(ownerID: extendedInfo.ownerID) {
             throw .unauthorized
         }
 
@@ -112,14 +115,13 @@ final class FetchProfile: FetchProfileUseCase {
         }
 
         let profilePhotosWithURLs = try await profilePhotosWithURLs(forProfileID: basicProfile.id)
-        let profileInterestsWithInterests = try await profileInterestsWithInterests(
-            forProfileID: basicProfile.id
-        )
+        let interestIDs = try await interestIDs(forProfileID: basicProfile.id)
         let profileDTO = ProfileDTOMapper.map(
             from: basicProfile,
             basicInfo: basicInfo,
+            extendedInfo: extendedInfo,
             profilePhotos: profilePhotosWithURLs,
-            interests: profileInterestsWithInterests
+            interestIDs: interestIDs
         )
 
         return profileDTO
@@ -128,6 +130,36 @@ final class FetchProfile: FetchProfileUseCase {
 }
 
 extension FetchProfile {
+
+    private func basicInfo(
+        forProfileID profileID: UUID
+    ) async throws(FetchProfileError) -> BasicInfo {
+        let basicInfo: BasicInfo
+        do {
+            basicInfo = try await basicInfoRepository.fetch(byProfileID: profileID)
+        } catch BasicInfoRepositoryError.notFound {
+            throw .notFound(profileID: profileID)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return basicInfo
+    }
+
+    private func extendedInfo(
+        forProfileID profileID: UUID
+    ) async throws(FetchProfileError) -> ExtendedInfo? {
+        let extendedInfo: ExtendedInfo
+        do {
+            extendedInfo = try await extendedInfoRepository.fetch(byProfileID: profileID)
+        } catch ExtendedInfoRepositoryError.notFound {
+            return nil
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        return extendedInfo
+    }
 
     private func profilePhotosWithURLs(
         forProfileID profileID: UUID
@@ -154,9 +186,9 @@ extension FetchProfile {
         return results
     }
 
-    private func profileInterestsWithInterests(
+    private func interestIDs(
         forProfileID profileID: UUID
-    ) async throws(FetchProfileError) -> [(ProfileInterest, Interest)] {
+    ) async throws(FetchProfileError) -> [UUID] {
         let profileInterests: [ProfileInterest]
         do {
             profileInterests = try await profileInterestRepository.fetchAll(forProfileID: profileID)
@@ -164,19 +196,9 @@ extension FetchProfile {
             throw .unknown(error)
         }
 
-        var results: [(ProfileInterest, Interest)] = []
-        for profileInterest in profileInterests {
-            let interest: Interest
-            do {
-                interest = try await interestRepository.fetch(byID: profileInterest.interestID)
-            } catch let error {
-                throw .unknown(error)
-            }
+        let ids = profileInterests.map(\.id)
 
-            results.append((profileInterest, interest))
-        }
-
-        return results
+        return ids
     }
 
 }

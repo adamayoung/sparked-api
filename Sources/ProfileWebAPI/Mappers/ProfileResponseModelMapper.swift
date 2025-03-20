@@ -16,7 +16,6 @@ struct ProfileResponseModelMapper {
         let photos = dto.photos.map {
             ProfilePhotoResponseModelMapper.map(from: $0, profileID: dto.id)
         }
-        let interests = dto.interests.map(InterestResponseModelMapper.map)
 
         return ProfileResponseModel(
             id: dto.id,
@@ -28,7 +27,10 @@ struct ProfileResponseModelMapper {
             homeTown: dto.homeTown,
             workplace: dto.workplace,
             photos: photos,
-            interests: interests
+            interestIDs: dto.interestIDs,
+            height: dto.height,
+            educationLevelID: dto.educationLevelID,
+            starSignID: dto.starSignID
         )
     }
 

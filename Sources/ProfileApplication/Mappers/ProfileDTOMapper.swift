@@ -15,11 +15,11 @@ struct ProfileDTOMapper {
     static func map(
         from basicProfile: BasicProfile,
         basicInfo: BasicInfo,
+        extendedInfo: ExtendedInfo?,
         profilePhotos: [(ProfilePhoto, URL)],
-        interests: [(ProfileInterest, Interest)]
+        interestIDs: [UUID]
     ) -> ProfileDTO {
         let profilePhotoDTOs = profilePhotos.map(ProfilePhotoDTOMapper.map)
-        let interestDTOs = interests.map(ProfileInterestDTOMapper.map)
 
         return ProfileDTO(
             id: basicProfile.id,
@@ -32,7 +32,11 @@ struct ProfileDTOMapper {
             homeTown: basicInfo.homeTown,
             workplace: basicInfo.workplace,
             photos: profilePhotoDTOs,
-            interests: interestDTOs
+            interestIDs: interestIDs,
+            height: extendedInfo?.height,
+            educationLevelID: extendedInfo?.educationLevelID,
+            starSignID: extendedInfo?.starSignID
+
         )
     }
 
