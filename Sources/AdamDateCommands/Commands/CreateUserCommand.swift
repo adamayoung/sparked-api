@@ -94,7 +94,7 @@ struct CreateUserCommand: AsyncCommand {
                 firstName: \(user.firstName)
                 familyName: \(user.familyName)
                 email: \(user.email)
-                roles: \(roles.map(\.code).joined(separator: ", "))
+                roles: \(user.roles.map(\.code).joined(separator: ", "))
             """)
     }
 

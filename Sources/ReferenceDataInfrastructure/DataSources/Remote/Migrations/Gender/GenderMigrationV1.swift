@@ -11,7 +11,7 @@ import Foundation
 struct GenderMigrationV1: AsyncMigration {
 
     func prepare(on database: Database) async throws {
-        try await database.schema("gender")
+        try await database.schema("reference_data_gender")
             .id()
             .field("code", .string, .required)
             .field("name", .string, .required)
@@ -25,7 +25,7 @@ struct GenderMigrationV1: AsyncMigration {
     }
 
     func revert(on database: Database) async throws {
-        try await database.schema("gender").delete()
+        try await database.schema("reference_data_gender").delete()
     }
 
 }

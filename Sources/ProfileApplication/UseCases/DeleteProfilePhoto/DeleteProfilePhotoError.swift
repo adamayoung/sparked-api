@@ -11,6 +11,7 @@ package enum DeleteProfilePhotoError: LocalizedError, Equatable, Sendable {
 
     case profileNotFound(profileID: UUID)
     case profilePhotoNotFound(profilePhotoID: UUID)
+    case unauthorized
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -20,6 +21,9 @@ package enum DeleteProfilePhotoError: LocalizedError, Equatable, Sendable {
 
         case .profilePhotoNotFound(let profilePhotoID):
             "Profile photo \(profilePhotoID) not found"
+
+        case .unauthorized:
+            "Unauthorized"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -39,6 +43,9 @@ package enum DeleteProfilePhotoError: LocalizedError, Equatable, Sendable {
             .profilePhotoNotFound(let rhsProfilePhotoID)
         ):
             lhsProfilePhotoID == rhsProfilePhotoID
+
+        case (.unauthorized, .unauthorized):
+            true
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

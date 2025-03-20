@@ -15,18 +15,18 @@ struct ProfilePhotoModelMapper {
     static func map(from profilePhoto: ProfilePhoto) -> ProfilePhotoModel {
         ProfilePhotoModel(
             id: profilePhoto.id,
-            userID: profilePhoto.userID,
             profileID: profilePhoto.profileID,
             index: profilePhoto.index,
-            filename: profilePhoto.filename
+            filename: profilePhoto.filename,
+            ownerID: profilePhoto.ownerID
         )
     }
 
     static func map(from profilePhoto: ProfilePhoto, to model: inout ProfilePhotoModel) {
-        model.userID = profilePhoto.userID
         model.profileID = profilePhoto.profileID
         model.index = profilePhoto.index
         model.filename = profilePhoto.filename
+        model.ownerID = profilePhoto.ownerID
     }
 
 }

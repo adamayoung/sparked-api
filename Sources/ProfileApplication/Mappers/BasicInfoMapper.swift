@@ -12,15 +12,15 @@ struct BasicInfoMapper {
 
     private init() {}
 
-    static func map(from input: CreateBasicInfoInput) -> BasicInfo {
+    static func map(from input: CreateBasicInfoInput, ownerID: User.ID) -> BasicInfo {
         BasicInfo(
-            userID: input.userID,
             profileID: input.profileID,
             genderID: input.genderID,
             countryID: input.countryID,
             location: input.location,
             homeTown: input.homeTown,
-            workplace: input.workplace
+            workplace: input.workplace,
+            ownerID: ownerID
         )
     }
 

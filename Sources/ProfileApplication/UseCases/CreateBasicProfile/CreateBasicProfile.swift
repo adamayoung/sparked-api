@@ -22,18 +22,17 @@ final class CreateBasicProfile: CreateBasicProfileUseCase {
     }
 
     func execute(
-        input: CreateBasicProfileInput
+        input: CreateBasicProfileInput,
+        userContext: some UserContext
     ) async throws(CreateBasicProfileError) -> BasicProfileDTO {
+        guard userContext.canWrite(ownerID: input.ownerID) else {
+            throw .unauthorized
+        }
+
         try await validate(input: input)
 
         let basicProfile = BasicProfileMapper.map(from: input)
-        do {
-            try await repository.create(basicProfile)
-        } catch BasicProfileRepositoryError.duplicate {
-            throw .profileAlreadyExistsForUser(userID: input.userID)
-        } catch let error {
-            throw .unknown(error)
-        }
+        try await create(basicProfile)
 
         let basicProfileDTO = BasicProfileDTOMapper.map(from: basicProfile)
 
@@ -44,8 +43,22 @@ final class CreateBasicProfile: CreateBasicProfileUseCase {
 
 extension CreateBasicProfile {
 
+    private func create(_ basicProfile: BasicProfile) async throws(CreateBasicProfileError) {
+        do {
+            try await repository.create(basicProfile)
+        } catch BasicProfileRepositoryError.duplicate {
+            throw .profileAlreadyExistsForUser(userID: basicProfile.ownerID)
+        } catch let error {
+            throw .unknown(error)
+        }
+    }
+
+}
+
+extension CreateBasicProfile {
+
     private func validate(input: CreateBasicProfileInput) async throws(CreateBasicProfileError) {
-        try await validate(userID: input.userID)
+        try await validate(userID: input.ownerID)
     }
 
     private func validate(userID: UUID) async throws(CreateBasicProfileError) {

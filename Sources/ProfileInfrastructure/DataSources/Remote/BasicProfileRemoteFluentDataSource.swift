@@ -21,7 +21,7 @@ final class BasicProfileRemoteFluentDataSource: BasicProfileRemoteDataSource {
     func create(_ basicProfile: BasicProfile) async throws(BasicProfileRepositoryError) {
         var existingBasicProfile: BasicProfile?
         do {
-            existingBasicProfile = try await fetch(byUserID: basicProfile.userID)
+            existingBasicProfile = try await fetch(byUserID: basicProfile.ownerID)
         } catch BasicProfileRepositoryError.notFound {
             existingBasicProfile = nil
         } catch let error {
@@ -67,7 +67,7 @@ final class BasicProfileRemoteFluentDataSource: BasicProfileRemoteDataSource {
         let basicProfileModel: BasicProfileModel?
         do {
             basicProfileModel = try await BasicProfileModel.query(on: database)
-                .filter(\.$userID == userID)
+                .filter(\.$ownerID == userID)
                 .first()
         } catch let error {
             throw .unknown(error)

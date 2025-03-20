@@ -29,12 +29,15 @@ struct BasicProfileController: RouteCollection, Sendable {
 
     @Sendable
     func showMe(req: Request) async throws -> BasicProfileResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         return basicProfileResponseModel
@@ -42,7 +45,7 @@ struct BasicProfileController: RouteCollection, Sendable {
 
     @Sendable
     func show(req: Request) async throws -> BasicProfileResponseModel {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString)
@@ -50,7 +53,10 @@ struct BasicProfileController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(id: profileID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            id: profileID,
+            userContext: userContext
+        )
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfileDTO)
 
         return basicProfileResponseModel
@@ -58,8 +64,8 @@ struct BasicProfileController: RouteCollection, Sendable {
 
     @Sendable
     func createMe(req: Request) async throws -> BasicProfileResponseModel {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
@@ -75,7 +81,10 @@ struct BasicProfileController: RouteCollection, Sendable {
             from: createBasicProfileRequestModel,
             userID: userID
         )
-        let basicProfile = try await req.createBasicProfileUseCase.execute(input: input)
+        let basicProfile = try await req.createBasicProfileUseCase.execute(
+            input: input,
+            userContext: userContext
+        )
         let basicProfileResponseModel = BasicProfileResponseModelMapper.map(from: basicProfile)
 
         return basicProfileResponseModel

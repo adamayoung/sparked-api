@@ -15,7 +15,6 @@ struct BasicInfoResponseModelMapper {
     static func map(from dto: BasicInfoDTO) -> BasicInfoResponseModel {
         BasicInfoResponseModel(
             id: dto.id,
-            profileID: dto.profileID,
             genderID: dto.genderID,
             countryID: dto.countryID,
             location: dto.location,

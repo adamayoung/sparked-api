@@ -14,7 +14,7 @@ package protocol BasicInfoRepository {
 
     func fetch(byID id: BasicInfo.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
-    func fetch(byUserID userID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
+    func fetch(byOwnerID ownerID: User.ID) async throws(BasicInfoRepositoryError) -> BasicInfo
 
     func fetch(
         byProfileID profileID: BasicProfile.ID
@@ -34,13 +34,13 @@ package enum BasicInfoRepositoryError: Error, Equatable {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.duplicate, .duplicate):
-            return true
+            true
         case (.notFound, .notFound):
-            return true
+            true
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            return lhsError?.localizedDescription == rhsError?.localizedDescription
+            lhsError?.localizedDescription == rhsError?.localizedDescription
         default:
-            return false
+            false
         }
     }
 

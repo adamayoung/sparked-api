@@ -11,7 +11,7 @@ import Foundation
 struct UserRoleMigrationV1: AsyncMigration {
 
     func prepare(on database: Database) async throws {
-        try await database.schema("user+role")
+        try await database.schema("identity_user+role")
             .id()
             .field("user_id", .uuid, .required)
             .field("role_id", .uuid, .required)
@@ -20,7 +20,7 @@ struct UserRoleMigrationV1: AsyncMigration {
     }
 
     func revert(on database: Database) async throws {
-        try await database.schema("user+role").delete()
+        try await database.schema("identity_user+role").delete()
     }
 
 }

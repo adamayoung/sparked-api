@@ -14,6 +14,7 @@ extension CreateBasicProfileError: AbortError {
         switch self {
         case .userNotFound: .notFound
         case .profileAlreadyExistsForUser: .badRequest
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

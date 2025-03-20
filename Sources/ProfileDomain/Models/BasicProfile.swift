@@ -10,10 +10,10 @@ import Foundation
 package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
-    package let userID: User.ID
     package let displayName: String
     package let birthDate: Date
     package let bio: String
+    package let ownerID: User.ID
 
     package var age: Int {
         let now = Date()
@@ -26,16 +26,16 @@ package struct BasicProfile: Identifiable, Equatable, Hashable, Sendable, Codabl
 
     package init(
         id: UUID = UUID(),
-        userID: User.ID,
         displayName: String,
         birthDate: Date,
-        bio: String
+        bio: String,
+        ownerID: User.ID
     ) {
         self.id = id
-        self.userID = userID
         self.displayName = displayName
         self.birthDate = birthDate
         self.bio = bio
+        self.ownerID = ownerID
     }
 
 }

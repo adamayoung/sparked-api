@@ -15,9 +15,9 @@ struct ProfileInterestMapper {
     static func map(from model: ProfileInterestModel) throws -> ProfileInterest {
         try ProfileInterest(
             id: model.requireID(),
-            userID: model.userID,
             profileID: model.profileID,
-            interestID: model.interestID
+            interestID: model.interestID,
+            ownerID: model.ownerID
         )
     }
 

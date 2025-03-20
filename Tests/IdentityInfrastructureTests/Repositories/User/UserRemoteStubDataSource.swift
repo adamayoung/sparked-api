@@ -15,7 +15,7 @@ final class UserRemoteStubDataSource: UserRemoteDataSource {
 
     var createResult: Result<Void, UserRepositoryError> = .failure(.unknown())
     private(set) var createWasCalled = false
-    private(set) var lastCreateUser: User?
+    private(set) var lastCreateParameters: (user: User, roles: [Role])?
 
     var fetchByIDResult: Result<User, UserRepositoryError> = .failure(.unknown())
     private(set) var fetchByIDWasCalled = false
@@ -27,9 +27,12 @@ final class UserRemoteStubDataSource: UserRemoteDataSource {
 
     init() {}
 
-    func create(_ user: User) async throws(UserRepositoryError) {
+    func create(
+        _ user: User,
+        withRoles roles: [Role]
+    ) async throws(UserRepositoryError) {
         createWasCalled = true
-        lastCreateUser = user
+        lastCreateParameters = (user: user, roles: roles)
 
         try createResult.get()
     }

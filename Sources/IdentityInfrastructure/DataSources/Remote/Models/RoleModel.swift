@@ -10,7 +10,7 @@ import Foundation
 
 final class RoleModel: Model, @unchecked Sendable {
 
-    static let schema = "role"
+    static let schema = "identity_role"
 
     @ID var id: UUID?
 

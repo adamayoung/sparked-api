@@ -9,6 +9,9 @@ import Foundation
 
 package protocol FetchProfileInterestsUseCase {
 
-    func execute(profileID: UUID) async throws(FetchProfileInterestsError) -> [ProfileInterestDTO]
+    func execute(
+        profileID: UUID,
+        userContext: some UserContext
+    ) async throws(FetchProfileInterestsError) -> [ProfileInterestDTO]
 
 }

@@ -10,7 +10,7 @@ import Foundation
 
 final class CountryModel: Model, @unchecked Sendable {
 
-    static let schema = "country"
+    static let schema = "reference_data_country"
 
     @ID var id: UUID?
 

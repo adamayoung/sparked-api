@@ -75,23 +75,23 @@ extension BasicInfoDefaultRepositoryTests {
 
     private static func makeBasicInfo(
         id: UUID? = UUID(uuidString: "F851F836-1B2A-42F7-8298-F6431FA5E246"),
-        userID: UUID? = UUID(uuidString: "E5DD4113-B75D-422B-BA88-1781E0A0858E"),
         profileID: UUID? = UUID(uuidString: "AF009805-B95B-4676-9307-A47FD8FFDEF7"),
         genderID: UUID? = UUID(uuidString: "274CB99E-E95C-46FA-95B4-DFFCD9D81EAC"),
         countryID: UUID? = UUID(uuidString: "7CB0462C-B977-4B3F-B0E3-A02137C977E0"),
         location: String = "Location",
         homeTown: String? = "Home town",
-        workplace: String? = "Workplace"
+        workplace: String? = "Workplace",
+        ownerID: UUID? = UUID(uuidString: "E5DD4113-B75D-422B-BA88-1781E0A0858E")
     ) throws -> BasicInfo {
         try BasicInfo(
             id: #require(id),
-            userID: #require(userID),
             profileID: #require(profileID),
             genderID: #require(genderID),
             countryID: #require(countryID),
             location: location,
             homeTown: homeTown,
-            workplace: workplace
+            workplace: workplace,
+            ownerID: #require(ownerID)
         )
     }
 

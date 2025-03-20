@@ -15,9 +15,9 @@ struct ProfileInterestModelMapper {
     static func map(from profileInterest: ProfileInterest) -> ProfileInterestModel {
         ProfileInterestModel(
             id: profileInterest.id,
-            userID: profileInterest.userID,
             profileID: profileInterest.profileID,
-            interestID: profileInterest.interestID
+            interestID: profileInterest.interestID,
+            ownerID: profileInterest.ownerID
         )
     }
 

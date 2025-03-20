@@ -35,11 +35,11 @@ struct BasicProfileMapperTests {
     @Test("map from basic profile model with user ID")
     func mapFromBasicProfileModelWithUserID() throws {
         let userID = try #require(UUID(uuidString: "60CCC12C-A927-4E52-BD70-EE9817648C2E"))
-        let basicProfileModel = try Self.buildBasicProfileModel(userID: userID)
+        let basicProfileModel = try Self.buildBasicProfileModel(ownerID: userID)
 
         let basicProfile = try BasicProfileMapper.map(from: basicProfileModel)
 
-        #expect(basicProfile.userID == userID)
+        #expect(basicProfile.ownerID == userID)
     }
 
     @Test("map from basic profile model with display name")
@@ -68,17 +68,17 @@ extension BasicProfileMapperTests {
 
     private static func buildBasicProfileModel(
         id: UUID? = UUID(uuidString: "373E4735-409C-4E9A-95A0-BE22DB4FA06B"),
-        userID: UUID? = UUID(uuidString: "834C128C-614F-406C-883C-15521C8281BF"),
         displayName: String = "",
         birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
+        bio: String = "",
+        ownerID: UUID? = UUID(uuidString: "834C128C-614F-406C-883C-15521C8281BF")
     ) throws -> BasicProfileModel {
         try BasicProfileModel(
             id: id,
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(ownerID)
         )
     }
 

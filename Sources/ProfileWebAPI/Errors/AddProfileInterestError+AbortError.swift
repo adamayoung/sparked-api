@@ -16,6 +16,7 @@ extension AddProfileInterestError: AbortError {
         case .interestNotFound: .notFound
         case .tooManyInterests: .badRequest
         case .duplicateInterest: .conflict
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

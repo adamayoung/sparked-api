@@ -31,10 +31,10 @@ struct BasicProfileRemoteFluentDataSourceTests {
         let userID = try #require(UUID(uuidString: "9991A3C9-29AB-4C0F-90BD-51782083F344"))
         let basicProfile = BasicProfile(
             id: id,
-            userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio"
+            bio: "Bio",
+            ownerID: userID
         )
         database.append([])
         database.append([TestOutput()])
@@ -49,17 +49,17 @@ struct BasicProfileRemoteFluentDataSourceTests {
         let userID = try #require(UUID(uuidString: "9991A3C9-29AB-4C0F-90BD-51782083F344"))
         let existingBasicProfile = BasicProfileModel(
             id: UUID(uuidString: "E00F5F37-00B8-4EEE-95F5-ADEC2BA9A9A4"),
-            userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio"
+            bio: "Bio",
+            ownerID: userID
         )
         let basicProfile = BasicProfile(
             id: try #require(UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA")),
-            userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio"
+            bio: "Bio",
+            ownerID: userID
         )
         database.append([existingBasicProfile])
         database.append([TestOutput()])
@@ -74,10 +74,10 @@ struct BasicProfileRemoteFluentDataSourceTests {
         let id = try #require(UUID(uuidString: "42E8A178-B848-4558-946E-BBE007527110"))
         let existingBasicProfile = try BasicProfileModel(
             id: id,
-            userID: #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5")),
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio"
+            bio: "Bio",
+            ownerID: #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5"))
         )
         database.append([existingBasicProfile])
 
@@ -101,16 +101,16 @@ struct BasicProfileRemoteFluentDataSourceTests {
         let userID = try #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5"))
         let existingBasicProfile = try BasicProfileModel(
             id: #require(UUID(uuidString: "42E8A178-B848-4558-946E-BBE007527110")),
-            userID: userID,
             displayName: "Dave",
             birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio"
+            bio: "Bio",
+            ownerID: userID
         )
         database.append([existingBasicProfile])
 
         let basicProfile = try await dataSource.fetch(byUserID: userID)
 
-        #expect(basicProfile.userID == userID)
+        #expect(basicProfile.ownerID == userID)
     }
 
     @Test("fetch by user ID when profile does not exists throws user not found error")

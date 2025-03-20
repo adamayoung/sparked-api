@@ -16,12 +16,18 @@ struct AuthenticateUserTests {
 
     let useCase: AuthenticateUser
     let repository: UserStubRepository
+    let roleRepository: RoleStubRepository
     let hasher: PasswordHasherStubService
 
     init() {
         self.repository = UserStubRepository()
+        self.roleRepository = RoleStubRepository()
         self.hasher = PasswordHasherStubService()
-        self.useCase = AuthenticateUser(repository: repository, hasher: hasher)
+        self.useCase = AuthenticateUser(
+            repository: repository,
+            roleRepository: roleRepository,
+            hasher: hasher
+        )
     }
 
     @Test("execute when authentication is successful returns user")

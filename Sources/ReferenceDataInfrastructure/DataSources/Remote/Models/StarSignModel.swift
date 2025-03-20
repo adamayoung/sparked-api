@@ -10,7 +10,7 @@ import Foundation
 
 final class StarSignModel: Model, @unchecked Sendable {
 
-    static let schema = "star_sign"
+    static let schema = "reference_data_star_sign"
 
     @ID var id: UUID?
 

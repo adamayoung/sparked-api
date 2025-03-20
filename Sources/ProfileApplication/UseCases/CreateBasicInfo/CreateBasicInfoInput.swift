@@ -9,7 +9,6 @@ import Foundation
 
 package struct CreateBasicInfoInput: Equatable, Sendable {
 
-    package let userID: UUID
     package let profileID: UUID
     package let genderID: UUID
     package let countryID: UUID
@@ -18,7 +17,6 @@ package struct CreateBasicInfoInput: Equatable, Sendable {
     package let workplace: String?
 
     package init(
-        userID: UUID,
         profileID: UUID,
         genderID: UUID,
         countryID: UUID,
@@ -26,7 +24,6 @@ package struct CreateBasicInfoInput: Equatable, Sendable {
         homeTown: String? = nil,
         workplace: String? = nil
     ) {
-        self.userID = userID
         self.profileID = profileID
         self.genderID = genderID
         self.countryID = countryID

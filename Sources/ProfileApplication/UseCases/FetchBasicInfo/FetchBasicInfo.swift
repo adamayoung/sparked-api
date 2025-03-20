@@ -16,7 +16,10 @@ final class FetchBasicInfo: FetchBasicInfoUseCase {
         self.repository = repository
     }
 
-    func execute(id: UUID) async throws(FetchBasicInfoError) -> BasicInfoDTO {
+    func execute(
+        id: UUID,
+        userContext: some UserContext
+    ) async throws(FetchBasicInfoError) -> BasicInfoDTO {
         let basicInfo: BasicInfo
         do {
             basicInfo = try await repository.fetch(byID: id)
@@ -26,19 +29,8 @@ final class FetchBasicInfo: FetchBasicInfoUseCase {
             throw .unknown(error)
         }
 
-        let basicInfoDTO = BasicInfoDTOMapper.map(from: basicInfo)
-
-        return basicInfoDTO
-    }
-
-    func execute(userID: UUID) async throws(FetchBasicInfoError) -> BasicInfoDTO {
-        let basicInfo: BasicInfo
-        do {
-            basicInfo = try await repository.fetch(byUserID: userID)
-        } catch BasicInfoRepositoryError.notFound {
-            throw .notFoundForUser(userID: userID)
-        } catch let error {
-            throw .unknown(error)
+        guard userContext.canRead(ownerID: basicInfo.ownerID) else {
+            throw .unauthorized
         }
 
         let basicInfoDTO = BasicInfoDTOMapper.map(from: basicInfo)
@@ -46,7 +38,39 @@ final class FetchBasicInfo: FetchBasicInfoUseCase {
         return basicInfoDTO
     }
 
-    func execute(profileID: ProfileDTO.ID) async throws(FetchBasicInfoError) -> BasicInfoDTO {
+    func execute(
+        userID: UUID,
+        userContext: some UserContext
+    ) async throws(FetchBasicInfoError) -> BasicInfoDTO {
+        let basicInfo: BasicInfo
+        do {
+            basicInfo = try await repository.fetch(byOwnerID: userID)
+        } catch BasicInfoRepositoryError.notFound {
+            throw .notFoundForUser(userID: userID)
+        } catch let error {
+            throw .unknown(error)
+        }
+
+        guard userContext.canRead(ownerID: basicInfo.ownerID) else {
+            throw .unauthorized
+        }
+
+        guard
+            userContext.isOwner(basicInfo.ownerID)
+                || (userContext.isAdmin && userContext.isSystem)
+        else {
+            throw .unauthorized
+        }
+
+        let basicInfoDTO = BasicInfoDTOMapper.map(from: basicInfo)
+
+        return basicInfoDTO
+    }
+
+    func execute(
+        profileID: ProfileDTO.ID,
+        userContext: some UserContext
+    ) async throws(FetchBasicInfoError) -> BasicInfoDTO {
         let basicInfo: BasicInfo
         do {
             basicInfo = try await repository.fetch(byProfileID: profileID)
@@ -54,6 +78,10 @@ final class FetchBasicInfo: FetchBasicInfoUseCase {
             throw .profileNotFound(profileID: profileID)
         } catch let error {
             throw .unknown(error)
+        }
+
+        guard userContext.canRead(ownerID: basicInfo.ownerID) else {
+            throw .unauthorized
         }
 
         let basicInfoDTO = BasicInfoDTOMapper.map(from: basicInfo)

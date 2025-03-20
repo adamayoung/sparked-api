@@ -9,6 +9,9 @@ import ProfileDomain
 
 package protocol RemoveProfileInterestUseCase {
 
-    func execute(input: RemoveProfileInterestInput) async throws(RemoveProfileInterestError)
+    func execute(
+        input: RemoveProfileInterestInput,
+        userContext: some UserContext
+    ) async throws(RemoveProfileInterestError)
 
 }

@@ -29,7 +29,10 @@ struct FetchBasicProfileTests {
 
         repository.fetchByIDResult = .success(basicProfile)
 
-        let basicProfileDTO = try await useCase.execute(id: id)
+        let basicProfileDTO = try await useCase.execute(
+            id: id,
+            userContext: UserContextStub.user
+        )
 
         #expect(basicProfileDTO.id == basicProfile.id)
         #expect(repository.fetchByIDWasCalled)
@@ -43,7 +46,7 @@ struct FetchBasicProfileTests {
 
         await #expect(throws: FetchBasicProfileError.unknown(BasicProfileRepositoryError.unknown()))
         {
-            _ = try await useCase.execute(id: id)
+            _ = try await useCase.execute(id: id, userContext: UserContextStub.user)
         }
         #expect(repository.fetchByIDWasCalled)
         #expect(repository.lastFetchByIDID == id)
@@ -51,11 +54,15 @@ struct FetchBasicProfileTests {
 
     @Test("execute by user ID when user and basic profile exists returns basic profile")
     func executeByUserIDWhenUserAndBasicProfileExistsReturnsBasicProfile() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
-        let basicProfile = try Self.createBasicProfile(userID: userID)
+        let userContext = UserContextStub.user
+        let userID = try #require(userContext.userID)
+        let basicProfile = try Self.createBasicProfile(ownerID: userID)
         repository.fetchByUserIDResult = .success(basicProfile)
 
-        let basicProfileDTO = try await useCase.execute(userID: userID)
+        let basicProfileDTO = try await useCase.execute(
+            userID: userID,
+            userContext: UserContextStub.user
+        )
 
         #expect(basicProfileDTO.id == basicProfile.id)
         #expect(repository.fetchByUserIDWasCalled)
@@ -70,7 +77,10 @@ struct FetchBasicProfileTests {
         await #expect(
             throws: FetchBasicProfileError.unknown(BasicProfileRepositoryError.unknown())
         ) {
-            _ = try await useCase.execute(userID: userID)
+            _ = try await useCase.execute(
+                userID: userID,
+                userContext: UserContextStub.user
+            )
         }
         #expect(repository.fetchByUserIDWasCalled)
         #expect(repository.lastFetchByUserIDUserID == userID)
@@ -82,17 +92,17 @@ extension FetchBasicProfileTests {
 
     private static func createBasicProfile(
         id: UUID? = UUID(uuidString: "51045953-FA7E-47FF-A336-D608742031DF"),
-        userID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"),
         displayName: String = "Dave",
         birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
+        bio: String = "",
+        ownerID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC")
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(ownerID)
         )
     }
 

@@ -16,10 +16,15 @@ struct FetchUserTests {
 
     let useCase: FetchUser
     let repository: UserStubRepository
+    let roleRepository: RoleStubRepository
 
     init() {
         self.repository = UserStubRepository()
-        self.useCase = FetchUser(repository: repository)
+        self.roleRepository = RoleStubRepository()
+        self.useCase = FetchUser(
+            repository: repository,
+            roleRepository: roleRepository
+        )
     }
 
     @Test("execute when user found returns user")

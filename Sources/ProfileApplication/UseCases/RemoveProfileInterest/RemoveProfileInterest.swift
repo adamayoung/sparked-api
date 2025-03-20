@@ -21,8 +21,15 @@ final class RemoveProfileInterest: RemoveProfileInterestUseCase {
         self.basicProfileRepository = basicProfileRepository
     }
 
-    func execute(input: RemoveProfileInterestInput) async throws(RemoveProfileInterestError) {
+    func execute(
+        input: RemoveProfileInterestInput,
+        userContext: some UserContext
+    ) async throws(RemoveProfileInterestError) {
         let basicProfile = try await basicProfile(withID: input.profileID)
+        guard userContext.canWrite(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         let profileInterest = try await profileInterest(
             byInterestID: input.interestID,
             for: basicProfile.id

@@ -10,7 +10,7 @@ import Foundation
 
 final class GenderModel: Model, @unchecked Sendable {
 
-    static let schema = "gender"
+    static let schema = "reference_data_gender"
 
     @ID var id: UUID?
 

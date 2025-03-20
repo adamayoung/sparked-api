@@ -13,6 +13,7 @@ struct UserResponseModel: Content, Identifiable {
     let firstName: String
     let familyName: String
     let email: String
+    let roles: [String]
     let isVerified: Bool
 
 }

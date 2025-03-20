@@ -38,6 +38,14 @@ struct RegisterControllerTests {
             familyName: "Smith",
             fullName: "Dave Smith",
             email: "email@example.com",
+            roles: [
+                RoleDTO(
+                    id: #require(UUID(uuidString: "13221120-6A7D-4FE2-8AAA-235F65B5E03D")),
+                    code: "USER",
+                    name: "User",
+                    description: "User role"
+                )
+            ],
             isVerified: true,
             isActive: true
         )

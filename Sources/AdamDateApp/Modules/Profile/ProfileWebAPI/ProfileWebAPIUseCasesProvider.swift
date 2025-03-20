@@ -43,7 +43,7 @@ extension Application.ProfileWebAPIUseCases.Provider {
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeCreateBasicInfoUseCase(
                     repository: app.basicInfoRepository,
-                    userRepository: app.profileUserRepository,
+                    basicProfileRepository: app.basicProfileRepository,
                     countryRepository: app.profileCountryRepository,
                     genderRepository: app.profileGenderRepository
                 )
@@ -66,6 +66,7 @@ extension Application.ProfileWebAPIUseCases.Provider {
             app.profileWebAPIUseCases.use { app in
                 ProfileApplicationFactory.makeFetchProfilePhotosUseCase(
                     repository: app.profilePhotoRepository,
+                    basicProfileRepository: app.basicProfileRepository,
                     imageRepository: app.imageRepository
                 )
             }

@@ -29,24 +29,24 @@ struct CreateBasicProfileTests {
 
     @Test("execute when user exists and basic profile created returns basic profile")
     func executeWhenUserExistsAndBasicProfileCreatedReturnsBasicProfile() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
+        let userContext = UserContextStub.user
+        let userID = try #require(userContext.userID)
         let input = try Self.createCreateBasicProfileInput(userID: userID)
-        let basicProfile = try Self.createBasicProfile(userID: userID)
         let user = User(id: userID, email: "some@email.com")
 
         repository.createResult = .success(Void())
         userRepository.fetchByIDResult = .success(user)
 
-        let basicProfileDTO = try await useCase.execute(input: input)
+        _ = try await useCase.execute(input: input, userContext: userContext)
 
-        #expect(basicProfileDTO.userID == basicProfile.userID)
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateBasicProfile?.userID == userID)
+        #expect(repository.lastCreateBasicProfile?.ownerID == userID)
     }
 
     @Test("execute when create basic profile fails throws error")
     func executeWhenCreatingBasicProfileFailsThrowsError() async throws {
-        let userID = try #require(UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC"))
+        let userContext = UserContextStub.user
+        let userID = try #require(userContext.userID)
         let input = try Self.createCreateBasicProfileInput(userID: userID)
         let user = User(id: userID, email: "some@email.com")
 
@@ -56,10 +56,10 @@ struct CreateBasicProfileTests {
         await #expect(
             throws: CreateBasicProfileError.unknown(BasicProfileRepositoryError.unknown())
         ) {
-            _ = try await useCase.execute(input: input)
+            _ = try await useCase.execute(input: input, userContext: UserContextStub.user)
         }
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateBasicProfile?.userID == input.userID)
+        #expect(repository.lastCreateBasicProfile?.ownerID == input.ownerID)
     }
 
 }
@@ -73,10 +73,10 @@ extension CreateBasicProfileTests {
         bio: String = ""
     ) throws -> CreateBasicProfileInput {
         try CreateBasicProfileInput(
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(userID)
         )
     }
 
@@ -89,10 +89,10 @@ extension CreateBasicProfileTests {
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(userID)
         )
     }
 

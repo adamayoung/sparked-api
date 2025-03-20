@@ -15,10 +15,10 @@ struct BasicProfileMapper {
     static func map(from model: BasicProfileModel) throws -> BasicProfile {
         try BasicProfile(
             id: model.requireID(),
-            userID: model.userID,
             displayName: model.displayName,
             birthDate: model.birthDate,
-            bio: model.bio
+            bio: model.bio,
+            ownerID: model.ownerID
         )
     }
 

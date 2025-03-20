@@ -23,6 +23,7 @@ final class TokenPayloadAdapter: TokenPayloadService {
             subject: dto.id.uuidString,
             email: dto.email,
             fullName: dto.fullName,
+            roles: dto.roles.map(\.code),
             configuration: jwtConfiguration
         )
     }

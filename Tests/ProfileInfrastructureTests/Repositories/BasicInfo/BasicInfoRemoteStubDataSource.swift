@@ -21,9 +21,9 @@ final class BasicInfoRemoteStubDataSource: BasicInfoRemoteDataSource {
     private(set) var fetchByIDWasCalled = false
     private(set) var lastFetchByIDID: UUID?
 
-    var fetchByUserIDResult: Result<BasicInfo, BasicInfoRepositoryError> = .failure(.unknown())
-    private(set) var fetchByUserIDWasCalled = false
-    private(set) var lastFetchByUserIDUserID: UUID?
+    var fetchByOwnerIDResult: Result<BasicInfo, BasicInfoRepositoryError> = .failure(.unknown())
+    private(set) var fetchByOwnerIDWasCalled = false
+    private(set) var lastFetchByOwnerIDOwnerID: UUID?
 
     var fetchByProfileIDResult: Result<BasicInfo, BasicInfoRepositoryError> = .failure(.unknown())
     private(set) var fetchByProfileIDWasCalled = false
@@ -45,11 +45,11 @@ final class BasicInfoRemoteStubDataSource: BasicInfoRemoteDataSource {
         return try fetchByIDResult.get()
     }
 
-    func fetch(byUserID userID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
-        fetchByUserIDWasCalled = true
-        lastFetchByUserIDUserID = userID
+    func fetch(byOwnerID ownerID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {
+        fetchByOwnerIDWasCalled = true
+        lastFetchByOwnerIDOwnerID = ownerID
 
-        return try fetchByUserIDResult.get()
+        return try fetchByOwnerIDResult.get()
     }
 
     func fetch(byProfileID profileID: UUID) async throws(BasicInfoRepositoryError) -> BasicInfo {

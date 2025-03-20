@@ -33,6 +33,10 @@ final class UserStubRepository: UserRepository {
         try createResult.get()
     }
 
+    func create(_ user: User, withRoles roles: [Role]) async throws(UserRepositoryError) {
+        // TODO: create
+    }
+
     func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User {
         fetchByIDWasCalled = true
         lastFetchByIDID = id

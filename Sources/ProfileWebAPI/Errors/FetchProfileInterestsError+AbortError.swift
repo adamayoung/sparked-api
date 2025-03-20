@@ -13,6 +13,7 @@ extension FetchProfileInterestsError: AbortError {
     package var status: HTTPResponseStatus {
         switch self {
         case .profileNotFound: .notFound
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

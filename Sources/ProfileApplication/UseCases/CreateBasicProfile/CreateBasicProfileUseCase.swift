@@ -10,7 +10,8 @@ import Foundation
 package protocol CreateBasicProfileUseCase {
 
     func execute(
-        input: CreateBasicProfileInput
+        input: CreateBasicProfileInput,
+        userContext: some UserContext
     ) async throws(CreateBasicProfileError) -> BasicProfileDTO
 
 }

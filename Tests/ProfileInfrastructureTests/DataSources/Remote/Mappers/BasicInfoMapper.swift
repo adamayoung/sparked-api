@@ -116,23 +116,23 @@ extension BasicInfoMapperTests {
 
     private static func buildBasicInfoModel(
         id: UUID? = UUID(uuidString: "93FD4854-A4D6-4704-9A65-F43BEDB881D6"),
-        userID: UUID? = UUID(uuidString: "E5DD4113-B75D-422B-BA88-1781E0A0858E"),
         profileID: UUID? = UUID(uuidString: "6EAF94E9-3430-4073-95AB-9B3FB8883313"),
         genderID: UUID? = UUID(uuidString: "59FDAF42-06A1-4966-926F-8F736E851D3C"),
         countryID: UUID? = UUID(uuidString: "9D7BEB42-E51F-456C-9BE9-3584D84CD63C"),
         location: String = "Nottingham",
         homeTown: String? = "Leicester",
-        workplace: String? = "Apple"
+        workplace: String? = "Apple",
+        ownerID: UUID? = UUID(uuidString: "E5DD4113-B75D-422B-BA88-1781E0A0858E")
     ) throws -> BasicInfoModel {
         try BasicInfoModel(
             id: id,
-            userID: #require(userID),
             profileID: #require(profileID),
             genderID: #require(genderID),
             countryID: #require(countryID),
             location: location,
             homeTown: homeTown,
-            workplace: workplace
+            workplace: workplace,
+            ownerID: #require(ownerID)
         )
     }
 

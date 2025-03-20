@@ -35,7 +35,7 @@ struct InterestController: RouteCollection, Sendable {
 
     @Sendable
     func index(req: Request) async throws -> [InterestResponseModel] {
-        try await req.jwt.verify(as: TokenPayload.self)
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
         guard
             let profileIDString = req.parameters.get("profileID", as: String.self),
             let profileID = UUID(uuidString: profileIDString)
@@ -43,8 +43,10 @@ struct InterestController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let profileInterestDTOs = try await req.fetchProfileInterestsUseCase
-            .execute(profileID: profileID)
+        let profileInterestDTOs = try await req.fetchProfileInterestsUseCase.execute(
+            profileID: profileID,
+            userContext: userContext
+        )
 
         let responseModels = profileInterestDTOs.map(InterestResponseModelMapper.map)
 
@@ -53,14 +55,19 @@ struct InterestController: RouteCollection, Sendable {
 
     @Sendable
     func indexMe(req: Request) async throws -> [InterestResponseModel] {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
-        let profileInterestDTOs = try await req.fetchProfileInterestsUseCase
-            .execute(profileID: basicProfileDTO.id)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
+        let profileInterestDTOs = try await req.fetchProfileInterestsUseCase.execute(
+            profileID: basicProfileDTO.id,
+            userContext: userContext
+        )
 
         let responseModels = profileInterestDTOs.map(InterestResponseModelMapper.map)
 
@@ -69,12 +76,15 @@ struct InterestController: RouteCollection, Sendable {
 
     @Sendable
     func add(req: Request) async throws -> HTTPResponseStatus {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
 
         let addProfileInterestRequestModel: AddProfileInterestRequestModel
         do {
@@ -88,15 +98,15 @@ struct InterestController: RouteCollection, Sendable {
             from: addProfileInterestRequestModel,
             profileID: basicProfileDTO.id
         )
-        _ = try await req.addProfileInterestUseCase.execute(input: input)
+        _ = try await req.addProfileInterestUseCase.execute(input: input, userContext: userContext)
 
         return .accepted
     }
 
     @Sendable
     func remove(req: Request) async throws -> HTTPResponseStatus {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
@@ -109,7 +119,10 @@ struct InterestController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         guard basicProfileDTO.id == profileID else {
             throw Abort(.forbidden)
         }
@@ -118,19 +131,22 @@ struct InterestController: RouteCollection, Sendable {
             profileID: basicProfileDTO.id,
             interestID: interestID
         )
-        try await req.removeProfileInterestUseCase.execute(input: input)
+        try await req.removeProfileInterestUseCase.execute(input: input, userContext: userContext)
 
         return .accepted
     }
 
     @Sendable
     func removeMe(req: Request) async throws -> HTTPResponseStatus {
-        let token = try await req.jwt.verify(as: TokenPayload.self)
-        guard let userID = UUID(uuidString: token.subject.value) else {
+        let userContext = try await req.jwt.verify(as: TokenPayload.self)
+        guard let userID = userContext.userID else {
             throw Abort(.forbidden)
         }
 
-        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(userID: userID)
+        let basicProfileDTO = try await req.fetchBasicProfileUseCase.execute(
+            userID: userID,
+            userContext: userContext
+        )
         guard
             let interestIDString = req.parameters.get("interestID", as: String.self),
             let interestID = UUID(uuidString: interestIDString)
@@ -142,7 +158,7 @@ struct InterestController: RouteCollection, Sendable {
             profileID: basicProfileDTO.id,
             interestID: interestID
         )
-        try await req.removeProfileInterestUseCase.execute(input: input)
+        try await req.removeProfileInterestUseCase.execute(input: input, userContext: userContext)
 
         return .accepted
     }

@@ -10,7 +10,7 @@ import Foundation
 
 final class UserModel: Model, @unchecked Sendable {
 
-    static let schema = "user"
+    static let schema = "identity_user"
 
     @ID var id: UUID?
 

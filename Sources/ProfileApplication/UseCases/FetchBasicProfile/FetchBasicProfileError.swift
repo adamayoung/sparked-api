@@ -12,6 +12,7 @@ package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
     case notFound(profileID: UUID)
     case notFoundForUser(userID: UUID)
     case userNotFound(userID: UUID)
+    case unauthorized
     case unknown(Error? = nil)
 
     package var errorDescription: String? {
@@ -24,6 +25,9 @@ package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
 
         case .userNotFound(let userID):
             "User \(userID) not found"
+
+        case .unauthorized:
+            "Unauthorized"
 
         case .unknown(let error):
             "Unknown error: \(error?.localizedDescription ?? "No description available")"
@@ -40,6 +44,9 @@ package enum FetchBasicProfileError: LocalizedError, Equatable, Sendable {
 
         case (.userNotFound(let lhsUserID), .userNotFound(let rhsUserID)):
             lhsUserID == rhsUserID
+
+        case (.unauthorized, .unauthorized):
+            true
 
         case (.unknown(let lhsError), .unknown(let rhsError)):
             lhsError?.localizedDescription == rhsError?.localizedDescription

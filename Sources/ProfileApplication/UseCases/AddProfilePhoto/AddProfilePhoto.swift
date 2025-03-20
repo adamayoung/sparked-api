@@ -29,9 +29,14 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
     }
 
     func execute(
-        input: AddProfilePhotoInput
+        input: AddProfilePhotoInput,
+        userContext: some UserContext
     ) async throws(AddProfilePhotoError) -> ProfilePhotoDTO {
         let basicProfile = try await basicProfile(withID: input.profileID)
+        guard userContext.canWrite(ownerID: basicProfile.ownerID) else {
+            throw .unauthorized
+        }
+
         let nextPhotoIndex = try await nextPhotoIndex(forProfileID: basicProfile.id)
 
         let photoID = UUID()
@@ -39,17 +44,13 @@ final class AddProfilePhoto: AddProfilePhotoUseCase {
         let photoURL = try await addPhoto(input.photoData, filename: filename)
 
         let profilePhoto = ProfilePhoto(
-            userID: basicProfile.userID,
             profileID: basicProfile.id,
             index: nextPhotoIndex,
-            filename: filename
+            filename: filename,
+            ownerID: basicProfile.id
         )
 
-        do {
-            try await repository.create(profilePhoto)
-        } catch let error {
-            throw .unknown(error)
-        }
+        try await create(profilePhoto)
 
         let profilePhotoDTO = ProfilePhotoDTOMapper.map(from: profilePhoto, photoURL: photoURL)
 
@@ -101,6 +102,14 @@ extension AddProfilePhoto {
         }
 
         return photoURL
+    }
+
+    private func create(_ profilePhoto: ProfilePhoto) async throws(AddProfilePhotoError) {
+        do {
+            try await repository.create(profilePhoto)
+        } catch let error {
+            throw .unknown(error)
+        }
     }
 
 }

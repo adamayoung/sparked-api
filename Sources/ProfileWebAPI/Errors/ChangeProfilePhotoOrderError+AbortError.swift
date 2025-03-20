@@ -15,6 +15,7 @@ extension ChangeProfilePhotoOrderError: AbortError {
         case .profileNotFound: .notFound
         case .profilePhotoNotFound: .notFound
         case .invalidIndex: .badRequest
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

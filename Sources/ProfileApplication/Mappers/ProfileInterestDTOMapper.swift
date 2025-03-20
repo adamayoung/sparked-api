@@ -18,8 +18,6 @@ struct ProfileInterestDTOMapper {
     ) -> ProfileInterestDTO {
         ProfileInterestDTO(
             id: profileInterest.id,
-            userID: profileInterest.userID,
-            profileID: profileInterest.profileID,
             interestID: interest.id,
             name: interest.name,
             glyph: interest.glyph

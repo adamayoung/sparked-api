@@ -11,7 +11,8 @@ import ProfileDomain
 package protocol ChangeProfilePhotoOrderUseCase {
 
     func execute(
-        input: ChangeProfilePhotoOrderInput
+        input: ChangeProfilePhotoOrderInput,
+        userContext: some UserContext
     ) async throws(ChangeProfilePhotoOrderError) -> ProfilePhotoDTO
 
 }

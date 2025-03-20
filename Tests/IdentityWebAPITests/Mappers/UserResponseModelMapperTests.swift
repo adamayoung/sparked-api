@@ -73,6 +73,7 @@ extension UserResponseModelMapperTests {
         firstName: String = "",
         familyName: String = "",
         email: String = "",
+        roles: [RoleDTO] = [],
         isVerified: Bool = true,
         isActive: Bool = true
     ) throws -> UserDTO {
@@ -82,8 +83,23 @@ extension UserResponseModelMapperTests {
             familyName: familyName,
             fullName: "\(firstName) \(familyName)",
             email: email,
+            roles: roles,
             isVerified: isVerified,
             isActive: isActive
+        )
+    }
+
+    private static func buildRoleDTO(
+        id: UUID? = UUID(uuidString: "BB736BCD-67AA-4D79-A10A-44C93800B528"),
+        code: String = "USER",
+        name: String = "User",
+        description: String = "User role"
+    ) throws -> RoleDTO {
+        try RoleDTO(
+            id: #require(id),
+            code: code,
+            name: name,
+            description: description
         )
     }
 

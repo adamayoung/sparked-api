@@ -14,6 +14,7 @@ extension FetchProfileError: AbortError {
         switch self {
         case .notFound: .notFound
         case .userNotFound: .notFound
+        case .unauthorized: .unauthorized
         case .unknown: .internalServerError
         }
     }

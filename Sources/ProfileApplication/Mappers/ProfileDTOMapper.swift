@@ -23,7 +23,6 @@ struct ProfileDTOMapper {
 
         return ProfileDTO(
             id: basicProfile.id,
-            userID: basicProfile.userID,
             displayName: basicProfile.displayName,
             birthDate: basicProfile.birthDate,
             age: basicProfile.age,

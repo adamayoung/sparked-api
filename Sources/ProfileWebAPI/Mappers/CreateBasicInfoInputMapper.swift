@@ -14,11 +14,9 @@ struct CreateBasicInfoInputMapper {
 
     static func map(
         from requestModel: CreateBasicInfoRequestModel,
-        userID: UUID,
-        profileID: UUID
+        profileID: BasicProfileDTO.ID
     ) -> CreateBasicInfoInput {
         CreateBasicInfoInput(
-            userID: userID,
             profileID: profileID,
             genderID: requestModel.genderID,
             countryID: requestModel.countryID,

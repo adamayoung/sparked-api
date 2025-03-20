@@ -40,7 +40,6 @@ extension BasicProfileResponseModelMapperTests {
 
     private static func buildBasicProfileDTO(
         id: UUID? = UUID(uuidString: "A1F167AD-6FEC-4A48-8A55-775D2A645FB0"),
-        userID: UUID? = UUID(uuidString: "54A3BB4B-1AC7-48E3-A92E-93D94AC125F9"),
         displayName: String = "",
         birthDate: Date = Date(timeIntervalSince1970: 0),
         age: Int = 21,
@@ -48,7 +47,6 @@ extension BasicProfileResponseModelMapperTests {
     ) throws -> BasicProfileDTO {
         try BasicProfileDTO(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
             age: age,

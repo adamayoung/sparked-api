@@ -72,7 +72,7 @@ struct BasicProfileDefaultRepositoryTests {
     @Test("fetch by user ID returns basic profile")
     func fetchByUserIDReturnsBasicProfile() async throws {
         let userID = try #require(UUID(uuidString: "F6AA977F-D5E5-40FB-BC94-F6029B8084F2"))
-        let expectedBasicProfile = try Self.makeBasicProfile(userID: userID)
+        let expectedBasicProfile = try Self.makeBasicProfile(ownerID: userID)
         remoteDataSource.fetchByUserIDResult = .success(expectedBasicProfile)
 
         let basicProfile = try await repository.fetch(byUserID: userID)
@@ -100,17 +100,17 @@ extension BasicProfileDefaultRepositoryTests {
 
     private static func makeBasicProfile(
         id: UUID? = UUID(uuidString: "B552E889-6409-40F1-BFA2-7CD40A26CF41"),
-        userID: UUID? = UUID(uuidString: "BC925225-56C9-4BD1-AC64-BB890279F489"),
         displayName: String = "Display Name",
         birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
+        bio: String = "",
+        ownerID: UUID? = UUID(uuidString: "BC925225-56C9-4BD1-AC64-BB890279F489")
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(ownerID)
         )
     }
 

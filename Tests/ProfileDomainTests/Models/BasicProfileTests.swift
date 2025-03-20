@@ -28,17 +28,17 @@ extension BasicProfileTests {
 
     private func buildBasicProfile(
         id: UUID? = UUID(uuidString: "A641FB14-0CE1-45A4-A851-28664BB50C50"),
-        userID: UUID? = UUID(uuidString: "ECE2D9AA-ED8D-4353-9F9C-33384B034436"),
         displayName: String = "",
         birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = ""
+        bio: String = "",
+        ownerID: UUID? = UUID(uuidString: "ECE2D9AA-ED8D-4353-9F9C-33384B034436")
     ) throws -> BasicProfile {
         try BasicProfile(
             id: #require(id),
-            userID: #require(userID),
             displayName: displayName,
             birthDate: birthDate,
-            bio: bio
+            bio: bio,
+            ownerID: #require(ownerID)
         )
     }
 

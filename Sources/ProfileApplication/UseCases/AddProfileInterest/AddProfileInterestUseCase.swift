@@ -10,7 +10,8 @@ import Foundation
 package protocol AddProfileInterestUseCase {
 
     func execute(
-        input: AddProfileInterestInput
+        input: AddProfileInterestInput,
+        userContext: some UserContext
     ) async throws(AddProfileInterestError) -> ProfileInterestDTO
 
 }

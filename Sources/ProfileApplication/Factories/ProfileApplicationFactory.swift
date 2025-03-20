@@ -47,13 +47,13 @@ package final class ProfileApplicationFactory {
 
     package static func makeCreateBasicInfoUseCase(
         repository: some BasicInfoRepository,
-        userRepository: some UserRepository,
+        basicProfileRepository: some BasicProfileRepository,
         countryRepository: some CountryRepository,
         genderRepository: some GenderRepository
     ) -> some CreateBasicInfoUseCase {
         CreateBasicInfo(
             repository: repository,
-            userRepository: userRepository,
+            basicProfileRepository: basicProfileRepository,
             countryRepository: countryRepository,
             genderRepository: genderRepository
         )
@@ -79,10 +79,12 @@ package final class ProfileApplicationFactory {
 
     package static func makeFetchProfilePhotosUseCase(
         repository: some ProfilePhotoRepository,
+        basicProfileRepository: some BasicProfileRepository,
         imageRepository: some ImageRepository
     ) -> some FetchProfilePhotosUseCase {
         FetchProfilePhotos(
             repository: repository,
+            basicProfileRepository: basicProfileRepository,
             imageRepository: imageRepository
         )
     }

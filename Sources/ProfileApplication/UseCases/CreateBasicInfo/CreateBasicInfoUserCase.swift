@@ -9,6 +9,9 @@ import Foundation
 
 package protocol CreateBasicInfoUseCase {
 
-    func execute(input: CreateBasicInfoInput) async throws(CreateBasicInfoError) -> BasicInfoDTO
+    func execute(
+        input: CreateBasicInfoInput,
+        userContext: some UserContext
+    ) async throws(CreateBasicInfoError) -> BasicInfoDTO
 
 }
