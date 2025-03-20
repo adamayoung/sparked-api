@@ -15,16 +15,13 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   build:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     outputs:
         version: ${{ steps.meta.outputs.version }}
-        dockerImage: "${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
+        dockerImage: " ${{ github.repository }}:${{ steps.meta.outputs.version }}"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,7 +33,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ github.repository }}
           tags: |
             type=schedule
             type=ref,event=branch
@@ -71,6 +68,7 @@ jobs:
     environment:
         name: production
         url: ${{ steps.deployment.outputs.webAppURL }}
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
