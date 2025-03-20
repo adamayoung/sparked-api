@@ -12,7 +12,6 @@ import Vapor
 @testable import FileStorageKit
 
 @Suite("AzureRESTBlobStorage")
-@MainActor
 struct AzureRESTBlobStorageTests {
 
     let storage: AzureRESTBlobStorage

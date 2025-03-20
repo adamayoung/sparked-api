@@ -35,22 +35,16 @@ struct AuthenticateUserTests {
         let email = "email@example.com"
         let password = "testPassword"
         let credential = UserCredential(email: email, password: password)
-        let user = try User(
-            id: #require(UUID(uuidString: "0941E3F4-A620-40CD-A2BD-4E8D0655D8B0")),
-            firstName: "Dave",
-            familyName: "Smith",
-            email: email,
-            passwordHash: password,
-            isVerified: true,
-            isActive: true
-        )
+        let user = try User.mock(email: email, passwordHash: password)
+        let roles = try [Role.userMock()]
         repository.fetchByEmailResult = .success(user)
+        roleRepository.fetchAllForUserIDResult = .success(roles)
 
         let userDTO = try await useCase.execute(credential: credential)
 
         #expect(userDTO.id == user.id)
         #expect(repository.fetchByEmailWasCalled)
-        #expect(repository.lastFetchByEmailEmail == email)
+        #expect(repository.lastFetchByEmailParameter == email)
     }
 
     @Test("execute when authentication is unsuccessful throws error")

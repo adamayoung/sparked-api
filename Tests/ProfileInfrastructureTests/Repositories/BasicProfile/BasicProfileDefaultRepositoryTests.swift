@@ -25,7 +25,7 @@ struct BasicProfileDefaultRepositoryTests {
 
     @Test("create creates basic profile")
     func createCreatesBasicProfile() async throws {
-        let basicProfile = try Self.makeBasicProfile()
+        let basicProfile = try BasicProfile.mock()
         remoteDataSource.createResult = .success(Void())
 
         try await repository.create(basicProfile)
@@ -36,7 +36,7 @@ struct BasicProfileDefaultRepositoryTests {
 
     @Test("create when remote data source create fails throws error")
     func createWhenRemoteDataSourceCreatesFailsThrowsError() async throws {
-        let basicProfile = try Self.makeBasicProfile()
+        let basicProfile = try BasicProfile.mock()
         remoteDataSource.createResult = .failure(.unknown())
 
         await #expect(throws: BasicProfileRepositoryError.unknown()) {
@@ -49,7 +49,7 @@ struct BasicProfileDefaultRepositoryTests {
     @Test("fetch by ID returns basic profile")
     func fetchByIDReturnsBasicProfile() async throws {
         let id = try #require(UUID(uuidString: "5D2B6829-603B-425F-B9FA-C890BC121335"))
-        let expectedBasicProfile = try Self.makeBasicProfile(id: id)
+        let expectedBasicProfile = try BasicProfile.mock(id: id)
         remoteDataSource.fetchByIDResult = .success(expectedBasicProfile)
 
         let basicProfile = try await repository.fetch(byID: id)
@@ -72,7 +72,7 @@ struct BasicProfileDefaultRepositoryTests {
     @Test("fetch by user ID returns basic profile")
     func fetchByUserIDReturnsBasicProfile() async throws {
         let userID = try #require(UUID(uuidString: "F6AA977F-D5E5-40FB-BC94-F6029B8084F2"))
-        let expectedBasicProfile = try Self.makeBasicProfile(ownerID: userID)
+        let expectedBasicProfile = try BasicProfile.mock(ownerID: userID)
         remoteDataSource.fetchByUserIDResult = .success(expectedBasicProfile)
 
         let basicProfile = try await repository.fetch(byUserID: userID)
@@ -92,26 +92,6 @@ struct BasicProfileDefaultRepositoryTests {
         }
         #expect(remoteDataSource.fetchByUserIDWasCalled)
         #expect(remoteDataSource.lastFetchByUserIDUserID == userID)
-    }
-
-}
-
-extension BasicProfileDefaultRepositoryTests {
-
-    private static func makeBasicProfile(
-        id: UUID? = UUID(uuidString: "B552E889-6409-40F1-BFA2-7CD40A26CF41"),
-        displayName: String = "Display Name",
-        birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = "",
-        ownerID: UUID? = UUID(uuidString: "BC925225-56C9-4BD1-AC64-BB890279F489")
-    ) throws -> BasicProfile {
-        try BasicProfile(
-            id: #require(id),
-            displayName: displayName,
-            birthDate: birthDate,
-            bio: bio,
-            ownerID: #require(ownerID)
-        )
     }
 
 }

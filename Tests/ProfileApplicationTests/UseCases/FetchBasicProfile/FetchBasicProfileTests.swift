@@ -25,13 +25,13 @@ struct FetchBasicProfileTests {
     @Test("execute by ID when basic profile exists returns basic profile DTO")
     func executeByIDWhenBasicProfileExistsReturnsBasicProfile() async throws {
         let id = try #require(UUID(uuidString: "3065DD78-CC13-4EFD-A1F8-0FF58C07DA24"))
-        let basicProfile = try Self.createBasicProfile(id: id)
+        let basicProfile = try BasicProfile.mock(id: id)
 
         repository.fetchByIDResult = .success(basicProfile)
 
         let basicProfileDTO = try await useCase.execute(
             id: id,
-            userContext: UserContextStub.user
+            userContext: UserMockContext.withUserRoleMock()
         )
 
         #expect(basicProfileDTO.id == basicProfile.id)
@@ -46,7 +46,7 @@ struct FetchBasicProfileTests {
 
         await #expect(throws: FetchBasicProfileError.unknown(BasicProfileRepositoryError.unknown()))
         {
-            _ = try await useCase.execute(id: id, userContext: UserContextStub.user)
+            _ = try await useCase.execute(id: id, userContext: UserMockContext.withUserRoleMock())
         }
         #expect(repository.fetchByIDWasCalled)
         #expect(repository.lastFetchByIDID == id)
@@ -54,14 +54,14 @@ struct FetchBasicProfileTests {
 
     @Test("execute by user ID when user and basic profile exists returns basic profile")
     func executeByUserIDWhenUserAndBasicProfileExistsReturnsBasicProfile() async throws {
-        let userContext = UserContextStub.user
+        let userContext = UserMockContext.withUserRoleMock()
         let userID = try #require(userContext.userID)
-        let basicProfile = try Self.createBasicProfile(ownerID: userID)
+        let basicProfile = try BasicProfile.mock(ownerID: userID)
         repository.fetchByUserIDResult = .success(basicProfile)
 
         let basicProfileDTO = try await useCase.execute(
             userID: userID,
-            userContext: UserContextStub.user
+            userContext: userContext
         )
 
         #expect(basicProfileDTO.id == basicProfile.id)
@@ -79,31 +79,11 @@ struct FetchBasicProfileTests {
         ) {
             _ = try await useCase.execute(
                 userID: userID,
-                userContext: UserContextStub.user
+                userContext: UserMockContext.withUserRoleMock()
             )
         }
         #expect(repository.fetchByUserIDWasCalled)
         #expect(repository.lastFetchByUserIDUserID == userID)
-    }
-
-}
-
-extension FetchBasicProfileTests {
-
-    private static func createBasicProfile(
-        id: UUID? = UUID(uuidString: "51045953-FA7E-47FF-A336-D608742031DF"),
-        displayName: String = "Dave",
-        birthDate: Date = Date(timeIntervalSince1970: 0),
-        bio: String = "",
-        ownerID: UUID? = UUID(uuidString: "12B46C87-AC38-43B5-B197-983BA2810EBC")
-    ) throws -> BasicProfile {
-        try BasicProfile(
-            id: #require(id),
-            displayName: displayName,
-            birthDate: birthDate,
-            bio: bio,
-            ownerID: #require(ownerID)
-        )
     }
 
 }

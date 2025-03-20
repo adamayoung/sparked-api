@@ -47,18 +47,12 @@ struct BasicProfileRemoteFluentDataSourceTests {
     @Test("create when profile does exist for user throws profile already exists for user error")
     func createWhenProfileDoesExistForUserThrowsProfileAlreadyExistsForUserError() async throws {
         let userID = try #require(UUID(uuidString: "9991A3C9-29AB-4C0F-90BD-51782083F344"))
-        let existingBasicProfile = BasicProfileModel(
+        let existingBasicProfile = try BasicProfileModel.mock(
             id: UUID(uuidString: "E00F5F37-00B8-4EEE-95F5-ADEC2BA9A9A4"),
-            displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio",
             ownerID: userID
         )
-        let basicProfile = BasicProfile(
+        let basicProfile = try BasicProfile.mock(
             id: try #require(UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA")),
-            displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio",
             ownerID: userID
         )
         database.append([existingBasicProfile])
@@ -72,13 +66,7 @@ struct BasicProfileRemoteFluentDataSourceTests {
     @Test("fetch by ID when profile exists returns profile")
     func fetchByIDWhenProfileExistsReturnsProfile() async throws {
         let id = try #require(UUID(uuidString: "42E8A178-B848-4558-946E-BBE007527110"))
-        let existingBasicProfile = try BasicProfileModel(
-            id: id,
-            displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio",
-            ownerID: #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5"))
-        )
+        let existingBasicProfile = try BasicProfileModel.mock(id: id)
         database.append([existingBasicProfile])
 
         let basicProfile = try await dataSource.fetch(byID: id)
@@ -99,13 +87,7 @@ struct BasicProfileRemoteFluentDataSourceTests {
     @Test("fetch by user ID when profile exists returns profile")
     func fetchByUserIDWhenProfileExistsReturnsProfile() async throws {
         let userID = try #require(UUID(uuidString: "FAB7120C-EF53-4FDC-94DE-A64489DB39B5"))
-        let existingBasicProfile = try BasicProfileModel(
-            id: #require(UUID(uuidString: "42E8A178-B848-4558-946E-BBE007527110")),
-            displayName: "Dave",
-            birthDate: Date(timeIntervalSince1970: 10000),
-            bio: "Bio",
-            ownerID: userID
-        )
+        let existingBasicProfile = try BasicProfileModel.mock(ownerID: userID)
         database.append([existingBasicProfile])
 
         let basicProfile = try await dataSource.fetch(byUserID: userID)

@@ -11,7 +11,6 @@ import Testing
 @testable import ReferenceDataApplication
 
 @Suite("FetchCountries")
-@MainActor
 struct FetchCountriesTests {
 
     let useCase: FetchCountries
@@ -24,35 +23,9 @@ struct FetchCountriesTests {
 
     @Test("execute returns sorted countries")
     func executeReturnsCountries() async throws {
-        let countries = try [
-            Country(
-                id: #require(UUID(uuidString: "76A6BA42-A862-40C5-B917-38F41CE13486")),
-                code: "US",
-                name: "United States",
-                nameKey: "UNITED_STATES"
-            ),
-            Country(
-                id: #require(UUID(uuidString: "A964D9DD-5FCA-4B87-9383-4033A26D0900")),
-                code: "GB",
-                name: "United Kingdom",
-                nameKey: "UNITED_KINGDOM"
-            )
-        ]
+        let countries: [Country] = try [.unitedStatesMock(), .unitedKingdomMock()]
+        let expectedCountryDTOs: [CountryDTO] = try [.unitedKingdomMock(), .unitedStatesMock()]
 
-        let expectedCountryDTOs = try [
-            CountryDTO(
-                id: #require(UUID(uuidString: "A964D9DD-5FCA-4B87-9383-4033A26D0900")),
-                code: "GB",
-                name: "United Kingdom",
-                nameKey: "UNITED_KINGDOM"
-            ),
-            CountryDTO(
-                id: #require(UUID(uuidString: "76A6BA42-A862-40C5-B917-38F41CE13486")),
-                code: "US",
-                name: "United States",
-                nameKey: "UNITED_STATES"
-            )
-        ]
         repository.fetchAllResult = .success(countries)
 
         let countryDTOs = try await useCase.execute()

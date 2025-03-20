@@ -30,33 +30,13 @@ struct RegisterUserTests {
         )
     }
 
-    @Test("execute when user created successfully returns user", .disabled())
+    @Test("execute when user created successfully returns user")
     func executeWhenUserCreatedSuccessfullyReturnsUser() async throws {
         let password = "Password123"
-        let input = RegisterUserInput(
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            password: password,
-            isVerified: true,
-            roles: ["USER"]
-        )
-        let role = try Role(
-            id: #require(UUID(uuidString: "5AE6C277-CF2C-4943-A472-3A1351C9EF08")),
-            code: "USER",
-            name: "User",
-            description: "User role"
-        )
+        let input = RegisterUserInput.mock(password: password)
+        let role = try Role.userMock()
         let passwordHash = "321drowssaP"
-        let user = try User(
-            id: #require(UUID(uuidString: "BDE07538-4204-4F5E-9DB6-CF90A322C18D")),
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            passwordHash: passwordHash,
-            isVerified: true,
-            isActive: true
-        )
+        let user = try User.mock(passwordHash: passwordHash)
         hasher.hashResult = .success(passwordHash)
         repository.createResult = .success(Void())
         roleRepository.fetchByCodeResult = .success(role)
@@ -65,26 +45,15 @@ struct RegisterUserTests {
 
         #expect(userDTO.email == user.email)
         #expect(repository.createWasCalled)
-        #expect(repository.lastCreateUser?.email == input.email)
+        #expect(repository.lastCreateParameters?.user.email == input.email)
         #expect(hasher.hashWasCalled)
-        #expect(hasher.hashLastPassword == password)
+        #expect(hasher.lastHashParameter == password)
     }
 
-    @Test("execute when user creation failed throws error", .disabled())
+    @Test("execute when user creation failed throws error")
     func executeWhenUserCreationFailedThrowsError() async throws {
-        let input = RegisterUserInput(
-            firstName: "Dave",
-            familyName: "Smith",
-            email: "email@example.com",
-            password: "Password123",
-            isVerified: true
-        )
-        let role = try Role(
-            id: #require(UUID(uuidString: "5AE6C277-CF2C-4943-A472-3A1351C9EF08")),
-            code: "USER",
-            name: "User",
-            description: "User role"
-        )
+        let input = RegisterUserInput.mock()
+        let role = try Role.userMock()
         hasher.hashResult = .success("")
         roleRepository.fetchByCodeResult = .success(role)
         repository.createResult = .failure(.unknown())
