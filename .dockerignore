@@ -9,3 +9,5 @@
 /.env.*
 *.bicep
 *.bicepparam
+prometheus.local.yml
+grafana.local.yml
