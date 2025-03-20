@@ -52,7 +52,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           logout: true
 
-      - name: Build and Push Docker image
+      - name: Build
         uses: docker/build-push-action@v6
         with:
           context: .
