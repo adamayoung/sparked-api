@@ -9,9 +9,9 @@ import HealthWebAPI
 import Vapor
 
 func healthWebAPIRoutes(_ routes: RoutesBuilder) throws {
-    let authRouter = routes.grouped("health")
+    let healthRouter = routes.grouped("health")
 
-    try authRouter.register(
+    try healthRouter.register(
         collection: HealthWebAPIFactory.makeHealthController()
     )
 }

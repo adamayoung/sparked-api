@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Sparked",
+    name: "SparkedAPI",
 
     platforms: [
         .macOS(.v14)
@@ -19,7 +19,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
         .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.1.0")
     ],
 
     targets: [
@@ -28,6 +29,7 @@ let package = Package(
             dependencies: [
                 "SparkedCommands",
                 "HealthWebAPI",
+                "MetricsWebAPI",
                 "ProfileWebAPI",
                 "ProfileApplication",
                 "ProfileInfrastructure",
@@ -48,7 +50,8 @@ let package = Package(
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
-                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
+                .product(name: "Prometheus", package: "swift-prometheus")
             ]
         ),
         .testTarget(
@@ -259,6 +262,24 @@ let package = Package(
             dependencies: [
                 "HealthWebAPI",
                 "APITesting",
+                .product(name: "VaporTesting", package: "vapor")
+            ]
+        ),
+
+        // --------------------------------------
+        // Metrics
+
+        .target(
+            name: "MetricsWebAPI",
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "Prometheus", package: "swift-prometheus")
+            ]
+        ),
+        .testTarget(
+            name: "MetricsWebAPITests",
+            dependencies: [
+                "MetricsWebAPI",
                 .product(name: "VaporTesting", package: "vapor")
             ]
         ),
