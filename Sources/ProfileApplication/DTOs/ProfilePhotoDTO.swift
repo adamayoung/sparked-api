@@ -1,6 +1,6 @@
 //
 //  ProfilePhotoDTO.swift
-//  AdamDateApp
+//  SparkedAPI
 //
 //  Created by Adam Young on 19/02/2025.
 //

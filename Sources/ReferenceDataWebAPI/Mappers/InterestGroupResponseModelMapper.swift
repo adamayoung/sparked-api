@@ -1,6 +1,6 @@
 //
 //  InterestGroupResponseModelMapper.swift
-//  AdamDateApp
+//  SparkedAPI
 //
 //  Created by Adam Young on 13/03/2025.
 //

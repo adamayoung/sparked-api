@@ -1,6 +1,6 @@
 //
 //  InterestMigrationV1.swift
-//  AdamDateApp
+//  SparkedAPI
 //
 //  Created by Adam Young on 12/03/2025.
 //
@@ -20,7 +20,7 @@ struct InterestMigrationV1: AsyncMigration {
                 "interest_group_id",
                 .uuid,
                 .required,
-                .references("interest_group", "id")
+                .references("reference_data_interest_group", "id")
             )
             .field("created_at", .datetime)
             .field("updated_at", .datetime)

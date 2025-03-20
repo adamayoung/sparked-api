@@ -1,6 +1,6 @@
 //
 //  AuthenticateUserUseCase.swift
-//  AdamDateApp
+//  SparkedAPI
 //
 //  Created by Adam Young on 24/01/2025.
 //

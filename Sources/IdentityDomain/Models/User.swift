@@ -1,6 +1,6 @@
 //
 //  User.swift
-//  AdamDateAPI
+//  SparkedAPI
 //
 //  Created by Adam Young on 09/01/2025.
 //
