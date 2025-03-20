@@ -29,16 +29,23 @@ jobs:
       - name: Lint
         run: swift format lint -r -p .
 
-      - name: Cache
-        uses: actions/cache@v4
+      - name: Restore .build
+        id: "restore-build"
+        uses: actions/cache/restore@v4
         with:
           path: .build
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
+          key: "swiftpm-tests-build-${{ runner.os }}-${{ github.event.pull_request.base.sha || github.event.after }}"
+          restore-keys: "swiftpm-tests-build-${{ runner.os }}-"
 
       - name: Build
         run: swift build --build-tests
+
+      - name: Cache .build
+        if: steps.restore-build.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .build
+          key: "swiftpm-tests-build-${{ runner.os }}-${{ github.event.pull_request.base.sha || github.event.after }}"
 
       - name: Test
         run: swift test --filter *Tests --skip-build
