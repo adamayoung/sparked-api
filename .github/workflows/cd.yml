@@ -58,8 +58,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           build-args: TAG=${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ github.repository }}:buildcache
+          cache-to: type=registry,ref=${{ github.repository }}:buildcache,mode=max
 
   deploy:
     name: Deploy to Azure
@@ -105,8 +105,6 @@ jobs:
           POSTGRES_USER: ${{ secrets.DATABASE_USER }}@${{ steps.deployment.outputs.databaseServerURL }}
           POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           POSTGRES_DATABASE: postgres
-          AZURE_STORAGE_ACCOUNT_NAME: "***"
-          AZURE_STORAGE_ACCOUNT_KEY: "***"
           JWT_SECRET: "***"
           JWT_EXPIRATION: 3600
           JWT_ISSUER: SparkedIssuer
