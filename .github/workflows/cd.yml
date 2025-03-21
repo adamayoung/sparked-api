@@ -58,8 +58,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           build-args: TAG=${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ github.repository }}:buildcache
+          cache-to: type=registry,ref=${{ github.repository }}:buildcache,mode=max
 
   deploy:
     name: Deploy to Azure
@@ -81,6 +81,10 @@ jobs:
       - name: Create Resource Group
         run: az group create --name ${{ vars.RESOURCE_GROUP_NAME }} --location ${{ vars.RESOURCE_GROUP_LOCATION }}
 
+      - name: Stop App Service
+        continue-on-error: true
+        run: az webapp stop --name ${{ vars.WEB_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP_NAME }}
+
       - name: Deploy
         id: deployment
         uses: azure/bicep-deploy@v2
@@ -94,8 +98,20 @@ jobs:
           template-file: ./main.bicep
           parameters: '{"appServicePlanName":"${{ vars.APP_SERVICE_PLAN_NAME}}", "webAppName":"${{ vars.WEB_APP_NAME }}", "dockerImage":"${{ needs.build.outputs.dockerImage }}", "databaseServerName":"${{ vars.DATABASE_SERVER_NAME }}", "databaseUser":"${{ secrets.DATABASE_USER }}", "databasePassword":"${{ secrets.DATABASE_PASSWORD }}", "storageAccountName":"${{ vars.STORAGE_ACCOUNT_NAME }}", "storageContainerNames": ${{ vars.STORAGE_ACCOUNT_CONTAINER_NAMES }}, "jwtSecret":"${{ secrets.JWT_SECRET }}", "jwtExpiration":${{ vars.JWT_EXPIRATION }}, "jwtIssuer":"${{ vars.JWT_ISSUER }}", "jwtAudience":"${{ vars.JWT_AUDIENCE }}"}'
 
-      - name: Restart App Service
-        run: az webapp restart --name ${{ vars.WEB_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP_NAME }}
+      - name: Migrate database
+        run: swift run SparkedAPI migrate --yes
+        env:
+          POSTGRES_HOSTNAME: ${{ steps.deployment.outputs.databaseServerURL }}
+          POSTGRES_USER: ${{ secrets.DATABASE_USER }}@${{ steps.deployment.outputs.databaseServerURL }}
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          POSTGRES_DATABASE: postgres
+          JWT_SECRET: "***"
+          JWT_EXPIRATION: 3600
+          JWT_ISSUER: SparkedIssuer
+          JWT_AUDIENCE: SparkedAudience
+
+      - name: Start App Service
+        run: az webapp start --name ${{ vars.WEB_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP_NAME }}
 
       - name: Logout from Azure
         run: az logout
