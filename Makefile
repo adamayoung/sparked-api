@@ -18,7 +18,7 @@ build:
 
 .PHONY: docker-build
 docker-build:
-	@docker buildx build --platform linux/amd64 -t sparked-api -t sparked-api:latest -t adamayoung/sparked-api -t adamayoung/sparked-api:latest .
+	@docker buildx build --platform linux/amd64 --cache-from type=registry,ref=adamayoung/sparked-api:buildcache --cache-to type=registry,ref=adamayoung/sparked-api:buildcache,mode=max -t sparked-api -t sparked-api:latest -t adamayoung/sparked-api -t adamayoung/sparked-api:latest .
 
 .PHONY: docker-push
 docker-push:
