@@ -105,9 +105,9 @@ jobs:
           POSTGRES_USER: ${{ secrets.DATABASE_USER }}@${{ steps.deployment.outputs.databaseServerURL }}
           POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           POSTGRES_DATABASE: postgres
-          AZURE_STORAGE_ACCOUNT_NAME: ***
-          AZURE_STORAGE_ACCOUNT_KEY: ***
-          JWT_SECRET: ***
+          AZURE_STORAGE_ACCOUNT_NAME: "***"
+          AZURE_STORAGE_ACCOUNT_KEY: "***"
+          JWT_SECRET: "***"
           JWT_EXPIRATION: 3600
           JWT_ISSUER: SparkedIssuer
           JWT_AUDIENCE: SparkedAudience
