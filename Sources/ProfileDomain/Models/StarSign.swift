@@ -11,16 +11,10 @@ package struct StarSign: Identifiable, Equatable, Hashable, Sendable, Codable {
 
     package let id: UUID
     package let name: String
-    package let glyph: String
 
-    package init(
-        id: UUID,
-        name: String,
-        glyph: String
-    ) {
+    package init(id: UUID, name: String) {
         self.id = id
         self.name = name
-        self.glyph = glyph
     }
 
 }

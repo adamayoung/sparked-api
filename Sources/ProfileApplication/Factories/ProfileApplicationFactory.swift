@@ -14,6 +14,7 @@ package final class ProfileApplicationFactory {
     package static func makeFetchProfileUseCase(
         basicProfileRepository: some BasicProfileRepository,
         basicInfoRepository: some BasicInfoRepository,
+        extendedInfoRepository: some ExtendedInfoRepository,
         profilePhotoRepository: some ProfilePhotoRepository,
         imageRepository: some ImageRepository,
         profileInterestRepository: some ProfileInterestRepository,
@@ -22,6 +23,7 @@ package final class ProfileApplicationFactory {
         FetchProfile(
             basicProfileRepository: basicProfileRepository,
             basicInfoRepository: basicInfoRepository,
+            extendedInfoRepository: extendedInfoRepository,
             profilePhotoRepository: profilePhotoRepository,
             imageRepository: imageRepository,
             profileInterestRepository: profileInterestRepository,
@@ -63,6 +65,26 @@ package final class ProfileApplicationFactory {
         repository: some BasicInfoRepository
     ) -> some FetchBasicInfoUseCase {
         FetchBasicInfo(repository: repository)
+    }
+
+    package static func makeCreateExtendedInfoUseCase(
+        repository: some ExtendedInfoRepository,
+        basicProfileRepository: some BasicProfileRepository,
+        educationLevelRepository: some EducationLevelRepository,
+        starSignRepository: some StarSignRepository
+    ) -> some CreateExtendedInfoUseCase {
+        CreateExtendedInfo(
+            repository: repository,
+            basicProfileRepository: basicProfileRepository,
+            educationLevelRepository: educationLevelRepository,
+            starSignRepository: starSignRepository
+        )
+    }
+
+    package static func makeFetchExtendedInfoUseCase(
+        repository: some ExtendedInfoRepository
+    ) -> some FetchExtendedInfoUseCase {
+        FetchExtendedInfo(repository: repository)
     }
 
     package static func makeAddProfilePhotoUseCase(

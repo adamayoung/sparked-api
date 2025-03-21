@@ -28,6 +28,12 @@ extension Application {
         )
     }
 
+    var extendedInfoRepository: any ExtendedInfoRepository {
+        ProfileInfrastructureFactory.makeExtendedInfoRepository(
+            database: self.db(DatabaseID.sparked)
+        )
+    }
+
     var profilePhotoRepository: any ProfilePhotoRepository {
         ProfileInfrastructureFactory.makeProfilePhotoRepository(
             database: self.db(DatabaseID.sparked)
@@ -64,6 +70,27 @@ extension Application {
             genderService: ProfileAdapterFactory.makeGenderService(
                 fetchGenderUseCase: ReferenceDataApplicationFactory.makeFetchGenderUseCase(
                     genderRepository: self.genderRepository
+                )
+            )
+        )
+    }
+
+    var profileEducationLevelRepository: any ProfileApplication.EducationLevelRepository {
+        ProfileInfrastructureFactory.makeEducationLevelRepository(
+            educationLevelService: ProfileAdapterFactory.makeEducationLevelService(
+                fetchEducationLevelUseCase:
+                    ReferenceDataApplicationFactory.makeFetchEducationLevelUseCase(
+                        educationLevelRepository: self.educationLevelRepository
+                    )
+            )
+        )
+    }
+
+    var profileStarSignRepository: any ProfileApplication.StarSignRepository {
+        ProfileInfrastructureFactory.makeStarSignRepository(
+            starSignService: ProfileAdapterFactory.makeStarSignService(
+                fetchStarSignUseCase: ReferenceDataApplicationFactory.makeFetchStarSignUseCase(
+                    starSignRepository: self.starSignRepository
                 )
             )
         )

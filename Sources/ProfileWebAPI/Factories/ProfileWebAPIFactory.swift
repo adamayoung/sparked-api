@@ -23,6 +23,10 @@ package final class ProfileWebAPIFactory: Sendable {
         BasicInfoController()
     }
 
+    package static func makeExtendedInfoController() -> some RouteCollection {
+        ExtendedInfoController()
+    }
+
     package static func makePhotoController() -> some RouteCollection {
         PhotoController()
     }

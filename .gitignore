@@ -10,3 +10,4 @@ DerivedData/
 /.docker-filestorage
 .env.*
 *.bicepparam
+/.vscode

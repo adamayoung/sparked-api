@@ -28,6 +28,9 @@ extension Application {
             var makeCreateBasicInfoUseCase: ((Application) -> CreateBasicInfoUseCase)?
             var makeFetchBasicInfoUseCase: ((Application) -> FetchBasicInfoUseCase)?
 
+            var makeCreateExtendedInfoUseCase: ((Application) -> CreateExtendedInfoUseCase)?
+            var makeFetchExtendedInfoUseCase: ((Application) -> FetchExtendedInfoUseCase)?
+
             var makeFetchProfileUseCase: ((Application) -> FetchProfileUseCase)?
 
             var makeAddProfilePhotoUseCase: ((Application) -> AddProfilePhotoUseCase)?
@@ -84,6 +87,24 @@ extension Application {
             guard let makeUseCase = self.storage.makeFetchBasicInfoUseCase else {
                 fatalError(
                     "No FetchBasicInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var createExtendedInfoUseCase: CreateExtendedInfoUseCase {
+            guard let makeUseCase = self.storage.makeCreateExtendedInfoUseCase else {
+                fatalError(
+                    "No CreateExtendedInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
+                )
+            }
+            return makeUseCase(self.application)
+        }
+
+        var fetchExtendedInfoUseCase: FetchExtendedInfoUseCase {
+            guard let makeUseCase = self.storage.makeFetchExtendedInfoUseCase else {
+                fatalError(
+                    "No FetchExtendedInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
                 )
             }
             return makeUseCase(self.application)
@@ -190,6 +211,14 @@ extension Application {
             self.storage.makeFetchBasicInfoUseCase = makeUseCase
         }
 
+        package func use(_ makeUseCase: @escaping (Application) -> CreateExtendedInfoUseCase) {
+            self.storage.makeCreateExtendedInfoUseCase = makeUseCase
+        }
+
+        package func use(_ makeUseCase: @escaping (Application) -> FetchExtendedInfoUseCase) {
+            self.storage.makeFetchExtendedInfoUseCase = makeUseCase
+        }
+
         package func use(_ makeUseCase: @escaping (Application) -> FetchProfileUseCase) {
             self.storage.makeFetchProfileUseCase = makeUseCase
         }
@@ -265,6 +294,14 @@ extension Request {
 
     var fetchBasicInfoUseCase: FetchBasicInfoUseCase {
         application.profileWebAPIUseCases.fetchBasicInfoUseCase
+    }
+
+    var createExtendedInfoUseCase: CreateExtendedInfoUseCase {
+        application.profileWebAPIUseCases.createExtendedInfoUseCase
+    }
+
+    var fetchExtendedInfoUseCase: FetchExtendedInfoUseCase {
+        application.profileWebAPIUseCases.fetchExtendedInfoUseCase
     }
 
     var fetchProfileUseCase: FetchProfileUseCase {

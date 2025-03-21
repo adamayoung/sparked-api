@@ -13,7 +13,7 @@ import Vapor
 struct BasicInfoController: RouteCollection, Sendable {
 
     func boot(routes: any RoutesBuilder) throws {
-        routes.group("me", "info") { meInfo in
+        routes.group("me", "basic-info") { meInfo in
             meInfo.get(use: showMe)
                 .description("Get basic information about the authenticated user")
 
@@ -21,7 +21,7 @@ struct BasicInfoController: RouteCollection, Sendable {
                 .description("Create basic information about the authenticated user")
         }
 
-        routes.group(":profileID", "info") { info in
+        routes.group(":profileID", "basic-info") { info in
             info.get(use: show)
                 .description("Get basic information about a user")
 

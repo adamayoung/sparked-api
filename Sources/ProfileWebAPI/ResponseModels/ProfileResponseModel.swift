@@ -18,6 +18,9 @@ struct ProfileResponseModel: Content, Equatable {
     let homeTown: String?
     let workplace: String?
     let photos: [ProfilePhotoResponseModel]
-    let interests: [InterestResponseModel]
+    let interestIDs: [UUID]
+    let height: Double?
+    let educationLevelID: UUID?
+    let starSignID: UUID?
 
 }

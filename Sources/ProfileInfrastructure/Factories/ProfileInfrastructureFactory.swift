@@ -29,6 +29,14 @@ package final class ProfileInfrastructureFactory: Sendable {
         return BasicInfoDefaultRepository(remoteDataSource: remoteDataSource)
     }
 
+    package static func makeExtendedInfoRepository(
+        database: some Database
+    ) -> some ExtendedInfoRepository {
+        let remoteDataSource = Self.makeExtendedInfoRemoteDataSource(database: database)
+
+        return ExtendedInfoDefaultRepository(remoteDataSource: remoteDataSource)
+    }
+
     package static func makeProfilePhotoRepository(
         database: some Database
     ) -> some ProfilePhotoRepository {
@@ -87,6 +95,18 @@ extension ProfileInfrastructureFactory {
         InterestDefaultRepository(interestService: interestService)
     }
 
+    package static func makeEducationLevelRepository(
+        educationLevelService: some EducationLevelService
+    ) -> some EducationLevelRepository {
+        EducationLevelDefaultRepository(educationLevelService: educationLevelService)
+    }
+
+    package static func makeStarSignRepository(
+        starSignService: some StarSignService
+    ) -> some StarSignRepository {
+        StarSignDefaultRepository(starSignService: starSignService)
+    }
+
 }
 
 extension ProfileInfrastructureFactory {
@@ -101,6 +121,12 @@ extension ProfileInfrastructureFactory {
         database: some Database
     ) -> some BasicInfoRemoteDataSource {
         BasicInfoRemoteFluentDataSource(database: database)
+    }
+
+    private static func makeExtendedInfoRemoteDataSource(
+        database: some Database
+    ) -> some ExtendedInfoRemoteDataSource {
+        ExtendedInfoRemoteFluentDataSource(database: database)
     }
 
     private static func makeProfilePhotoRemoteDataSource(
