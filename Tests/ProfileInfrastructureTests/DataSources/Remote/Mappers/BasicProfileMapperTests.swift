@@ -27,7 +27,7 @@ struct BasicProfileMapperTests {
     func mapFromBasicProfileModelWhenIDIsNilThrowsError() throws {
         let basicProfileModel = try BasicProfileModel.mock(id: nil)
 
-        #expect(throws: Error.self) {
+        #expect(throws: (any Error).self) {
             _ = try BasicProfileMapper.map(from: basicProfileModel)
         }
     }

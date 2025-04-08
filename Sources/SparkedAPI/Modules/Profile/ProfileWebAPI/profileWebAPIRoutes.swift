@@ -8,7 +8,7 @@
 import ProfileWebAPI
 import Vapor
 
-func profileWebAPIRoutes(_ routes: RoutesBuilder) throws {
+func profileWebAPIRoutes(_ routes: some RoutesBuilder) throws {
     let profilesRouter = routes.grouped("profiles")
 
     try profilesRouter.register(collection: ProfileWebAPIFactory.makeProfileController())

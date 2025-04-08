@@ -22,23 +22,23 @@ extension Application {
 
         final class Storage: @unchecked Sendable {
 
-            var makeFetchCountriesUseCase: ((Application) -> FetchCountriesUseCase)?
-            var makeFetchCountryUseCase: ((Application) -> FetchCountryUseCase)?
+            var makeFetchCountriesUseCase: ((Application) -> any FetchCountriesUseCase)?
+            var makeFetchCountryUseCase: ((Application) -> any FetchCountryUseCase)?
 
-            var makeFetchGendersUseCase: ((Application) -> FetchGendersUseCase)?
-            var makeFetchGenderUseCase: ((Application) -> FetchGenderUseCase)?
+            var makeFetchGendersUseCase: ((Application) -> any FetchGendersUseCase)?
+            var makeFetchGenderUseCase: ((Application) -> any FetchGenderUseCase)?
 
-            var makeFetchInterestGroupsUseCase: ((Application) -> FetchInterestGroupsUseCase)?
-            var makeFetchInterestGroupUseCase: ((Application) -> FetchInterestGroupUseCase)?
+            var makeFetchInterestGroupsUseCase: ((Application) -> any FetchInterestGroupsUseCase)?
+            var makeFetchInterestGroupUseCase: ((Application) -> any FetchInterestGroupUseCase)?
 
-            var makeFetchInterestsUseCase: ((Application) -> FetchInterestsUseCase)?
-            var makeFetchInterestUseCase: ((Application) -> FetchInterestUseCase)?
+            var makeFetchInterestsUseCase: ((Application) -> any FetchInterestsUseCase)?
+            var makeFetchInterestUseCase: ((Application) -> any FetchInterestUseCase)?
 
-            var makeFetchStarSignsUseCase: ((Application) -> FetchStarSignsUseCase)?
-            var makeFetchStarSignUseCase: ((Application) -> FetchStarSignUseCase)?
+            var makeFetchStarSignsUseCase: ((Application) -> any FetchStarSignsUseCase)?
+            var makeFetchStarSignUseCase: ((Application) -> any FetchStarSignUseCase)?
 
-            var makeFetchEducationLevelsUseCase: ((Application) -> FetchEducationLevelsUseCase)?
-            var makeFetchEducationLevelUseCase: ((Application) -> FetchEducationLevelUseCase)?
+            var makeFetchEducationLevelsUseCase: ((Application) -> any FetchEducationLevelsUseCase)?
+            var makeFetchEducationLevelUseCase: ((Application) -> any FetchEducationLevelUseCase)?
 
             init() {}
         }
@@ -161,51 +161,52 @@ extension Application {
             provider.run(self.application)
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchCountriesUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchCountriesUseCase) {
             self.storage.makeFetchCountriesUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchCountryUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchCountryUseCase) {
             self.storage.makeFetchCountryUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchGendersUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchGendersUseCase) {
             self.storage.makeFetchGendersUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchGenderUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchGenderUseCase) {
             self.storage.makeFetchGenderUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestGroupsUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchInterestGroupsUseCase) {
             self.storage.makeFetchInterestGroupsUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestGroupUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchInterestGroupUseCase) {
             self.storage.makeFetchInterestGroupUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestsUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchInterestsUseCase) {
             self.storage.makeFetchInterestsUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchInterestUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchInterestUseCase) {
             self.storage.makeFetchInterestUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchStarSignsUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchStarSignsUseCase) {
             self.storage.makeFetchStarSignsUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchStarSignUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchStarSignUseCase) {
             self.storage.makeFetchStarSignUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchEducationLevelsUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchEducationLevelsUseCase)
+        {
             self.storage.makeFetchEducationLevelsUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchEducationLevelUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchEducationLevelUseCase) {
             self.storage.makeFetchEducationLevelUseCase = makeUseCase
         }
 
@@ -234,51 +235,51 @@ extension Application {
 
 extension Request {
 
-    var fetchCountriesUseCase: FetchCountriesUseCase {
+    var fetchCountriesUseCase: any FetchCountriesUseCase {
         application.referenceDataWebAPIUseCases.fetchCountriesUseCase
     }
 
-    var fetchCountryUseCase: FetchCountryUseCase {
+    var fetchCountryUseCase: any FetchCountryUseCase {
         application.referenceDataWebAPIUseCases.fetchCountryUseCase
     }
 
-    var fetchGendersUseCase: FetchGendersUseCase {
+    var fetchGendersUseCase: any FetchGendersUseCase {
         application.referenceDataWebAPIUseCases.fetchGendersUseCase
     }
 
-    var fetchGenderUseCase: FetchGenderUseCase {
+    var fetchGenderUseCase: any FetchGenderUseCase {
         application.referenceDataWebAPIUseCases.fetchGenderUseCase
     }
 
-    var fetchInterestGroupsUseCase: FetchInterestGroupsUseCase {
+    var fetchInterestGroupsUseCase: any FetchInterestGroupsUseCase {
         application.referenceDataWebAPIUseCases.fetchInterestGroupsUseCase
     }
 
-    var fetchInterestGroupUseCase: FetchInterestGroupUseCase {
+    var fetchInterestGroupUseCase: any FetchInterestGroupUseCase {
         application.referenceDataWebAPIUseCases.fetchInterestGroupUseCase
     }
 
-    var fetchInterestsUseCase: FetchInterestsUseCase {
+    var fetchInterestsUseCase: any FetchInterestsUseCase {
         application.referenceDataWebAPIUseCases.fetchInterestsUseCase
     }
 
-    var fetchInterestUseCase: FetchInterestUseCase {
+    var fetchInterestUseCase: any FetchInterestUseCase {
         application.referenceDataWebAPIUseCases.fetchInterestUseCase
     }
 
-    var fetchStarSignsUseCase: FetchStarSignsUseCase {
+    var fetchStarSignsUseCase: any FetchStarSignsUseCase {
         application.referenceDataWebAPIUseCases.fetchStarSignsUseCase
     }
 
-    var fetchStarSignUseCase: FetchStarSignUseCase {
+    var fetchStarSignUseCase: any FetchStarSignUseCase {
         application.referenceDataWebAPIUseCases.fetchStarSignUseCase
     }
 
-    var fetchEducationLevelsUseCase: FetchEducationLevelsUseCase {
+    var fetchEducationLevelsUseCase: any FetchEducationLevelsUseCase {
         application.referenceDataWebAPIUseCases.fetchEducationLevelsUseCase
     }
 
-    var fetchEducationLevelUseCase: FetchEducationLevelUseCase {
+    var fetchEducationLevelUseCase: any FetchEducationLevelUseCase {
         application.referenceDataWebAPIUseCases.fetchEducationLevelUseCase
     }
 

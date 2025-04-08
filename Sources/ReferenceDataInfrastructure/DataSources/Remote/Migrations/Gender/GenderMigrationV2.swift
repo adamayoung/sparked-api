@@ -10,7 +10,7 @@ import Foundation
 
 struct GenderMigrationV2: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.transaction { database in
             for gender in Self.genders {
                 try await gender.save(on: database)
@@ -18,7 +18,7 @@ struct GenderMigrationV2: AsyncMigration {
         }
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.transaction { database in
             for gender in Self.genders {
                 try await GenderModel

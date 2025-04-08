@@ -11,7 +11,7 @@ package enum FetchProfilePhotoError: LocalizedError, Equatable, Sendable {
 
     case notFound(id: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

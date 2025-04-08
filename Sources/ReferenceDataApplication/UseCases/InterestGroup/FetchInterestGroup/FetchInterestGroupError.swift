@@ -10,7 +10,7 @@ import Foundation
 package enum FetchInterestGroupError: LocalizedError, Equatable, Sendable {
 
     case notFound(interestGroupID: UUID)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

@@ -10,7 +10,7 @@ import Foundation
 package enum FetchStarSignError: LocalizedError, Equatable, Sendable {
 
     case notFound(starSignID: UUID)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

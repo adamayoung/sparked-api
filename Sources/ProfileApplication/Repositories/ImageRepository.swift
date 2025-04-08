@@ -20,7 +20,7 @@ package protocol ImageRepository {
 
 package enum ImageRepositoryError: Error, Equatable {
 
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (
         lhs: ImageRepositoryError,

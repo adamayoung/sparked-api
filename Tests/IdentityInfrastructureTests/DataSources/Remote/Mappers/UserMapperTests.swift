@@ -27,7 +27,7 @@ struct UserMapperTests {
     func mapFromUserModelThrowsErrorWhenIDIsNil() throws {
         let userModel = Self.buildUserModel(id: nil)
 
-        #expect(throws: Error.self) {
+        #expect(throws: (any Error).self) {
             _ = try UserMapper.map(from: userModel)
         }
     }

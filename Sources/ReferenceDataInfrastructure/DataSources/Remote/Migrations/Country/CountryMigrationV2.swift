@@ -10,7 +10,7 @@ import Foundation
 
 struct CountryMigrationV2: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.transaction { database in
             for country in Self.countries {
                 try await country.save(on: database)
@@ -18,7 +18,7 @@ struct CountryMigrationV2: AsyncMigration {
         }
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.transaction { database in
             for country in Self.countries {
                 try await CountryModel

@@ -95,7 +95,7 @@ package final class ReferenceDataInfrastructureFactory: Sendable {
 
 extension ReferenceDataInfrastructureFactory {
 
-    package static func makeMigrations() -> [Migration] {
+    package static func makeMigrations() -> [any Migration] {
         ReferenceDataMigrations.all()
     }
 

@@ -27,7 +27,7 @@ struct BasicInfoMapperTests {
     func mapFromBasicInfoModelWhenIDIsNilThrowsError() throws {
         let basicInfoModel = try BasicInfoModel.mock(id: nil)
 
-        #expect(throws: Error.self) {
+        #expect(throws: (any Error).self) {
             _ = try BasicInfoMapper.map(from: basicInfoModel)
         }
     }

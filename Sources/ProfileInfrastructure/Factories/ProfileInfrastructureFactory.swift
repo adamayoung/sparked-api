@@ -63,7 +63,7 @@ package final class ProfileInfrastructureFactory: Sendable {
         return ProfileInterestDefaultRepository(remoteDataSource: remoteDataSource)
     }
 
-    package static func makeMigrations() -> [Migration] {
+    package static func makeMigrations() -> [any Migration] {
         ProfileMigrations.all()
     }
 

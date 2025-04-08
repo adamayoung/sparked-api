@@ -28,7 +28,7 @@ package enum ProfilePhotoRepositoryError: Error, Equatable {
 
     case duplicate
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (
         lhs: ProfilePhotoRepositoryError,

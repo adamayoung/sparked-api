@@ -19,7 +19,7 @@ package protocol CountryRepository: Sendable {
 package enum CountryRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: CountryRepositoryError, rhs: CountryRepositoryError) -> Bool {
         switch (lhs, rhs) {

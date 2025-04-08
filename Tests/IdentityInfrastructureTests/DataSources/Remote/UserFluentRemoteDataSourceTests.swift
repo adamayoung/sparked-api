@@ -82,8 +82,8 @@ struct UserFluentRemoteDataSourceTests {
     @Test("fetch by email when user exists returns user")
     func fetchByEmailWhenUserExistsReturnsUser() async throws {
         let email = "email@example.com"
-        let alreadyExistsUserModel = try UserModel(
-            id: #require(UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3")),
+        let alreadyExistsUserModel = UserModel(
+            id: UUID(uuidString: "05DE7EF2-460B-4837-A549-6D44E1649EF3"),
             firstName: "Bob",
             familyName: "Robert",
             email: email,

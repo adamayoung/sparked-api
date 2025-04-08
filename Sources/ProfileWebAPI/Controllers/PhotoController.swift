@@ -143,7 +143,11 @@ struct PhotoController: RouteCollection, Sendable {
             throw Abort(.notFound)
         }
 
-        return req.fileio.streamFile(at: profilePhotoDTO.url.absoluteString)
+        do {
+            return try await req.fileio.asyncStreamFile(at: profilePhotoDTO.url.absoluteString)
+        } catch {
+            throw Abort(.notFound)
+        }
     }
 
     @Sendable

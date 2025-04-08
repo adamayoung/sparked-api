@@ -17,7 +17,7 @@ package protocol UserService {
 package enum UserServiceError: LocalizedError, Equatable, Sendable {
 
     case notFound(userID: UUID)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

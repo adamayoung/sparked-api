@@ -12,7 +12,7 @@ package enum AuthenticateUserError: LocalizedError, Equatable, Sendable {
     case invalidEmailOrPassword
     case notVerified
     case userDisabled
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

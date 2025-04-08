@@ -14,7 +14,7 @@ package enum CreateBasicInfoError: LocalizedError, Equatable, Sendable {
     case genderNotFound(genderID: UUID)
     case basicInfoAlreadyExistsForProfile(profileID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

@@ -19,7 +19,7 @@ package protocol EducationLevelService {
 package enum EducationLevelServiceError: LocalizedError, Equatable, Sendable {
 
     case notFound(id: UUID)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

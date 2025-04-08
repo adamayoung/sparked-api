@@ -10,7 +10,7 @@ import Foundation
 
 struct EducationLevelMigrationV1: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.schema("reference_data_education_level")
             .id()
             .field("name", .string, .required)
@@ -24,7 +24,7 @@ struct EducationLevelMigrationV1: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.schema("reference_data_education_level").delete()
     }
 

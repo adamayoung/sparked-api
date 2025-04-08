@@ -11,7 +11,7 @@ package enum FetchUserError: LocalizedError, Equatable, Sendable {
 
     case notFoundByID(userID: UUID)
     case notFoundByEmail(email: String)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

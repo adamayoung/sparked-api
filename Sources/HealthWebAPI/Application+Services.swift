@@ -20,7 +20,7 @@ extension Application {
 
         final class Storage: @unchecked Sendable {
 
-            var makeHealthService: ((Application) -> HealthService)?
+            var makeHealthService: ((Application) -> any HealthService)?
 
             init() {}
 
@@ -32,7 +32,7 @@ extension Application {
 
         let application: Application
 
-        var makeHealthService: HealthService {
+        var makeHealthService: any HealthService {
             guard let makeProvider = self.storage.makeHealthService else {
                 fatalError(
                     "No HealthServices configured. Configure with app.healthServices.use(...)"
@@ -45,7 +45,7 @@ extension Application {
             provider.run(self.application)
         }
 
-        package func use(_ makeService: @escaping (Application) -> HealthService) {
+        package func use(_ makeService: @escaping (Application) -> any HealthService) {
             self.storage.makeHealthService = makeService
         }
 
@@ -74,7 +74,7 @@ extension Application {
 
 extension Request {
 
-    var healthService: HealthService {
+    var healthService: any HealthService {
         application.healthServices.makeHealthService
     }
 

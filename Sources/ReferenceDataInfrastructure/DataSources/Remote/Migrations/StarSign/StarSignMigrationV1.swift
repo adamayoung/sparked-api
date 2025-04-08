@@ -10,7 +10,7 @@ import Foundation
 
 struct StarSignMigrationV1: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.schema("reference_data_star_sign")
             .id()
             .field("name", .string, .required)
@@ -26,7 +26,7 @@ struct StarSignMigrationV1: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.schema("reference_data_star_sign").delete()
     }
 

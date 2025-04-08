@@ -14,7 +14,7 @@ package enum AddProfileInterestError: LocalizedError, Equatable, Sendable {
     case tooManyInterests(maxCount: Int)
     case duplicateInterest(interestID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

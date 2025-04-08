@@ -14,7 +14,7 @@ package enum CreateExtendedInfoError: LocalizedError, Equatable, Sendable {
     case starSignNotFound(starSignID: UUID)
     case extendedInfoAlreadyExistsForProfile(profileID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

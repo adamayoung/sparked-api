@@ -19,7 +19,7 @@ package protocol GenderRepository: Sendable {
 package enum GenderRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: GenderRepositoryError, rhs: GenderRepositoryError) -> Bool {
         switch (lhs, rhs) {

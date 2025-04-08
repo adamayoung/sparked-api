@@ -12,7 +12,7 @@ package enum FetchProfileError: LocalizedError, Equatable, Sendable {
     case notFound(profileID: UUID)
     case userNotFound(userID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

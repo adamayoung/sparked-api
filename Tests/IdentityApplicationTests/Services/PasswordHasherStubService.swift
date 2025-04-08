@@ -10,11 +10,11 @@ import IdentityApplication
 
 final class PasswordHasherStubService: PasswordHasherService, @unchecked Sendable {
 
-    var hashResult: Result<String, Error> = .success("")
+    var hashResult: Result<String, any Error> = .success("")
     private(set) var hashWasCalled = false
     private(set) var lastHashParameter: String?
 
-    var verifyResult: Result<Bool, Error> = .success(true)
+    var verifyResult: Result<Bool, any Error> = .success(true)
     private(set) var verifyWasCalled = false
     private(set) var lastVerifyParameters: (password: String, created: String)?
 

@@ -12,8 +12,8 @@ struct ReferenceDataMigrations {
 
     private init() {}
 
-    package static func all() -> [Migration] {
-        var migrations: [Migration] = []
+    package static func all() -> [any Migration] {
+        var migrations: [any Migration] = []
         migrations.append(contentsOf: gender())
         migrations.append(contentsOf: country())
         migrations.append(contentsOf: interestGroup())
@@ -27,42 +27,42 @@ struct ReferenceDataMigrations {
 
 extension ReferenceDataMigrations {
 
-    package static func gender() -> [Migration] {
+    package static func gender() -> [any Migration] {
         [
             GenderMigrationV1(),
             GenderMigrationV2()
         ]
     }
 
-    package static func country() -> [Migration] {
+    package static func country() -> [any Migration] {
         [
             CountryMigrationV1(),
             CountryMigrationV2()
         ]
     }
 
-    package static func interestGroup() -> [Migration] {
+    package static func interestGroup() -> [any Migration] {
         [
             InterestGroupMigrationV1(),
             InterestGroupMigrationV2()
         ]
     }
 
-    package static func interest() -> [Migration] {
+    package static func interest() -> [any Migration] {
         [
             InterestMigrationV1(),
             InterestMigrationV2()
         ]
     }
 
-    package static func starSign() -> [Migration] {
+    package static func starSign() -> [any Migration] {
         [
             StarSignMigrationV1(),
             StarSignMigrationV2()
         ]
     }
 
-    package static func educationLevel() -> [Migration] {
+    package static func educationLevel() -> [any Migration] {
         [
             EducationLevelMigrationV1(),
             EducationLevelMigrationV2()

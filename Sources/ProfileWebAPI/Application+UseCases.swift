@@ -22,29 +22,31 @@ extension Application {
 
         final class Storage: @unchecked Sendable {
 
-            var makeCreateBasicProfileUseCase: ((Application) -> CreateBasicProfileUseCase)?
-            var makeFetchBasicProfileUseCase: ((Application) -> FetchBasicProfileUseCase)?
+            var makeCreateBasicProfileUseCase: ((Application) -> any CreateBasicProfileUseCase)?
+            var makeFetchBasicProfileUseCase: ((Application) -> any FetchBasicProfileUseCase)?
 
-            var makeCreateBasicInfoUseCase: ((Application) -> CreateBasicInfoUseCase)?
-            var makeFetchBasicInfoUseCase: ((Application) -> FetchBasicInfoUseCase)?
+            var makeCreateBasicInfoUseCase: ((Application) -> any CreateBasicInfoUseCase)?
+            var makeFetchBasicInfoUseCase: ((Application) -> any FetchBasicInfoUseCase)?
 
-            var makeCreateExtendedInfoUseCase: ((Application) -> CreateExtendedInfoUseCase)?
-            var makeFetchExtendedInfoUseCase: ((Application) -> FetchExtendedInfoUseCase)?
+            var makeCreateExtendedInfoUseCase: ((Application) -> any CreateExtendedInfoUseCase)?
+            var makeFetchExtendedInfoUseCase: ((Application) -> any FetchExtendedInfoUseCase)?
 
-            var makeFetchProfileUseCase: ((Application) -> FetchProfileUseCase)?
+            var makeFetchProfileUseCase: ((Application) -> any FetchProfileUseCase)?
 
-            var makeAddProfilePhotoUseCase: ((Application) -> AddProfilePhotoUseCase)?
-            var makeFetchProfilePhotosUseCase: ((Application) -> FetchProfilePhotosUseCase)?
-            var makeFetchProfilePhotoUseCase: ((Application) -> FetchProfilePhotoUseCase)?
+            var makeAddProfilePhotoUseCase: ((Application) -> any AddProfilePhotoUseCase)?
+            var makeFetchProfilePhotosUseCase: ((Application) -> any FetchProfilePhotosUseCase)?
+            var makeFetchProfilePhotoUseCase: ((Application) -> any FetchProfilePhotoUseCase)?
             var makeChangeProfilePhotoOrderUseCase:
                 (
-                    (Application) -> ChangeProfilePhotoOrderUseCase
+                    (Application) -> any ChangeProfilePhotoOrderUseCase
                 )?
-            var makeDeleteProfilePhotoUseCase: ((Application) -> DeleteProfilePhotoUseCase)?
+            var makeDeleteProfilePhotoUseCase: ((Application) -> any DeleteProfilePhotoUseCase)?
 
-            var makeFetchProfileInterestsUseCase: ((Application) -> FetchProfileInterestsUseCase)?
-            var makeAddProfileInterestUseCase: ((Application) -> AddProfileInterestUseCase)?
-            var makeRemoveProfileInterestUseCase: ((Application) -> RemoveProfileInterestUseCase)?
+            var makeFetchProfileInterestsUseCase:
+                ((Application) -> any FetchProfileInterestsUseCase)?
+            var makeAddProfileInterestUseCase: ((Application) -> any AddProfileInterestUseCase)?
+            var makeRemoveProfileInterestUseCase:
+                ((Application) -> any RemoveProfileInterestUseCase)?
 
             init() {}
 
@@ -56,7 +58,7 @@ extension Application {
 
         let application: Application
 
-        var createBasicProfileUseCase: CreateBasicProfileUseCase {
+        var createBasicProfileUseCase: any CreateBasicProfileUseCase {
             guard let makeUseCase = self.storage.makeCreateBasicProfileUseCase else {
                 fatalError(
                     "No CreateBasicProfileUserCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -65,7 +67,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchBasicProfileUseCase: FetchBasicProfileUseCase {
+        var fetchBasicProfileUseCase: any FetchBasicProfileUseCase {
             guard let makeUseCase = self.storage.makeFetchBasicProfileUseCase else {
                 fatalError(
                     "No FetchBasicProfileUserCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -74,7 +76,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var createBasicInfoUseCase: CreateBasicInfoUseCase {
+        var createBasicInfoUseCase: any CreateBasicInfoUseCase {
             guard let makeUseCase = self.storage.makeCreateBasicInfoUseCase else {
                 fatalError(
                     "No CreateBasicInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -83,7 +85,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchBasicInfoUseCase: FetchBasicInfoUseCase {
+        var fetchBasicInfoUseCase: any FetchBasicInfoUseCase {
             guard let makeUseCase = self.storage.makeFetchBasicInfoUseCase else {
                 fatalError(
                     "No FetchBasicInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -92,7 +94,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var createExtendedInfoUseCase: CreateExtendedInfoUseCase {
+        var createExtendedInfoUseCase: any CreateExtendedInfoUseCase {
             guard let makeUseCase = self.storage.makeCreateExtendedInfoUseCase else {
                 fatalError(
                     "No CreateExtendedInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -101,7 +103,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchExtendedInfoUseCase: FetchExtendedInfoUseCase {
+        var fetchExtendedInfoUseCase: any FetchExtendedInfoUseCase {
             guard let makeUseCase = self.storage.makeFetchExtendedInfoUseCase else {
                 fatalError(
                     "No FetchExtendedInfoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -110,7 +112,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchProfileUseCase: FetchProfileUseCase {
+        var fetchProfileUseCase: any FetchProfileUseCase {
             guard let makeUseCase = self.storage.makeFetchProfileUseCase else {
                 fatalError(
                     "No FetchProfileUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -119,7 +121,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var addProfilePhotoUseCase: AddProfilePhotoUseCase {
+        var addProfilePhotoUseCase: any AddProfilePhotoUseCase {
             guard let makeUseCase = self.storage.makeAddProfilePhotoUseCase else {
                 fatalError(
                     "No AddProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -128,7 +130,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
+        var fetchProfilePhotosUseCase: any FetchProfilePhotosUseCase {
             guard let makeUseCase = self.storage.makeFetchProfilePhotosUseCase else {
                 fatalError(
                     "No FetchProfilePhotosUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -137,7 +139,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
+        var fetchProfilePhotoUseCase: any FetchProfilePhotoUseCase {
             guard let makeUseCase = self.storage.makeFetchProfilePhotoUseCase else {
                 fatalError(
                     "No FetchProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -146,7 +148,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var changeProfilePhotoOrderUseCase: ChangeProfilePhotoOrderUseCase {
+        var changeProfilePhotoOrderUseCase: any ChangeProfilePhotoOrderUseCase {
             guard let makeUseCase = self.storage.makeChangeProfilePhotoOrderUseCase else {
                 fatalError(
                     "No ChangeProfilePhotoOrderUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -155,7 +157,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var deleteProfilePhotoUseCase: DeleteProfilePhotoUseCase {
+        var deleteProfilePhotoUseCase: any DeleteProfilePhotoUseCase {
             guard let makeUseCase = self.storage.makeDeleteProfilePhotoUseCase else {
                 fatalError(
                     "No DeleteProfilePhotoUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -164,7 +166,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var addProfileInterestUseCase: AddProfileInterestUseCase {
+        var addProfileInterestUseCase: any AddProfileInterestUseCase {
             guard let makeUseCase = self.storage.makeAddProfileInterestUseCase else {
                 fatalError(
                     "No AddProfileInterestUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -173,7 +175,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var fetchProfileInterestsUseCase: FetchProfileInterestsUseCase {
+        var fetchProfileInterestsUseCase: any FetchProfileInterestsUseCase {
             guard let makeUseCase = self.storage.makeFetchProfileInterestsUseCase else {
                 fatalError(
                     "No FetchProfileInterestsUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -182,7 +184,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var removeProfileInterestUseCase: RemoveProfileInterestUseCase {
+        var removeProfileInterestUseCase: any RemoveProfileInterestUseCase {
             guard let makeUseCase = self.storage.makeRemoveProfileInterestUseCase else {
                 fatalError(
                     "No RemoveProfileInterestUseCase configured. Configure with app.profileWebAPIUseCases.use(...)"
@@ -195,63 +197,67 @@ extension Application {
             provider.run(self.application)
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> CreateBasicProfileUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any CreateBasicProfileUseCase) {
             self.storage.makeCreateBasicProfileUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchBasicProfileUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchBasicProfileUseCase) {
             self.storage.makeFetchBasicProfileUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> CreateBasicInfoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any CreateBasicInfoUseCase) {
             self.storage.makeCreateBasicInfoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchBasicInfoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchBasicInfoUseCase) {
             self.storage.makeFetchBasicInfoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> CreateExtendedInfoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any CreateExtendedInfoUseCase) {
             self.storage.makeCreateExtendedInfoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchExtendedInfoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchExtendedInfoUseCase) {
             self.storage.makeFetchExtendedInfoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchProfileUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchProfileUseCase) {
             self.storage.makeFetchProfileUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> AddProfilePhotoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any AddProfilePhotoUseCase) {
             self.storage.makeAddProfilePhotoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchProfilePhotosUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchProfilePhotosUseCase) {
             self.storage.makeFetchProfilePhotosUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchProfilePhotoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchProfilePhotoUseCase) {
             self.storage.makeFetchProfilePhotoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> ChangeProfilePhotoOrderUseCase) {
+        package func use(
+            _ makeUseCase: @escaping (Application) -> any ChangeProfilePhotoOrderUseCase
+        ) {
             self.storage.makeChangeProfilePhotoOrderUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> DeleteProfilePhotoUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any DeleteProfilePhotoUseCase) {
             self.storage.makeDeleteProfilePhotoUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> AddProfileInterestUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any AddProfileInterestUseCase) {
             self.storage.makeAddProfileInterestUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchProfileInterestsUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchProfileInterestsUseCase)
+        {
             self.storage.makeFetchProfileInterestsUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> RemoveProfileInterestUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any RemoveProfileInterestUseCase)
+        {
             self.storage.makeRemoveProfileInterestUseCase = makeUseCase
         }
 
@@ -280,63 +286,63 @@ extension Application {
 
 extension Request {
 
-    var createBasicProfileUseCase: CreateBasicProfileUseCase {
+    var createBasicProfileUseCase: any CreateBasicProfileUseCase {
         application.profileWebAPIUseCases.createBasicProfileUseCase
     }
 
-    var fetchBasicProfileUseCase: FetchBasicProfileUseCase {
+    var fetchBasicProfileUseCase: any FetchBasicProfileUseCase {
         application.profileWebAPIUseCases.fetchBasicProfileUseCase
     }
 
-    var createBasicInfoUseCase: CreateBasicInfoUseCase {
+    var createBasicInfoUseCase: any CreateBasicInfoUseCase {
         application.profileWebAPIUseCases.createBasicInfoUseCase
     }
 
-    var fetchBasicInfoUseCase: FetchBasicInfoUseCase {
+    var fetchBasicInfoUseCase: any FetchBasicInfoUseCase {
         application.profileWebAPIUseCases.fetchBasicInfoUseCase
     }
 
-    var createExtendedInfoUseCase: CreateExtendedInfoUseCase {
+    var createExtendedInfoUseCase: any CreateExtendedInfoUseCase {
         application.profileWebAPIUseCases.createExtendedInfoUseCase
     }
 
-    var fetchExtendedInfoUseCase: FetchExtendedInfoUseCase {
+    var fetchExtendedInfoUseCase: any FetchExtendedInfoUseCase {
         application.profileWebAPIUseCases.fetchExtendedInfoUseCase
     }
 
-    var fetchProfileUseCase: FetchProfileUseCase {
+    var fetchProfileUseCase: any FetchProfileUseCase {
         application.profileWebAPIUseCases.fetchProfileUseCase
     }
 
-    var addProfilePhotoUseCase: AddProfilePhotoUseCase {
+    var addProfilePhotoUseCase: any AddProfilePhotoUseCase {
         application.profileWebAPIUseCases.addProfilePhotoUseCase
     }
 
-    var fetchProfilePhotosUseCase: FetchProfilePhotosUseCase {
+    var fetchProfilePhotosUseCase: any FetchProfilePhotosUseCase {
         application.profileWebAPIUseCases.fetchProfilePhotosUseCase
     }
 
-    var fetchProfilePhotoUseCase: FetchProfilePhotoUseCase {
+    var fetchProfilePhotoUseCase: any FetchProfilePhotoUseCase {
         application.profileWebAPIUseCases.fetchProfilePhotoUseCase
     }
 
-    var changeProfilePhotoOrderUseCase: ChangeProfilePhotoOrderUseCase {
+    var changeProfilePhotoOrderUseCase: any ChangeProfilePhotoOrderUseCase {
         application.profileWebAPIUseCases.changeProfilePhotoOrderUseCase
     }
 
-    var deleteProfilePhotoUseCase: DeleteProfilePhotoUseCase {
+    var deleteProfilePhotoUseCase: any DeleteProfilePhotoUseCase {
         application.profileWebAPIUseCases.deleteProfilePhotoUseCase
     }
 
-    var addProfileInterestUseCase: AddProfileInterestUseCase {
+    var addProfileInterestUseCase: any AddProfileInterestUseCase {
         application.profileWebAPIUseCases.addProfileInterestUseCase
     }
 
-    var fetchProfileInterestsUseCase: FetchProfileInterestsUseCase {
+    var fetchProfileInterestsUseCase: any FetchProfileInterestsUseCase {
         application.profileWebAPIUseCases.fetchProfileInterestsUseCase
     }
 
-    var removeProfileInterestUseCase: RemoveProfileInterestUseCase {
+    var removeProfileInterestUseCase: any RemoveProfileInterestUseCase {
         application.profileWebAPIUseCases.removeProfileInterestUseCase
     }
 

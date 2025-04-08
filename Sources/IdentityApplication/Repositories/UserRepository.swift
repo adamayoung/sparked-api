@@ -24,7 +24,7 @@ package enum UserRepositoryError: Error, Equatable {
     case duplicateUserID
     case duplicateEmail
     case roleNotFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: UserRepositoryError, rhs: UserRepositoryError) -> Bool {
         switch (lhs, rhs) {

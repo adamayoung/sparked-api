@@ -21,7 +21,7 @@ package protocol EducationLevelRepository: Sendable {
 package enum EducationLevelRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (
         lhs: EducationLevelRepositoryError,

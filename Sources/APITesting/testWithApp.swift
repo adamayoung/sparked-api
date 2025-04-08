@@ -11,14 +11,14 @@ import JWT
 import VaporTesting
 
 package func testWithApp(
-    _ routeCollection: RouteCollection,
+    _ routeCollection: some RouteCollection,
     test: (Application) async throws -> Void
 ) async throws {
     try await testWithApp([routeCollection], test: test)
 }
 
 package func testWithApp(
-    _ routeCollections: [RouteCollection],
+    _ routeCollections: [any RouteCollection],
     test: (Application) async throws -> Void
 ) async throws {
     try await testWithApp(routeCollections, jwtPayload: nil as TokenPayload?) { app, _ in
@@ -27,7 +27,7 @@ package func testWithApp(
 }
 
 package func testWithApp(
-    _ routeCollection: RouteCollection,
+    _ routeCollection: some RouteCollection,
     jwtPayload: (some JWTPayload)?,
     test: (Application, String?) async throws -> Void
 ) async throws {
@@ -39,7 +39,7 @@ package func testWithApp(
 }
 
 package func testWithApp(
-    _ routeCollections: [RouteCollection],
+    _ routeCollections: [any RouteCollection],
     jwtPayload: (some JWTPayload)?,
     test: (Application, String?) async throws -> Void
 ) async throws {

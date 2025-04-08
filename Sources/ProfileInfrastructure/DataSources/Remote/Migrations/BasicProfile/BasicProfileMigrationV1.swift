@@ -10,7 +10,7 @@ import Foundation
 
 struct BasicProfileMigrationV1: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.schema("profile_basic_profile")
             .id()
             .field("display_name", .string, .required)
@@ -24,7 +24,7 @@ struct BasicProfileMigrationV1: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.schema("profile_basic_profile").delete()
     }
 

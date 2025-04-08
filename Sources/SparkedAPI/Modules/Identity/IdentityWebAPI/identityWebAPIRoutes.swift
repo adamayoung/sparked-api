@@ -8,7 +8,7 @@
 import IdentityWebAPI
 import Vapor
 
-func identityWebAPIRoutes(_ routes: RoutesBuilder) throws {
+func identityWebAPIRoutes(_ routes: some RoutesBuilder) throws {
     let authRouter = routes.grouped("auth")
 
     try authRouter.register(

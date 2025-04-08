@@ -13,7 +13,7 @@ package enum FetchExtendedInfoError: LocalizedError, Equatable, Sendable {
     case notFoundForUser(userID: UUID)
     case profileNotFound(profileID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

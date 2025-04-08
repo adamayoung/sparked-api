@@ -17,7 +17,7 @@ package protocol InterestRepository {
 package enum InterestRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: InterestRepositoryError, rhs: InterestRepositoryError) -> Bool {
         switch (lhs, rhs) {

@@ -8,7 +8,7 @@
 import ReferenceDataWebAPI
 import Vapor
 
-func referenceDataWebAPIRoutes(_ routes: RoutesBuilder) throws {
+func referenceDataWebAPIRoutes(_ routes: some RoutesBuilder) throws {
     let referenceDataRouter = routes.grouped("reference-data")
 
     try referenceDataRouter.register(collection: ReferenceDataWebAPIFactory.makeCountryController())

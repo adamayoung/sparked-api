@@ -10,7 +10,7 @@ import Foundation
 
 struct StarSignMigrationV2: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.transaction { database in
             for starSign in Self.starSigns {
                 try await starSign.save(on: database)
@@ -18,7 +18,7 @@ struct StarSignMigrationV2: AsyncMigration {
         }
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         for starSign in Self.starSigns {
             try await StarSignModel
                 .find(starSign.requireID(), on: database)?

@@ -11,9 +11,9 @@ import ReferenceDataInfrastructure
 
 actor ReferenceDataCacheAdapter: CacheProvider {
 
-    private let cacheStore: CacheStore
+    private let cacheStore: any CacheStore
 
-    init(cacheStore: CacheStore) {
+    init(cacheStore: some CacheStore) {
         self.cacheStore = cacheStore
     }
 
