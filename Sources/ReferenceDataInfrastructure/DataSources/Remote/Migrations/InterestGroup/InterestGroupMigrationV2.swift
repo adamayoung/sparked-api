@@ -10,7 +10,7 @@ import Foundation
 
 struct InterestGroupMigrationV2: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.transaction { database in
             for (_, interestGroup) in Self.interestGroups {
                 try await interestGroup.save(on: database)
@@ -18,7 +18,7 @@ struct InterestGroupMigrationV2: AsyncMigration {
         }
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         for (_, interestGroup) in Self.interestGroups {
             try await InterestGroupModel
                 .find(interestGroup.requireID(), on: database)?

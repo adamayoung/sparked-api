@@ -21,7 +21,7 @@ package protocol InterestGroupRepository: Sendable {
 package enum InterestGroupRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (
         lhs: InterestGroupRepositoryError,

@@ -17,7 +17,7 @@ final class UserDefaultRepository: UserRepository {
         self.userService = userService
     }
 
-    func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User {
+    func fetch(byID id: UUID) async throws(UserRepositoryError) -> User {
         let user: User
         do {
             user = try await userService.fetch(byID: id)

@@ -10,9 +10,9 @@ import Vapor
 
 final class VaporPasswordHasher: PasswordHasher {
 
-    private let hasher: Vapor.PasswordHasher
+    private let hasher: any Vapor.PasswordHasher
 
-    init(hasher: Vapor.PasswordHasher) {
+    init(hasher: some Vapor.PasswordHasher) {
         self.hasher = hasher
     }
 

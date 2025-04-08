@@ -17,7 +17,7 @@ package protocol CountryService {
 package enum CountryServiceError: LocalizedError, Equatable, Sendable {
 
     case notFound(id: UUID)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

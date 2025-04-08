@@ -22,7 +22,7 @@ package protocol CacheProvider: Actor {
 
 package enum CacheProviderError: LocalizedError {
 
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: CacheProviderError, rhs: CacheProviderError) -> Bool {
         switch (lhs, rhs) {

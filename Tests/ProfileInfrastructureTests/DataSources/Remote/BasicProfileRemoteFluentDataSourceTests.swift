@@ -52,7 +52,7 @@ struct BasicProfileRemoteFluentDataSourceTests {
             ownerID: userID
         )
         let basicProfile = try BasicProfile.mock(
-            id: try #require(UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA")),
+            id: UUID(uuidString: "9CABF8F2-24C8-43E5-AFFF-D9CBAB3F06FA"),
             ownerID: userID
         )
         database.append([existingBasicProfile])

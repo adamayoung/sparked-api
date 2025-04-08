@@ -9,9 +9,7 @@ import Vapor
 
 struct SeedCommand: AsyncCommand {
 
-    struct Signature: CommandSignature {
-        init() {}
-    }
+    struct Signature: CommandSignature {}
 
     var help: String {
         "Seeds database with sample data"

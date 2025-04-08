@@ -9,7 +9,7 @@ import Foundation
 
 package enum FetchInterestGroupsError: LocalizedError, Equatable, Sendable {
 
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

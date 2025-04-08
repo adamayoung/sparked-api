@@ -8,7 +8,7 @@
 import MetricsWebAPI
 import Vapor
 
-func metricsRoutes(_ routes: RoutesBuilder) throws {
+func metricsRoutes(_ routes: some RoutesBuilder) throws {
     try routes.register(
         collection: MetricsWebAPIFactory.makeMetricsController()
     )

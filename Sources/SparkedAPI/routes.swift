@@ -9,7 +9,7 @@ import Metrics
 import Prometheus
 import Vapor
 
-func routes(_ routes: RoutesBuilder, environment: Environment) throws {
+func routes(_ routes: some RoutesBuilder, environment: Environment) throws {
     let apiRouter = routes.grouped("api")
     try webAPIRoutes(apiRouter)
 

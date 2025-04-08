@@ -7,6 +7,7 @@
 
 import Foundation
 import NIO
+import NIOFileSystem
 
 final class LocalFileStorage: FileStorage {
 
@@ -37,23 +38,14 @@ final class LocalFileStorage: FileStorage {
     ) async throws(FileStorageError) {
         let buffer = ByteBuffer(data: data)
         let fullPath = self.fullPath(containerName: containerName, filename: filename)
-        let fileHandle: NIOFileHandle
-        do {
-            fileHandle = try NIOFileHandle(
-                path: fullPath,
-                mode: .write,
-                flags: .allowFileCreation()
-            )
-        } catch let error {
-            throw .unknown(error)
-        }
-
-        defer {
-            try? fileHandle.close()
-        }
 
         do {
-            try await fileIO.write(fileHandle: fileHandle, buffer: buffer)
+            _ = try await FileSystem.shared.withFileHandle(
+                forWritingAt: FilePath(fullPath),
+                options: .newFile(replaceExisting: true)
+            ) { file in
+                try await file.write(contentsOf: buffer, toAbsoluteOffset: 0)
+            }
         } catch let error {
             throw .unknown(error)
         }

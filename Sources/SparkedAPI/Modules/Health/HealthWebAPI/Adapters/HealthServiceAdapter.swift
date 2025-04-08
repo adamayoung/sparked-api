@@ -40,7 +40,7 @@ final class HealthServiceAdapter: HealthService {
 extension HealthServiceAdapter {
 
     private func databaseStatus() async -> Bool {
-        guard let database = database as? SQLDatabase else {
+        guard let database = database as? any SQLDatabase else {
             return false
         }
 

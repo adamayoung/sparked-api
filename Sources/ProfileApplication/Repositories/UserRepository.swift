@@ -10,14 +10,14 @@ import ProfileDomain
 
 package protocol UserRepository {
 
-    func fetch(byID id: User.ID) async throws(UserRepositoryError) -> User
+    func fetch(byID id: UUID) async throws(UserRepositoryError) -> User
 
 }
 
 package enum UserRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: UserRepositoryError, rhs: UserRepositoryError) -> Bool {
         switch (lhs, rhs) {

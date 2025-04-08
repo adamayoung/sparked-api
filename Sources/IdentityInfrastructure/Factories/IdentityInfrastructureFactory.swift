@@ -25,7 +25,7 @@ package final class IdentityInfrastructureFactory: Sendable {
         return RoleDefaultRepository(remoteDataSource: remoteDataSource)
     }
 
-    package static func makeMigrations() -> [Migration] {
+    package static func makeMigrations() -> [any Migration] {
         IdentityMigrations.all()
     }
 

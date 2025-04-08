@@ -11,9 +11,9 @@ import IdentityApplication
 
 final class PasswordHasherAdapter: PasswordHasherService {
 
-    private let hasher: PasswordHasher
+    private let hasher: any PasswordHasher
 
-    init(hasher: PasswordHasher) {
+    init(hasher: some PasswordHasher) {
         self.hasher = hasher
     }
 

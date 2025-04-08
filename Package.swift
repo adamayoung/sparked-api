@@ -334,3 +334,13 @@ let package = Package(
 
     ]
 )
+
+#if compiler(>=6)
+    for target in package.targets {
+        target.swiftSettings = target.swiftSettings ?? []
+        target.swiftSettings?.append(contentsOf: [
+            .enableExperimentalFeature("StrictConcurrency"),
+            .enableUpcomingFeature("ExistentialAny")
+        ])
+    }
+#endif

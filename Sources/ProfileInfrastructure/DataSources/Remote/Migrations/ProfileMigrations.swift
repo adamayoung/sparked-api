@@ -12,8 +12,8 @@ struct ProfileMigrations {
 
     private init() {}
 
-    static func all() -> [Migration] {
-        var migrations: [Migration] = []
+    static func all() -> [any Migration] {
+        var migrations: [any Migration] = []
         migrations.append(contentsOf: basicProfile())
         migrations.append(contentsOf: basicInfo())
         migrations.append(contentsOf: profilePhoto())
@@ -26,31 +26,31 @@ struct ProfileMigrations {
 
 extension ProfileMigrations {
 
-    package static func basicProfile() -> [Migration] {
+    package static func basicProfile() -> [any Migration] {
         [
             BasicProfileMigrationV1()
         ]
     }
 
-    package static func basicInfo() -> [Migration] {
+    package static func basicInfo() -> [any Migration] {
         [
             BasicInfoMigrationV1()
         ]
     }
 
-    package static func extendedInfo() -> [Migration] {
+    package static func extendedInfo() -> [any Migration] {
         [
             ExtendedInfoMigrationV1()
         ]
     }
 
-    package static func profilePhoto() -> [Migration] {
+    package static func profilePhoto() -> [any Migration] {
         [
             ProfilePhotoMigrationV1()
         ]
     }
 
-    package static func profileInterest() -> [Migration] {
+    package static func profileInterest() -> [any Migration] {
         [
             ProfileInterestMigrationV1()
         ]

@@ -10,7 +10,7 @@ import Foundation
 
 struct InterestGroupMigrationV1: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.schema("reference_data_interest_group")
             .id()
             .field("name", .string, .required)
@@ -22,7 +22,7 @@ struct InterestGroupMigrationV1: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.schema("reference_data_interest_group").delete()
     }
 

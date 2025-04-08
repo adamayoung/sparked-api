@@ -12,8 +12,8 @@ struct IdentityMigrations {
 
     private init() {}
 
-    static func all() -> [Migration] {
-        var migrations: [Migration] = []
+    static func all() -> [any Migration] {
+        var migrations: [any Migration] = []
         migrations.append(contentsOf: user())
         migrations.append(contentsOf: role())
         migrations.append(contentsOf: userRole())
@@ -24,20 +24,20 @@ struct IdentityMigrations {
 
 extension IdentityMigrations {
 
-    package static func user() -> [Migration] {
+    package static func user() -> [any Migration] {
         [
             UserMigrationV1()
         ]
     }
 
-    package static func role() -> [Migration] {
+    package static func role() -> [any Migration] {
         [
             RoleMigrationV1(),
             RoleMigrationV2()
         ]
     }
 
-    package static func userRole() -> [Migration] {
+    package static func userRole() -> [any Migration] {
         [
             UserRoleMigrationV1()
         ]

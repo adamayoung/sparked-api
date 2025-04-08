@@ -11,8 +11,8 @@ package enum FileStorageError: Error, Equatable {
 
     case invalidURL
     case notFound
-    case network(Error)
-    case unknown(Error? = nil)
+    case network(any Error)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: FileStorageError, rhs: FileStorageError) -> Bool {
         switch (lhs, rhs) {

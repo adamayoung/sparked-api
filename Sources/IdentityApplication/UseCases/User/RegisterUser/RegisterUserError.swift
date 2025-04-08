@@ -13,7 +13,7 @@ package enum RegisterUserError: LocalizedError, Equatable, Sendable {
     case validation(ValidationError)
     case emailAlreadyExists(email: String)
     case roleNotFound(roleCode: String)
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     init(error: UserValidationError) {
         let validationError = RegisterUserError.ValidationError(error: error)

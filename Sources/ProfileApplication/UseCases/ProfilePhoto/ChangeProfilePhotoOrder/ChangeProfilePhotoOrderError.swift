@@ -13,7 +13,7 @@ package enum ChangeProfilePhotoOrderError: LocalizedError, Equatable, Sendable {
     case profilePhotoNotFound(profilePhotoID: UUID)
     case invalidIndex(index: Int, maxIndex: Int)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

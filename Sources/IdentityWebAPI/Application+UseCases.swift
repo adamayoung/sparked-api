@@ -22,9 +22,9 @@ extension Application {
 
         final class Storage: @unchecked Sendable {
 
-            var makeFetchUserUseCase: ((Application) -> FetchUserUseCase)?
-            var makeRegisterUserUseCase: ((Application) -> RegisterUserUseCase)?
-            var makeAuthenticateUserUseCase: ((Application) -> AuthenticateUserUseCase)?
+            var makeFetchUserUseCase: ((Application) -> any FetchUserUseCase)?
+            var makeRegisterUserUseCase: ((Application) -> any RegisterUserUseCase)?
+            var makeAuthenticateUserUseCase: ((Application) -> any AuthenticateUserUseCase)?
 
             init() {}
 
@@ -36,7 +36,7 @@ extension Application {
 
         let application: Application
 
-        var fetchUserUseCase: FetchUserUseCase {
+        var fetchUserUseCase: any FetchUserUseCase {
             guard let makeUseCase = self.storage.makeFetchUserUseCase else {
                 fatalError(
                     "No FetchUserUseCase configured. Configure with app.identityUseCases.use(...)")
@@ -44,7 +44,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var registerUserUseCase: RegisterUserUseCase {
+        var registerUserUseCase: any RegisterUserUseCase {
             guard let makeUseCase = self.storage.makeRegisterUserUseCase else {
                 fatalError(
                     "No RegisterUserUseCase configured. Configure with app.identityUseCases.use(...)"
@@ -53,7 +53,7 @@ extension Application {
             return makeUseCase(self.application)
         }
 
-        var authenticateUserUseCase: AuthenticateUserUseCase {
+        var authenticateUserUseCase: any AuthenticateUserUseCase {
             guard let makeUseCase = self.storage.makeAuthenticateUserUseCase else {
                 fatalError(
                     "No AuthenticateUserUseCase configured. Configure with app.identityUseCases.use(...)"
@@ -66,15 +66,15 @@ extension Application {
             provider.run(self.application)
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> FetchUserUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any FetchUserUseCase) {
             self.storage.makeFetchUserUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> RegisterUserUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any RegisterUserUseCase) {
             self.storage.makeRegisterUserUseCase = makeUseCase
         }
 
-        package func use(_ makeUseCase: @escaping (Application) -> AuthenticateUserUseCase) {
+        package func use(_ makeUseCase: @escaping (Application) -> any AuthenticateUserUseCase) {
             self.storage.makeAuthenticateUserUseCase = makeUseCase
         }
 
@@ -103,15 +103,15 @@ extension Application {
 
 extension Request {
 
-    var fetchUserUseCase: FetchUserUseCase {
+    var fetchUserUseCase: any FetchUserUseCase {
         application.identityUseCases.fetchUserUseCase
     }
 
-    var registerUserUseCase: RegisterUserUseCase {
+    var registerUserUseCase: any RegisterUserUseCase {
         application.identityUseCases.registerUserUseCase
     }
 
-    var authenticateUserUseCase: AuthenticateUserUseCase {
+    var authenticateUserUseCase: any AuthenticateUserUseCase {
         application.identityUseCases.authenticateUserUseCase
     }
 

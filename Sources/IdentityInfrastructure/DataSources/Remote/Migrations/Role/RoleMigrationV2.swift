@@ -10,7 +10,7 @@ import Foundation
 
 struct RoleMigrationV2: AsyncMigration {
 
-    func prepare(on database: Database) async throws {
+    func prepare(on database: any Database) async throws {
         try await database.transaction { database in
             for role in Self.defaultRoles {
                 try await role.save(on: database)
@@ -18,7 +18,7 @@ struct RoleMigrationV2: AsyncMigration {
         }
     }
 
-    func revert(on database: Database) async throws {
+    func revert(on database: any Database) async throws {
         try await database.transaction { database in
             for role in Self.defaultRoles {
                 try await RoleModel

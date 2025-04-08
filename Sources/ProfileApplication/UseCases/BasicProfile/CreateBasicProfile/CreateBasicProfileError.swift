@@ -12,7 +12,7 @@ package enum CreateBasicProfileError: LocalizedError, Equatable, Sendable {
     case userNotFound(userID: UUID)
     case profileAlreadyExistsForUser(userID: UUID)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

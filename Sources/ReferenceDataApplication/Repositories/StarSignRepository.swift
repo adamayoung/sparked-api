@@ -19,7 +19,7 @@ package protocol StarSignRepository: Sendable {
 package enum StarSignRepositoryError: Error, Equatable {
 
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (lhs: StarSignRepositoryError, rhs: StarSignRepositoryError) -> Bool {
         switch (lhs, rhs) {

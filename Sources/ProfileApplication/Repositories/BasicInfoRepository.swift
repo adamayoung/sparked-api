@@ -26,7 +26,7 @@ package enum BasicInfoRepositoryError: Error, Equatable {
 
     case duplicate
     case notFound
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package static func == (
         lhs: BasicInfoRepositoryError,

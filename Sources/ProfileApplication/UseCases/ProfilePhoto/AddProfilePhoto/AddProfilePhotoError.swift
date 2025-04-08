@@ -12,7 +12,7 @@ package enum AddProfilePhotoError: LocalizedError, Equatable, Sendable {
     case profileNotFound(profileID: UUID)
     case tooManyPhotos(maxCount: Int)
     case unauthorized
-    case unknown(Error? = nil)
+    case unknown((any Error)? = nil)
 
     package var errorDescription: String? {
         switch self {

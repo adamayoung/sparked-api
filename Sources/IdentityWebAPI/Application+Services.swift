@@ -22,7 +22,7 @@ extension Application {
 
         final class Storage: @unchecked Sendable {
 
-            var makeTokenPayloadService: ((Application) -> TokenPayloadService)?
+            var makeTokenPayloadService: ((Application) -> any TokenPayloadService)?
 
             init() {}
 
@@ -34,7 +34,7 @@ extension Application {
 
         let application: Application
 
-        var makeTokenPayloadService: TokenPayloadService {
+        var makeTokenPayloadService: any TokenPayloadService {
             guard let makeProvider = self.storage.makeTokenPayloadService else {
                 fatalError(
                     "No TokenPayloadService configured. Configure with app.identityServices.use(...)"
@@ -47,7 +47,7 @@ extension Application {
             provider.run(self.application)
         }
 
-        package func use(_ makeService: @escaping (Application) -> TokenPayloadService) {
+        package func use(_ makeService: @escaping (Application) -> any TokenPayloadService) {
             self.storage.makeTokenPayloadService = makeService
         }
 
@@ -76,7 +76,7 @@ extension Application {
 
 extension Request {
 
-    var tokenPayloadService: TokenPayloadService {
+    var tokenPayloadService: any TokenPayloadService {
         application.identityServices.makeTokenPayloadService
     }
 
