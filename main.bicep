@@ -95,24 +95,33 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
 }
 
 // PostgreSQL Server
-resource pgServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
+resource pgServer 'Microsoft.DBforPostgreSQL/flexibleServers@2024-11-01-preview' = {
   name: databaseServerName
   location: location
+  sku: {
+    name: 'Standard_B4ms'
+    tier: 'Burstable'
+  }
   properties: {
     administratorLogin: databaseUser
     administratorLoginPassword: databasePassword
     version: '11'
-    sslEnforcement: 'Enabled'
-    createMode: 'Default'
-  }
-  sku: {
-    name: 'B_Gen5_1'
-    tier: 'Basic'
-    capacity: 1
+    replica: {
+      role: 'Primary'
+    }
+    storage: {
+      iops: 120
+      tier: 'P4'
+      storageSizeGB: 32
+      autoGrow: 'Disabled'
+    }
+    network: {
+      publicNetworkAccess: 'Enabled'
+    }
   }
 }
 
-resource allowAllWindowsAzureIps 'Microsoft.DBforPostgreSQL/servers/firewallRules@2017-12-01' = {
+resource allowAllWindowsAzureIps 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRules@2024-11-01-preview' = {
   name: 'AllowAllWindowsAzureIps'
   parent: pgServer
   properties: {
