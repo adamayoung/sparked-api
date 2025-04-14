@@ -21,64 +21,22 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "ReferenceDataInfrastructureTests",
-        "name" : "ReferenceDataInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "SparkedAPITests",
-        "name" : "SparkedAPITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ProfileApplicationTests",
-        "name" : "ProfileApplicationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "IdentityInfrastructureTests",
-        "name" : "IdentityInfrastructureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataWebAPITests",
-        "name" : "ReferenceDataWebAPITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ProfileDomainTests",
-        "name" : "ProfileDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "ReferenceDataDomainTests",
-        "name" : "ReferenceDataDomainTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "CacheKitTests",
-        "name" : "CacheKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "IdentityWebAPITests",
         "name" : "IdentityWebAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "FileStorageKitTests",
+        "name" : "FileStorageKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MetricsWebAPITests",
+        "name" : "MetricsWebAPITests"
       }
     },
     {
@@ -98,22 +56,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityApplicationTests",
-        "name" : "IdentityApplicationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "FileStorageKitTests",
-        "name" : "FileStorageKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "HealthWebAPITests",
-        "name" : "HealthWebAPITests"
+        "identifier" : "ReferenceDataWebAPITests",
+        "name" : "ReferenceDataWebAPITests"
       }
     },
     {
@@ -126,8 +70,50 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "IdentityDomainTests",
-        "name" : "IdentityDomainTests"
+        "identifier" : "SparkedAPITests",
+        "name" : "SparkedAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityInfrastructureTests",
+        "name" : "IdentityInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "HealthWebAPITests",
+        "name" : "HealthWebAPITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityApplicationTests",
+        "name" : "IdentityApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileDomainTests",
+        "name" : "ProfileDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ProfileApplicationTests",
+        "name" : "ProfileApplicationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CacheKitTests",
+        "name" : "CacheKitTests"
       }
     },
     {
@@ -135,6 +121,27 @@
         "containerPath" : "container:",
         "identifier" : "ProfileInfrastructureTests",
         "name" : "ProfileInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "IdentityDomainTests",
+        "name" : "IdentityDomainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataInfrastructureTests",
+        "name" : "ReferenceDataInfrastructureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReferenceDataDomainTests",
+        "name" : "ReferenceDataDomainTests"
       }
     }
   ],

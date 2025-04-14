@@ -14,5 +14,5 @@ func routes(_ routes: some RoutesBuilder, environment: Environment) throws {
     try webAPIRoutes(apiRouter)
 
     let metricsRouter = routes.grouped("metrics")
-    try metricsRoutes(metricsRouter)
+    try metricsWebAPIRoutes(metricsRouter)
 }

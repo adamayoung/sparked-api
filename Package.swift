@@ -79,28 +79,32 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
-            ]
+            ],
+            path: "Sources/Profile/ProfileWebAPI"
         ),
         .testTarget(
             name: "ProfileWebAPITests",
             dependencies: [
                 "ProfileWebAPI",
                 "ProfileApplication",
-                "APITesting",
+                "APITestingSupport",
                 .product(name: "VaporTesting", package: "vapor")
-            ]
+            ],
+            path: "Tests/Profile/ProfileWebAPITests"
         ),
 
         .target(
             name: "ProfileApplication",
-            dependencies: ["ProfileDomain"]
+            dependencies: ["ProfileDomain"],
+            path: "Sources/Profile/ProfileApplication"
         ),
         .testTarget(
             name: "ProfileApplicationTests",
             dependencies: [
                 "ProfileApplication",
                 "ProfileDomain"
-            ]
+            ],
+            path: "Tests/Profile/ProfileApplicationTests"
         ),
 
         .target(
@@ -109,7 +113,8 @@ let package = Package(
                 "ProfileApplication",
                 "ProfileDomain",
                 .product(name: "Fluent", package: "fluent")
-            ]
+            ],
+            path: "Sources/Profile/ProfileInfrastructure"
         ),
         .testTarget(
             name: "ProfileInfrastructureTests",
@@ -119,13 +124,18 @@ let package = Package(
                 "ProfileDomain",
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "XCTFluent", package: "fluent-kit")
-            ]
+            ],
+            path: "Tests/Profile/ProfileInfrastructureTests"
         ),
 
-        .target(name: "ProfileDomain"),
+        .target(
+            name: "ProfileDomain",
+            path: "Sources/Profile/ProfileDomain"
+        ),
         .testTarget(
             name: "ProfileDomainTests",
-            dependencies: ["ProfileDomain"]
+            dependencies: ["ProfileDomain"],
+            path: "Tests/Profile/ProfileDomainTests"
         ),
 
         // --------------------------------------
@@ -139,29 +149,34 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
-            ]
+            ],
+            path: "Sources/Identity/IdentityWebAPI"
+
         ),
         .testTarget(
             name: "IdentityWebAPITests",
             dependencies: [
                 "IdentityWebAPI",
                 "IdentityApplication",
-                "APITesting",
+                "APITestingSupport",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
-            ]
+            ],
+            path: "Tests/Identity/IdentityWebAPITests"
         ),
 
         .target(
             name: "IdentityApplication",
-            dependencies: ["IdentityDomain"]
+            dependencies: ["IdentityDomain"],
+            path: "Sources/Identity/IdentityApplication"
         ),
         .testTarget(
             name: "IdentityApplicationTests",
             dependencies: [
                 "IdentityApplication",
                 "IdentityDomain"
-            ]
+            ],
+            path: "Tests/Identity/IdentityApplicationTests"
         ),
 
         .target(
@@ -170,7 +185,8 @@ let package = Package(
                 "IdentityApplication",
                 "IdentityDomain",
                 .product(name: "Fluent", package: "fluent")
-            ]
+            ],
+            path: "Sources/Identity/IdentityInfrastructure"
         ),
         .testTarget(
             name: "IdentityInfrastructureTests",
@@ -180,13 +196,18 @@ let package = Package(
                 "IdentityDomain",
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "XCTFluent", package: "fluent-kit")
-            ]
+            ],
+            path: "Tests/Identity/IdentityInfrastructureTests"
         ),
 
-        .target(name: "IdentityDomain"),
+        .target(
+            name: "IdentityDomain",
+            path: "Sources/Identity/IdentityDomain"
+        ),
         .testTarget(
             name: "IdentityDomainTests",
-            dependencies: ["IdentityDomain"]
+            dependencies: ["IdentityDomain"],
+            path: "Tests/Identity/IdentityDomainTests"
         ),
 
         // --------------------------------------
@@ -199,26 +220,30 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
-            ]
+            ],
+            path: "Sources/ReferenceData/ReferenceDataWebAPI"
         ),
         .testTarget(
             name: "ReferenceDataWebAPITests",
             dependencies: [
                 "ReferenceDataWebAPI",
                 "ReferenceDataApplication",
-                "APITesting",
+                "APITestingSupport",
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "VaporTesting", package: "vapor")
-            ]
+            ],
+            path: "Tests/ReferenceData/ReferenceDataWebAPITests"
         ),
 
         .target(
             name: "ReferenceDataApplication",
-            dependencies: ["ReferenceDataDomain"]
+            dependencies: ["ReferenceDataDomain"],
+            path: "Sources/ReferenceData/ReferenceDataApplication"
         ),
         .testTarget(
             name: "ReferenceDataApplicationTests",
-            dependencies: ["ReferenceDataApplication"]
+            dependencies: ["ReferenceDataApplication"],
+            path: "Tests/ReferenceData/ReferenceDataApplicationTests"
         ),
 
         .target(
@@ -227,7 +252,8 @@ let package = Package(
                 "ReferenceDataApplication",
                 "ReferenceDataDomain",
                 .product(name: "Fluent", package: "fluent")
-            ]
+            ],
+            path: "Sources/ReferenceData/ReferenceDataInfrastructure"
         ),
         .testTarget(
             name: "ReferenceDataInfrastructureTests",
@@ -237,13 +263,18 @@ let package = Package(
                 "ReferenceDataDomain",
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "XCTFluent", package: "fluent-kit")
-            ]
+            ],
+            path: "Tests/ReferenceData/ReferenceDataInfrastructureTests"
         ),
 
-        .target(name: "ReferenceDataDomain"),
+        .target(
+            name: "ReferenceDataDomain",
+            path: "Sources/ReferenceData/ReferenceDataDomain"
+        ),
         .testTarget(
             name: "ReferenceDataDomainTests",
-            dependencies: ["ReferenceDataDomain"]
+            dependencies: ["ReferenceDataDomain"],
+            path: "Tests/ReferenceData/ReferenceDataDomainTests"
         ),
 
         // --------------------------------------
@@ -255,15 +286,17 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio")
-            ]
+            ],
+            path: "Sources/Health/HealthWebAPI"
         ),
         .testTarget(
             name: "HealthWebAPITests",
             dependencies: [
                 "HealthWebAPI",
-                "APITesting",
+                "APITestingSupport",
                 .product(name: "VaporTesting", package: "vapor")
-            ]
+            ],
+            path: "Tests/Health/HealthWebAPITests"
         ),
 
         // --------------------------------------
@@ -274,14 +307,16 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Prometheus", package: "swift-prometheus")
-            ]
+            ],
+            path: "Sources/Metrics/MetricsWebAPI"
         ),
         .testTarget(
             name: "MetricsWebAPITests",
             dependencies: [
                 "MetricsWebAPI",
                 .product(name: "VaporTesting", package: "vapor")
-            ]
+            ],
+            path: "Tests/Metrics/MetricsWebAPITests"
         ),
 
         // --------------------------------------
@@ -292,20 +327,25 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt")
-            ]
+            ],
+            path: "Sources/Infrastructure/AuthKit"
         ),
         .testTarget(
             name: "AuthKitTests",
-            dependencies: ["AuthKit"]
+            dependencies: ["AuthKit"],
+            path: "Tests/Infrastructure/AuthKitTests"
         ),
 
         .target(
             name: "CacheKit",
-            dependencies: [.product(name: "Logging", package: "swift-log")]
+            dependencies: [.product(name: "Logging", package: "swift-log")],
+            path: "Sources/Infrastructure/CacheKit"
+
         ),
         .testTarget(
             name: "CacheKitTests",
-            dependencies: ["CacheKit"]
+            dependencies: ["CacheKit"],
+            path: "Tests/Infrastructure/CacheKitTests"
         ),
 
         .target(
@@ -313,23 +353,26 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio")
-            ]
+            ],
+            path: "Sources/Infrastructure/FileStorageKit"
         ),
         .testTarget(
             name: "FileStorageKitTests",
-            dependencies: ["FileStorageKit"]
+            dependencies: ["FileStorageKit"],
+            path: "Tests/Infrastructure/FileStorageKitTests"
         ),
 
         // --------------------------------------
         // Testing Support
 
         .target(
-            name: "APITesting",
+            name: "APITestingSupport",
             dependencies: [
                 "AuthKit",
                 .product(name: "VaporTesting", package: "vapor"),
                 .product(name: "JWT", package: "jwt")
-            ]
+            ],
+            path: "Sources/TestingSupport/APITestingSupport"
         )
 
     ]
