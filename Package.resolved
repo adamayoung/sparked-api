@@ -1,5 +1,5 @@
 {
-  "originHash" : "d80060464e5322c6be93a5fee3b077e25e28a3a3e85428a50fd2463318735afb",
+  "originHash" : "26bde9f0ec497df75f6a2d1e9d0ccc583299547e784ebe66d3e5ad27a3450949",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/fluent-kit.git",
       "state" : {
-        "revision" : "788f4b92c8d96e2bc0b89f6a240fa873d437c105",
-        "version" : "1.51.0"
+        "revision" : "0f1b8bf3e0d4355e6c77a2c54a59db1c3063c7fd",
+        "version" : "1.52.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/fluent-postgres-driver.git",
       "state" : {
-        "revision" : "fd57101e426d3edf66a32ba63a7d0b8ced4d7499",
-        "version" : "2.10.0"
+        "revision" : "095bc5a17ab3363167f4becb270b6f8eb790481c",
+        "version" : "2.10.1"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/fluent-sqlite-driver.git",
       "state" : {
-        "revision" : "6e3a5ff7f2cb733771a6bd71dd3a491cce79f24d",
-        "version" : "4.8.0"
+        "revision" : "73529a63ab11c7fe87da17b5a67a1b1f58c020f8",
+        "version" : "4.8.1"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/sql-kit.git",
       "state" : {
-        "revision" : "e0b35ff07601465dd9f3af19a1c23083acaae3bd",
-        "version" : "3.32.0"
+        "revision" : "baf0d8684a43f16cd11ebcc67300c8ab5cb5d078",
+        "version" : "3.33.0"
       }
     },
     {
